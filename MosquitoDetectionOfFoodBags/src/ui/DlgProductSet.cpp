@@ -33,10 +33,6 @@ void DlgProductSet::build_ui()
 	setDOErrorInfo(indicesDO);
 	auto indicesDI = DIFindAllDuplicateIndices();
 	setDIErrorInfo(indicesDI);
-
-	setAllQLabelStyleSheet();
-	setAllQCheckBoxStyleSheet();
-	setAllQPushButtonStyleSheet();
 }
 
 void DlgProductSet::read_config()
@@ -44,10 +40,8 @@ void DlgProductSet::read_config()
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	// 剔废持续时间
 	ui->pbtn_tifeichixushijian1->setText(QString::number(setConfig.tifeichixushijian1));
-	ui->pbtn_tifeichixushijian2->setText(QString::number(setConfig.tifeichixushijian2));
 	// 剔废时间
 	ui->pbtn_tifeijuli1->setText(QString::number(setConfig.tifeijuli1));
-	ui->pbtn_tifeijuli2->setText(QString::number(setConfig.tifeijuli2));
 
 	// 采图
 	ui->cBox_takeCamera1Pictures->setChecked(setConfig.takeWork1Pictures);
@@ -66,15 +60,6 @@ void DlgProductSet::read_config()
 	ui->pbtn_baoguang1->setText(QString::number(setConfig.baoguang1));
 	ui->pbtn_zengyi1->setText(QString::number(setConfig.zengyi1));
 	ui->pbtn_xiangsudangliang1->setText(QString::number(setConfig.xiangSuDangLiang1));
-
-	// 二工位
-	ui->pbtn_shangxianwei2->setText(QString::number(setConfig.shangXianWei2));
-	ui->pbtn_xiaxianwei2->setText(QString::number(setConfig.xiaXianWei2));
-	ui->pbtn_zuoxianwei2->setText(QString::number(setConfig.zuoXianWei2));
-	ui->pbtn_youxianwei2->setText(QString::number(setConfig.youXianWei2));
-	ui->pbtn_baoguang2->setText(QString::number(setConfig.baoguang2));
-	ui->pbtn_zengyi2->setText(QString::number(setConfig.zengyi2));
-	ui->pbtn_xiangsudangliang2->setText(QString::number(setConfig.xiangSuDangLiang2));
 
 	// 调试模式默认为关闭
 	setConfig.debugMode = false;
@@ -118,115 +103,12 @@ void DlgProductSet::read_config()
 	initDICheckItems();
 }
 
-void DlgProductSet::setAllQLabelStyleSheet()
-{
-	static constexpr const char* kLabelStyle = R"(QLabel {
-        color: #444444;
-        font-size: 20px;
-        background: transparent;
-        padding: 2px 4px;
-    })";
-
-	const auto labels = findChildren<QLabel*>();
-	for (QLabel* label : labels)
-	{
-		if (!label) continue;
-		label->setStyleSheet(kLabelStyle);
-	}
-}
-
-void DlgProductSet::setAllQCheckBoxStyleSheet()
-{
-	static constexpr const char* kCheckBoxStyle = R"(QCheckBox {
-        spacing: 8px;
-        font-size: 20px;
-        font-weight: bold;
-        color: rgb(0, 0, 0);
-    }
-    QCheckBox::indicator {
-        width: 20px;
-        height: 20px;
-        border-radius: 4px;
-        border: 2px solid #999;
-        background: #ffffff;
-    }
-    QCheckBox::indicator:hover {
-        border: 2px solid #666;
-    }
-    QCheckBox::indicator:checked {
-        border: 2px solid #2196F3;
-        background-color: qradialgradient(
-            cx:0.5, cy:0.5,
-            radius:0.4,
-            fx:0.5, fy:0.5,
-            stop:0 #2196F3,
-            stop:1 transparent
-        );
-    }
-    QCheckBox::indicator:pressed {
-        border: 2px solid #1565C0;
-        background-color: qradialgradient(
-            cx:0.5, cy:0.5,
-            radius:0.5,
-            fx:0.5, fy:0.5,
-            stop:0 #BBDEFB,
-            stop:1 transparent
-        );
-    }
-    QCheckBox::indicator:disabled {
-        border: 2px solid #ccc;
-        background: #eee;
-    }
-    QCheckBox:checked {
-        color: #2196F3;
-        font-weight: 500;
-    })";
-
-	const auto checkBoxes = findChildren<QCheckBox*>();
-	for (QCheckBox* cb : checkBoxes)
-	{
-		if (!cb) continue;
-		cb->setStyleSheet(kCheckBoxStyle);
-	}
-}
-
-void DlgProductSet::setAllQPushButtonStyleSheet()
-{
-	static constexpr const char* kPushButtonStyle = R"(QPushButton {
-        padding: 6px 14px;
-        border: 2px solid #CCC;
-        border-radius: 4px;
-        background-color: white;
-        color: #444;
-        font-size: 20px;
-    }
-    QPushButton:hover {
-        border-color: #999;
-        background-color: #F5F5F5;
-    }
-    QPushButton:pressed {
-        border-color: #777;
-        background-color: #EEE;
-    })";
-
-	const auto pushButtons = findChildren<QPushButton*>();
-	for (QPushButton* pb : pushButtons)
-	{
-		if (!pb) continue;
-		pb->setStyleSheet(kPushButtonStyle);
-	}
-}
-
 void DlgProductSet::build_connect()
 {
 	QObject::connect(ui->pbtn_tifeichixushijian1, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_tifeichixushijian1_clicked);
-	QObject::connect(ui->pbtn_tifeichixushijian2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_tifeichixushijian2_clicked);
 	QObject::connect(ui->pbtn_tifeijuli1, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_tifeijuli1_clicked);
-	QObject::connect(ui->pbtn_tifeijuli2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_tifeijuli2_clicked);
 	QObject::connect(ui->pbtn_shangxianwei1, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_shangxianwei1_clicked);
 	QObject::connect(ui->pbtn_xiaxianwei1, &QPushButton::clicked,
@@ -241,20 +123,6 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_zengyi1_clicked);
 	QObject::connect(ui->pbtn_xiangsudangliang1, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_xiangsudangliang1_clicked);
-	QObject::connect(ui->pbtn_shangxianwei2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_shangxianwei2_clicked);
-	QObject::connect(ui->pbtn_xiaxianwei2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_xiaxianwei2_clicked);
-	QObject::connect(ui->pbtn_zuoxianwei2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_zuoxianwei2_clicked);
-	QObject::connect(ui->pbtn_youxianwei2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_youxianwei2_clicked);
-	QObject::connect(ui->pbtn_baoguang2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_baoguang2_clicked);
-	QObject::connect(ui->pbtn_zengyi2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_zengyi2_clicked);
-	QObject::connect(ui->pbtn_xiangsudangliang2, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_xiangsudangliang2_clicked);
 	QObject::connect(ui->cBox_takeNgPictures, &QCheckBox::clicked,
 		this, &DlgProductSet::cBox_takeNgPictures_checked);
 	QObject::connect(ui->cBox_takeMaskPictures, &QCheckBox::clicked,
@@ -505,25 +373,6 @@ void DlgProductSet::pbtn_tifeichixushijian1_clicked()
 	}
 }
 
-void DlgProductSet::pbtn_tifeichixushijian2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_tifeichixushijian2->setText(value);
-		setConfig.tifeichixushijian2 = value.toDouble();
-	}
-}
-
 void DlgProductSet::pbtn_tifeijuli1_clicked()
 {
 	NumberKeyboard numKeyBord;
@@ -540,26 +389,6 @@ void DlgProductSet::pbtn_tifeijuli1_clicked()
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 		ui->pbtn_tifeijuli1->setText(value);
 		setConfig.tifeijuli1 = value.toDouble();
-		emit tifeijuliChanged();
-	}
-}
-
-void DlgProductSet::pbtn_tifeijuli2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_tifeijuli2->setText(value);
-		setConfig.tifeijuli2 = value.toDouble();
 		emit tifeijuliChanged();
 	}
 }
@@ -704,150 +533,6 @@ void DlgProductSet::pbtn_xiangsudangliang1_clicked()
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 		ui->pbtn_xiangsudangliang1->setText(value);
 		setConfig.xiangSuDangLiang1 = value.toDouble();
-		emit pixToWorldChanged();
-	}
-}
-
-void DlgProductSet::pbtn_shangxianwei2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_shangxianwei2->setText(value);
-		setConfig.shangXianWei2 = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_xiaxianwei2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_xiaxianwei2->setText(value);
-		setConfig.xiaXianWei2 = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_zuoxianwei2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_zuoxianwei2->setText(value);
-		setConfig.zuoXianWei2 = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_youxianwei2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_youxianwei2->setText(value);
-		setConfig.youXianWei2 = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_baoguang2_clicked()
-{
-	/*NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		auto& camera2 = Modules::getInstance().cameraModule.camera2;
-		ui->pbtn_baoguang2->setText(value);
-		setConfig.baoguang2 = value.toDouble();
-		if (camera2)
-		{
-			camera2->setExposureTime(static_cast<size_t>(value.toDouble()));
-		}
-	}*/
-}
-
-void DlgProductSet::pbtn_zengyi2_clicked()
-{
-	/*NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		auto& camera2 = Modules::getInstance().cameraModule.camera2;
-		ui->pbtn_zengyi2->setText(value);
-		setConfig.zengyi2 = value.toDouble();
-		if (camera2)
-		{
-			camera2->setGain(static_cast<size_t>(value.toDouble()));
-		}
-	}*/
-}
-
-void DlgProductSet::pbtn_xiangsudangliang2_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_xiangsudangliang2->setText(value);
-		setConfig.xiangSuDangLiang2 = value.toDouble();
 		emit pixToWorldChanged();
 	}
 }

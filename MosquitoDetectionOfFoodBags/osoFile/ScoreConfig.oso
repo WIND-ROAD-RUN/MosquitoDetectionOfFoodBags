@@ -4,29 +4,6 @@ namespace cdm {
 	class ScoreConfig
 	{
 	public:
-		zangWu : bool :default = false;
-		zangWuScore : double :default = 0;
-		zangWuArea : double :default = 0;
-
-		jieTou : bool :default = false;
-		jieTouScore : double :default = 0;
-		jieTouArea : double :default = 0;
-
-		xiaoZangWu : bool :default = false;
-		xiaoZangWuScore : double :default = 0;
-		xiaoZangWuArea : double :default = 0;
-
-		body : bool :default = false;
-		bodyScore : double :default = 0;
-		bodyArea : double :default = 0;
-
-		huaPo : bool :default = false;
-		huaPoScore : double :default = 0;
-		huaPoArea : double :default = 0;
-
-		weiZhiQueXianSingle : bool :default = false;
-		weiZhiQueXianSingleArea : double :default = 0;
-		weiZhiQueXianAll : bool :default = false;
-		weiZhiQueXianAllArea : double :default = 0;
+		test : bool : default = false;
 	};
 }

@@ -40,31 +40,21 @@ void UIModule::stop()
 void UIModule::ini_dlgProductScoreGroupList()
 {
 	_dlgProductScoreGroupList = {
-		_dlgProductScore->ui->widget_zangwu,
-		_dlgProductScore->ui->widget_xiaozangwu,
-		_dlgProductScore->ui->widget_jietou,
-		_dlgProductScore->ui->widget_body,
-		_dlgProductScore->ui->widget_huapo,
-		_dlgProductScore->ui->widget_weizhiquexian
+		
 	};
 }
 
 void UIModule::ini_dlgProductSetCheckList()
 {
 	_dlgProductSetCheckList = {
-		_dlgProductSet->ui->ckb_zangwu,
-		_dlgProductSet->ui->ckb_xiaozangwu,
-		_dlgProductSet->ui->ckb_jietou,
-		_dlgProductSet->ui->ckb_body,
-		_dlgProductSet->ui->ckb_huapo,
-		_dlgProductSet->ui->ckb_weizhiquexian
+		
 	};
 }
 
 void UIModule::connectSetAndScore()
 {
-	for (int i = 0; i < _dlgProductSetCheckList.size(); ++i) {
+	/*for (int i = 0; i < _dlgProductSetCheckList.size(); ++i) {
 		connect(_dlgProductSetCheckList[i], &QCheckBox::toggled, _dlgProductScoreGroupList[i], &QWidget::setVisible);
 		_dlgProductScoreGroupList[i]->setVisible(_dlgProductSetCheckList[i]->isChecked());
-	}
+	}*/
 }

@@ -28,6 +28,7 @@ public:
 	void ini_dlgProductScoreGroupList();
 	void ini_dlgProductSetCheckList();
 	void connectSetAndScore();
+
 public:
 	DlgProductSet* _dlgProductSet = nullptr;
 	DlgProductScore* _dlgProductScore = nullptr;

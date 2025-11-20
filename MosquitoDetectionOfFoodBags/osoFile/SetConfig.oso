@@ -6,8 +6,6 @@ namespace cdm {
 	public:
 		tifeichixushijian1 : double :default = 0;
 		tifeijuli1 : double :default = 0;
-		tifeichixushijian2 : double :default = 0;
-		tifeijuli2 : double :default = 0;
 
 		defectIgnoreX : int :default = 0;
 		defectIgnoreY : int :default = 0;
@@ -19,14 +17,6 @@ namespace cdm {
 		baoguang1 : double :default = 0;
 		zengyi1 : double :default = 0;
 		xiangSuDangLiang1 : double :default = 0;
-
-		shangXianWei2 : double :default = 0;
-		xiaXianWei2 : double :default = 0;
-		zuoXianWei2 : double :default = 0;
-		youXianWei2 : double :default = 0;
-		baoguang2 : double :default = 0;
-		zengyi2 : double :default = 0;
-		xiangSuDangLiang2 : double :default = 0;
 
 		takeWork1Pictures : bool :default = false;
 		takeWork2Pictures : bool :default = false;

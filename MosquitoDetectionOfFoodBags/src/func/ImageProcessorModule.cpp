@@ -85,7 +85,6 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 		DefectBox = std::any_cast<std::vector<int>>(context.customFields.at("DefectBox"));
 	}
 
-
 	for (auto& item : DefectBox)
 	{
 		item = imageRealLocation + item;
