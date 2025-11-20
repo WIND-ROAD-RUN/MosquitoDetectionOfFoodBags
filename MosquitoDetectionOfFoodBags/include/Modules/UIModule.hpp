@@ -31,7 +31,7 @@ public:
 public:
 	DlgProductSet* _dlgProductSet = nullptr;
 	DlgProductScore* _dlgProductScore = nullptr;
-	MDOFoodBags* _wetPapers = nullptr;
+	MDOFoodBags* _MDOFoodBags = nullptr;
 	rw::rqw::LabelWarning* labelWarning = nullptr;
 	DlgCloseForm* _dlgCloseForm = nullptr;
 

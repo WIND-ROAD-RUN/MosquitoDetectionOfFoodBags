@@ -6,7 +6,6 @@
 struct Utility
 {
 	static QString cameraIp1;
-	static QString cameraIp2;
 	static QString zmotionIp;
 };
 

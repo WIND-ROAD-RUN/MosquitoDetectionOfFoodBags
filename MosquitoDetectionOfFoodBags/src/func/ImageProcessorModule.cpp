@@ -4,13 +4,13 @@
 #include "Modules.hpp"
 #include "Utilty.hpp"
 
-ImageProcessorWetPapers::ImageProcessorWetPapers(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
+ImageProcessor::ImageProcessor(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
 	: QThread(parent), _queue(queue), _mutex(mutex), _condition(condition), _workIndex(workIndex)
 {
 
 }
 
-void ImageProcessorWetPapers::run()
+void ImageProcessor::run()
 {
 	while (!QThread::currentThread()->isInterruptionRequested()) {
 		MatInfo frame;
@@ -57,7 +57,7 @@ void ImageProcessorWetPapers::run()
 	}
 }
 
-void ImageProcessorWetPapers::run_debug(MatInfo& frame)
+void ImageProcessor::run_debug(MatInfo& frame)
 {
 	auto& imgPro = *_imgProcess;
 	imgPro(frame.image);
@@ -68,7 +68,7 @@ void ImageProcessorWetPapers::run_debug(MatInfo& frame)
 	emit imageNGReady(QPixmap::fromImage(maskImg), frame.index, defectResult.isBad);
 }
 
-void ImageProcessorWetPapers::run_OpenRemoveFunc(MatInfo& frame)
+void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
 	DefectBox.clear();
 	_isbad = false;
@@ -103,11 +103,10 @@ void ImageProcessorWetPapers::run_OpenRemoveFunc(MatInfo& frame)
 	save_image(imageInfo, maskImg);
 }
 
-void ImageProcessorWetPapers::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
+void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
-	auto& priorityQueue2 = Modules::getInstance().eliminateModule.productPriorityQueue2;
 	if (isbad)
 	{
 		++statisticalInfo.wasteCount;
@@ -126,15 +125,11 @@ void ImageProcessorWetPapers::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 			{
 				priorityQueue1->push(item);
 			}
-			else if (2 == imageProcessingModuleIndex)
-			{
-				priorityQueue2->push(item);
-			}
 		}
 	}
 }
 
-void ImageProcessorWetPapers::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image)
+void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image)
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	auto& isTakePictures = Modules::getInstance().runtimeInfoModule.isTakePictures;
@@ -150,7 +145,7 @@ void ImageProcessorWetPapers::save_image(rw::rqw::ImageInfo& imageInfo, const QI
 	}
 }
 
-void ImageProcessorWetPapers::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image)
+void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image)
 {
 	auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
@@ -200,7 +195,7 @@ void ImageProcessorWetPapers::save_image_work(rw::rqw::ImageInfo& imageInfo, con
 	}
 }
 
-void ImageProcessorWetPapers::buildSegModelEngine(const QString& enginePath)
+void ImageProcessor::buildSegModelEngine(const QString& enginePath)
 {
 	rw::ModelEngineConfig modelEngineConfig;
 	modelEngineConfig.conf_threshold = 0.1f;
@@ -216,27 +211,27 @@ void ImageProcessorWetPapers::buildSegModelEngine(const QString& enginePath)
 	_imgProcess->context().customFields["stationIdx"] = static_cast<int>(_workIndex);
 }
 
-void ImageProcessingModuleWetPapers::BuildModule()
+void ImageProcessingModule::BuildModule()
 {
 	for (int i = 0; i < _numConsumers; ++i) {
 		static size_t workIndexCount = 0;
-		ImageProcessorWetPapers* processor = new ImageProcessorWetPapers(_queue, _mutex, _condition, workIndexCount, this);
+		ImageProcessor* processor = new ImageProcessor(_queue, _mutex, _condition, workIndexCount, this);
 		workIndexCount++;
 		processor->imageProcessingModuleIndex = index;
 		processor->buildSegModelEngine(modelEnginePath);
-		connect(processor, &ImageProcessorWetPapers::imageNGReady, this, &ImageProcessingModuleWetPapers::imageNGReady, Qt::QueuedConnection);
+		connect(processor, &ImageProcessor::imageNGReady, this, &ImageProcessingModule::imageNGReady, Qt::QueuedConnection);
 		_processors.push_back(processor);
 		processor->start();
 	}
 }
 
-ImageProcessingModuleWetPapers::ImageProcessingModuleWetPapers(int numConsumers, QObject* parent)
+ImageProcessingModule::ImageProcessingModule(int numConsumers, QObject* parent)
 	: QObject(parent), _numConsumers(numConsumers)
 {
 
 }
 
-ImageProcessingModuleWetPapers::~ImageProcessingModuleWetPapers()
+ImageProcessingModule::~ImageProcessingModule()
 {
 	// 通知所有线程退出
 	for (auto processor : _processors) {
@@ -258,7 +253,7 @@ ImageProcessingModuleWetPapers::~ImageProcessingModuleWetPapers()
 	}
 }
 
-void ImageProcessingModuleWetPapers::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t index, float loc)
+void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t index, float loc)
 {
 	// 手动读取本地图片
 	//std::string imagePath = R"(C:\Users\rw\Desktop\temp\shijin_3.png)"; // 替换为你的图片路径

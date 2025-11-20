@@ -109,14 +109,13 @@ void Modules::connect()
 #pragma region connect camera and imgProModule
 
 	QObject::connect(&cameraModule, &CameraModule::frameCaptured1,
-		imgProModule.imageProcessingModule1.get(), &ImageProcessingModuleWetPapers::onFrameCaptured, Qt::DirectConnection);
+		imgProModule.imageProcessingModule1.get(), &ImageProcessingModule::onFrameCaptured, Qt::DirectConnection);
 #pragma endregion
 
 #pragma region connect UIModule and imgProModule
-	QObject::connect(imgProModule.imageProcessingModule1.get(), &ImageProcessingModuleWetPapers::imageNGReady, uiModule._wetPapers, &MDOFoodBags::onCameraDisplay);
-	QObject::connect(imgProModule.imageProcessingModule2.get(), &ImageProcessingModuleWetPapers::imageNGReady, uiModule._wetPapers, &MDOFoodBags::onCameraDisplay);
-	QObject::connect(uiModule._wetPapers, &MDOFoodBags::shibiekuangChanged, &imgProModule, &ImgProModule::onUpdateImgProContext);
-	QObject::connect(uiModule._wetPapers, &MDOFoodBags::shibiekuangChanged, &imgProModule, &ImgProModule::onUpdateImgProContext);
+	QObject::connect(imgProModule.imageProcessingModule1.get(), &ImageProcessingModule::imageNGReady, uiModule._MDOFoodBags, &MDOFoodBags::onCameraDisplay);
+	QObject::connect(uiModule._MDOFoodBags, &MDOFoodBags::shibiekuangChanged, &imgProModule, &ImgProModule::onUpdateImgProContext);
+	QObject::connect(uiModule._MDOFoodBags, &MDOFoodBags::shibiekuangChanged, &imgProModule, &ImgProModule::onUpdateImgProContext);
 	QObject::connect(uiModule._dlgProductScore, &DlgProductScore::scoreFormClosed, &imgProModule, &ImgProModule::onUpdateImgProContext);
 
 #pragma endregion
@@ -124,7 +123,7 @@ void Modules::connect()
 #pragma region connect UIModule and ReconnectModule
 	// 更新UI界面
 	QObject::connect(reconnectModule.monitorCameraAndCardStateThread.get(), &CameraAndCardStateThreadMDOFoodBags::updateCameraLabelState,
-		uiModule._wetPapers, &MDOFoodBags::updateCameraLabelState, Qt::QueuedConnection);
+		uiModule._MDOFoodBags, &MDOFoodBags::updateCameraLabelState, Qt::QueuedConnection);
 	// 相机重连
 	QObject::connect(reconnectModule.monitorCameraAndCardStateThread.get(), &CameraAndCardStateThreadMDOFoodBags::buildCamera,
 		&cameraModule, &CameraModule::onBuildCamera, Qt::QueuedConnection);
@@ -151,12 +150,12 @@ void Modules::connect()
 
 #pragma region connect UIModule and RuntimeInfoModule
 	QObject::connect(runtimeInfoModule.detachUtiltyThread.get(), &DetachUtiltyThread::updateStatisticalInfo,
-		uiModule._wetPapers, &MDOFoodBags::onUpdateStatisticalInfoUI, Qt::QueuedConnection);
+		uiModule._MDOFoodBags, &MDOFoodBags::onUpdateStatisticalInfoUI, Qt::QueuedConnection);
 #pragma endregion
 
 #ifdef BUILD_WITHOUT_HARDWARE
 	QObject::connect(test_module.testImgPushThread.get(), &TestImgPushThread::imgReady,
-		imgProModule.imageProcessingModule1.get(), &ImageProcessingModuleWetPapers::onFrameCaptured, Qt::DirectConnection);
+		imgProModule.imageProcessingModule1.get(), &ImageProcessingModule::onFrameCaptured, Qt::DirectConnection);
 #endif
 
 }
@@ -164,7 +163,7 @@ void Modules::connect()
 bool Modules::check()
 {
 #pragma region check single instance
-	if (!rw::rqw::RunEnvCheck::isSingleInstance("WetPapers.exe"))
+	if (!rw::rqw::RunEnvCheck::isSingleInstance("MDOFoodBags.exe"))
 	{
 		QMessageBox::warning(nullptr, "错误", "已经有程序在运行，请勿多次打开");
 		return false;

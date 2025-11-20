@@ -1,6 +1,6 @@
 #pragma once
 
-#
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <QPixmap>
@@ -17,12 +17,12 @@ struct MatInfo {
 };
 
 
-class ImageProcessorWetPapers : public QThread
+class ImageProcessor : public QThread
 {
 	Q_OBJECT
 
 public:
-	ImageProcessorWetPapers(QQueue<MatInfo>& queue,
+	ImageProcessor(QQueue<MatInfo>& queue,
 		QMutex& mutex,
 		QWaitCondition& condition,
 		int workIndex,
@@ -67,7 +67,7 @@ public:
 };
 
 
-class ImageProcessingModuleWetPapers : public QObject {
+class ImageProcessingModule : public QObject {
 	Q_OBJECT
 public:
 	QString modelEnginePath;
@@ -75,9 +75,9 @@ public:
 	// 初始化图像处理模块
 	void BuildModule();
 public:
-	ImageProcessingModuleWetPapers(int numConsumers, QObject* parent = nullptr);
+	ImageProcessingModule(int numConsumers, QObject* parent = nullptr);
 
-	~ImageProcessingModuleWetPapers();
+	~ImageProcessingModule();
 
 public slots:
 	// 相机回调函数
@@ -92,7 +92,7 @@ signals:
 	void paramMapsChanged();
 
 public:
-	std::vector<ImageProcessorWetPapers*> getProcessors() const {
+	std::vector<ImageProcessor*> getProcessors() const {
 		return _processors;
 	}
 
@@ -100,7 +100,7 @@ private:
 	QQueue<MatInfo> _queue;
 	QMutex _mutex;
 	QWaitCondition _condition;
-	std::vector<ImageProcessorWetPapers*> _processors;
+	std::vector<ImageProcessor*> _processors;
 	int _numConsumers;
 public:
 	size_t index;

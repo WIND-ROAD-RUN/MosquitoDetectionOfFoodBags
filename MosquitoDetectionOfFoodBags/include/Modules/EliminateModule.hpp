@@ -15,7 +15,7 @@ public:
 	void stop() override;
 public:
 	std::unique_ptr<rw::dsl::ThreadSafeHeap<float>> productPriorityQueue1;
-	std::unique_ptr<rw::dsl::ThreadSafeHeap<float>> productPriorityQueue2;
+
 public:
-	std::unique_ptr<DetachDefectThreadWetPapers> detachDefectThread{ nullptr };
+	std::unique_ptr<DetachDefectThreadMDOFoodBags> detachDefectThread{ nullptr };
 };

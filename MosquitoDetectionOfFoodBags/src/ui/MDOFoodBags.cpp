@@ -21,7 +21,6 @@ MDOFoodBags::MDOFoodBags(QWidget* parent)
 	ui->setupUi(this);
 
 	initializeComponents();
-
 }
 
 MDOFoodBags::~MDOFoodBags()

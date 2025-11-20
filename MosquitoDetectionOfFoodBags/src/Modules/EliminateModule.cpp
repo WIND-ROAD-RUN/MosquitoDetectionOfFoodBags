@@ -2,9 +2,8 @@
 
 bool EliminateModule::build()
 {
-	detachDefectThread = std::make_unique<DetachDefectThreadWetPapers>(this);
+	detachDefectThread = std::make_unique<DetachDefectThreadMDOFoodBags>(this);
 	productPriorityQueue1 = std::make_unique<rw::dsl::ThreadSafeHeap<float, rw::dsl::HeapType::MinHeap>>(50);
-	productPriorityQueue2 = std::make_unique<rw::dsl::ThreadSafeHeap<float, rw::dsl::HeapType::MinHeap>>(50);
 	return true;
 }
 
@@ -17,10 +16,6 @@ void EliminateModule::destroy()
 	if (productPriorityQueue1)
 	{
 		productPriorityQueue1.reset();
-	}
-	if (productPriorityQueue2)
-	{
-		productPriorityQueue2.reset();
 	}
 }
 

@@ -9,23 +9,22 @@
 #include"Utilty.hpp"
 
 
-class DetachDefectThreadWetPapers : public QThread
+class DetachDefectThreadMDOFoodBags : public QThread
 {
 	Q_OBJECT
 public:
 	std::atomic_bool isProcessing{ false };
 	std::atomic_bool isProcessFinish{ false };
 public:
-	explicit DetachDefectThreadWetPapers(QObject* parent = nullptr);
+	explicit DetachDefectThreadMDOFoodBags(QObject* parent = nullptr);
 
-	~DetachDefectThreadWetPapers() override;
+	~DetachDefectThreadMDOFoodBags() override;
 
 	void startThread();
 
 	void stopThread();
 
 	void processQueue1(std::unique_ptr<rw::dsl::ThreadSafeHeap<float>>& queue);
-	void processQueue2(std::unique_ptr<rw::dsl::ThreadSafeHeap<float>>& queue);
 
 protected:
 	void run() override;

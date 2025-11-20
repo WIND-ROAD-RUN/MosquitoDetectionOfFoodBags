@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
 	Modules::getInstance().build();
     MDOFoodBags w;
-	Modules::getInstance().uiModule._wetPapers = &w;
+	Modules::getInstance().uiModule._MDOFoodBags = &w;
 	Modules::getInstance().connect();
 	Modules::getInstance().start();
 

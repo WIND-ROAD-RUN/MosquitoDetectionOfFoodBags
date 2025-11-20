@@ -5,21 +5,6 @@
 #include "imgPro_ImageProcess.hpp"
 #include"IModule.hpp"
 
-void findHolesInMask(
-	std::vector<rw::DetectionRectangleInfo>& hollowRects,
-	const std::pair<int, int>& roiOffset,
-	int ignoreBorderX=0,
-	int ignoreBorderY=0, 
-	const rw::DetectionRectangleInfo& bodyInfo = {}
-);
-
-std::vector<rw::DetectionRectangleInfo> filterProWithShieldWithoutBody(
-	const std::vector<rw::DetectionRectangleInfo>& hollowRects,
-	const std::vector<rw::DetectionRectangleInfo>& shields
-);
-
-int countProsArea(const std::vector<rw::DetectionRectangleInfo>& pros);
-
 class ImgProModule
 	:public QObject, public IModule<bool>
 {
@@ -44,8 +29,8 @@ private:
 	void buildImageProcessingModule(size_t num);
 	void destroyImageProcessingModule();
 public:
-	std::unique_ptr<ImageProcessingModuleWetPapers> imageProcessingModule1{ nullptr };
-	std::unique_ptr<ImageProcessingModuleWetPapers> imageProcessingModule2{ nullptr };
+	std::unique_ptr<ImageProcessingModule> imageProcessingModule1{ nullptr };
+
 public slots:
 	void onUpdateImgProContext();
 };
