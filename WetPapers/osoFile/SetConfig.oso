@@ -1,0 +1,60 @@
+#include <string>
+
+namespace cdm {
+	class SetConfig
+	{
+	public:
+		tifeichixushijian1 : double :default = 0;
+		tifeijuli1 : double :default = 0;
+		tifeichixushijian2 : double :default = 0;
+		tifeijuli2 : double :default = 0;
+
+		defectIgnoreX : int :default = 0;
+		defectIgnoreY : int :default = 0;
+
+		shangXianWei1 : double :default = 0;
+		xiaXianWei1 : double :default = 0;
+		zuoXianWei1 : double :default = 0;
+		youXianWei1 : double :default = 0;
+		baoguang1 : double :default = 0;
+		zengyi1 : double :default = 0;
+		xiangSuDangLiang1 : double :default = 0;
+
+		shangXianWei2 : double :default = 0;
+		xiaXianWei2 : double :default = 0;
+		zuoXianWei2 : double :default = 0;
+		youXianWei2 : double :default = 0;
+		baoguang2 : double :default = 0;
+		zengyi2 : double :default = 0;
+		xiangSuDangLiang2 : double :default = 0;
+
+		takeWork1Pictures : bool :default = false;
+		takeWork2Pictures : bool :default = false;
+		saveNGImg : bool :default = false;
+		saveMaskImg : bool :default = false;
+		saveOKImg : bool :default = false;
+
+		qiyongerxiangji : bool :default = false;
+		qiyongyundongkongzhiqi : bool :default = false;
+		yundongkongzhiqichonglian : bool :default = false;
+
+		debugMode : bool :default = false;
+
+		tifeixinhaoOUT : int :default = 0;
+		xiangjichufa1OUT : int :default = 0;
+		xiangjichufa2OUT : int :default = 0;
+
+		xiangjichufachangdu : double :default = 0;
+		meizhuanmaichongshu : double :default = 0;
+		shedingzhouchang : double :default = 0;
+
+		isZangWu : bool :default = false;
+		isXiaoZangWu : bool :default = false;
+		isJieTou : bool :default = false;
+		isBody : bool :default = false;
+		isHuaPo : bool :default = false;
+		isWeiZhiQueXian : bool :default = false;
+
+		isTichuDongzuo : bool : default = true;
+	};
+}
