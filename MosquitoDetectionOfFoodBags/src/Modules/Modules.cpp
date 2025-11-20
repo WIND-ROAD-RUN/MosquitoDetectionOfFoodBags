@@ -45,11 +45,19 @@ bool Modules::build()
 	// 构建运动控制模块
 	auto motionControllerModuleBuild = motionControllerModule.build();
 
+#ifdef BUILD_WITHOUT_HARDWARE
+	test_module.build();
+#endif
+
 	return true;
 }
 
 void Modules::destroy()
 {
+#ifdef BUILD_WITHOUT_HARDWARE
+	test_module.destroy();
+#endif
+
 	runtimeInfoModule.destroy();
 	imgProModule.destroy();
 	cameraModule.destroy();
@@ -72,10 +80,18 @@ void Modules::start()
 	imgProModule.start();
 	cameraModule.start();
 	reconnectModule.start();
+
+#ifdef BUILD_WITHOUT_HARDWARE
+	test_module.start();
+#endif
 }
 
 void Modules::stop()
 {
+#ifdef BUILD_WITHOUT_HARDWARE
+	test_module.stop();
+#endif
+
 	reconnectModule.stop();
 	cameraModule.stop();
 	imgProModule.stop();
@@ -137,6 +153,11 @@ void Modules::connect()
 	QObject::connect(runtimeInfoModule.detachUtiltyThread.get(), &DetachUtiltyThread::updateStatisticalInfo,
 		uiModule._wetPapers, &MDOFoodBags::onUpdateStatisticalInfoUI, Qt::QueuedConnection);
 #pragma endregion
+
+#ifdef BUILD_WITHOUT_HARDWARE
+	QObject::connect(test_module.testImgPushThread.get(), &TestImgPushThread::imgReady,
+		imgProModule.imageProcessingModule1.get(), &ImageProcessingModuleWetPapers::onFrameCaptured, Qt::DirectConnection);
+#endif
 
 }
 

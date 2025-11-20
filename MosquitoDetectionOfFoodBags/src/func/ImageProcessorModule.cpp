@@ -1,5 +1,4 @@
 #include "ImageProcessorModule.hpp"
-#include "GlobalStruct.hpp"
 #include "imet_Utility.cuh"
 #include "ime_ModelEngineFactory.h"
 #include "Modules.hpp"

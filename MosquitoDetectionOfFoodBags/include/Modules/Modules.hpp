@@ -13,6 +13,7 @@
 #include "UIModule.hpp"
 #include "ReconnectModule.hpp"
 #include "rqw_RunEnvCheck.hpp"
+#include "TestModule.hpp"
 
 class Modules
 	:public IModule<bool>
@@ -57,6 +58,10 @@ public:
 	EliminateModule eliminateModule;
 	ImgSaveModule imgSaveModule;
 	MotionControllerModule motionControllerModule;
+
+#ifdef BUILD_WITHOUT_HARDWARE
+	TestModule test_module;
+#endif
 };
 
 template <class TypeCanToAssembly>

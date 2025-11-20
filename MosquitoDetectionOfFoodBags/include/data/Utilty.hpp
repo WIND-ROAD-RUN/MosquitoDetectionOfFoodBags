@@ -53,5 +53,5 @@ public:
 	QString modelPath = modelRootPath + R"(MDOFoodBags.engine)";
 public:
 	QString imageSaveRootPath = projectHome + R"(SavedImages\)";
-
+	QString testImgDirPath = R"(D:\zfkjDevelopment\ImgStorage\MDOFoodBags)";
 }globalPath;

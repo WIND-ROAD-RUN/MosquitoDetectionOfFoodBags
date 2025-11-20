@@ -15,10 +15,16 @@ class MDOFoodBags : public QMainWindow
 public:
 	MDOFoodBags(QWidget *parent = nullptr);
 	~MDOFoodBags();
+#ifdef BUILD_WITHOUT_HARDWARE
+public:
+	QCheckBox* cBox_testPushImg{ nullptr };
+public slots:
+	void cBox_testPushImg_checked(bool checked);
+#endif
 public:
 	void build_ui();
 	void build_connect();
-	void build_WetPapersData();
+	void build_MDOFoodBagsData();
 	void ini_clickableTitle();
 
 public:
@@ -96,9 +102,5 @@ private:
 	rw::rqw::ClickableLabel* clickableTitle = nullptr;
 
 #ifdef BUILD_WITHOUT_HARDWARE
-	void build_DetachTestImgThread();
-	void destroy_DetachTestImgThread();
-	void start_DetachTestImgThread();
-	void stop_DetachTestImgThread();
 #endif
 };

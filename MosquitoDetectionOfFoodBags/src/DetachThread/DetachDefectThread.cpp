@@ -1,7 +1,5 @@
 #include "DetachDefectThread.h"
-#include "GlobalStruct.hpp"
 #include <chrono>
-
 #include "Modules.hpp"
 
 DetachDefectThreadWetPapers::DetachDefectThreadWetPapers(QObject* parent)
@@ -102,7 +100,6 @@ void DetachDefectThreadWetPapers::processQueue2(std::unique_ptr<rw::dsl::ThreadS
 
 void DetachDefectThreadWetPapers::run()
 {
-	auto& globalThread = GlobalThread::getInstance();
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
 	auto& priorityQueue2 = Modules::getInstance().eliminateModule.productPriorityQueue2;
 	while (running) {

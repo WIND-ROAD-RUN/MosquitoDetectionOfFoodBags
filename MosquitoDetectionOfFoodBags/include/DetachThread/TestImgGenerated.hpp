@@ -12,10 +12,7 @@ public:
 	std::atomic_bool isProcessing{ false };
 	std::atomic_bool isProcessFinish{ false };
 private:
-	cv::Mat mat1;
-	cv::Mat mat2;
-	cv::Mat mat3;
-	cv::Mat mat4;
+	rw::rqw::MatInfo matInfo1;
 public:
 	explicit DetachTestImgThread(QObject* parent = nullptr);
 
@@ -27,7 +24,7 @@ public:
 private:
 	std::atomic<bool> _running;
 signals:
-	void frameCaptured(cv::Mat frame, size_t index);
+	void frameCaptured(rw::rqw::MatInfo matInfo, size_t index, float location);
 protected:
 	void run() override;
 };

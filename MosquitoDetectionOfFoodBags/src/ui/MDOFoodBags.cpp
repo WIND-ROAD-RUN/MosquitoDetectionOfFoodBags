@@ -10,7 +10,6 @@
 #include "DlgCloseForm.h"
 #include "DlgProductScore.h"
 #include "DlgProductSet.h"
-#include "GlobalStruct.hpp"
 #include "Modules.hpp"
 #include "NumberKeyboard.h"
 #include"Utilty.hpp"
@@ -33,17 +32,31 @@ MDOFoodBags::~MDOFoodBags()
 	delete ui;
 }
 
+#ifdef BUILD_WITHOUT_HARDWARE
+void MDOFoodBags::cBox_testPushImg_checked(bool checked)
+{
+	if (checked)
+	{
+		Modules::getInstance().test_module.testImgPush = true;
+	}
+	else
+	{
+		Modules::getInstance().test_module.testImgPush = false;
+	}
+}
+#endif
+
 void MDOFoodBags::build_ui()
 {
-	build_WetPapersData();
+	build_MDOFoodBagsData();
 
-	//弃用
-	/*ui->label_produceTotal->setVisible(false);
-	ui->label_produceTotalValue->setVisible(false);
-	ui->label_wasteProducts->setVisible(false);
-	ui->label_wasteProductsValue->setVisible(false);
-	ui->label_productionYield->setVisible(false);
-	ui->label_productionYieldValue->setVisible(false);*/
+#ifdef BUILD_WITHOUT_HARDWARE
+	cBox_testPushImg = new QCheckBox(this);
+	cBox_testPushImg->setText("图像推送状态");
+	ui->gBox_infor->layout()->addWidget(cBox_testPushImg);
+	QObject::connect(cBox_testPushImg, &QCheckBox::clicked,
+		this, &MDOFoodBags::cBox_testPushImg_checked);
+#endif
 }
 
 void MDOFoodBags::build_connect()
@@ -64,7 +77,7 @@ void MDOFoodBags::build_connect()
 	connect(ui->pbtn_resetProduct, &QPushButton::clicked, this, &MDOFoodBags::pbtn_resetProduct_clicked);
 }
 
-void MDOFoodBags::build_WetPapersData()
+void MDOFoodBags::build_MDOFoodBagsData()
 {
 	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	wetPapersConfig.isDebug = false;
@@ -120,49 +133,13 @@ void MDOFoodBags::initializeComponents()
 
 	build_connect();
 
-#ifndef  BUILD_WITHOUT_HARDWARE
-#endif
-
-
 #ifdef BUILD_WITHOUT_HARDWARE
-	build_DetachTestImgThread();
-	start_DetachTestImgThread();
 #endif
-
-
-	//////////////////
-	/*QThread* threadTifei = QThread::create([]() {
-
-		rw::ModelEngineConfig config;
-		config.conf_threshold = 0.1f;
-		config.nms_threshold = 0.1f;
-		config.imagePretreatmentPolicy = rw::ImagePretreatmentPolicy::LetterBox;
-		config.letterBoxColor = cv::Scalar(114, 114, 114);
-		config.modelPath = globalPath.modelPath.toStdString();
-		auto engine = rw::ModelEngineFactory::createModelEngine(config, rw::ModelType::Yolov11_Seg_CudaAcc, rw::ModelEngineDeployType::TensorRT);
-
-		cv::Mat colorImage(640, 640, CV_8UC3, cv::Scalar(0, 0, 0));
-		while (true)
-		{
-			QThread::msleep(1);
-			auto start = std::chrono::high_resolution_clock::now();
-			engine->processImg(colorImage);
-			auto end = std::chrono::high_resolution_clock::now();
-
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-			std::cout << "processImg耗时:" << duration << std::endl;
-		}
-		});
-	QObject::connect(threadTifei, &QThread::finished, threadTifei, &QThread::deleteLater);
-	threadTifei->start();*/
-
 }
 
 void MDOFoodBags::destroyComponents()
 {
 #ifdef BUILD_WITHOUT_HARDWARE
-	stop_DetachTestImgThread();
-	destroy_DetachTestImgThread();
 #endif
 
 	destroy_ImageEnlargedDisplay();
@@ -679,40 +656,3 @@ void MDOFoodBags::imgDisNg5_clicked()
 	_imageEnlargedDisplay->setGboxTitle(_workStationTitleMap[_currentImageEnlargedDisplayIndex]);
 	_imageEnlargedDisplay->show();
 }
-
-#ifdef BUILD_WITHOUT_HARDWARE
-void WetPapers::build_DetachTestImgThread()
-{
-	auto& globalThread = GlobalThread::getInstance();
-	globalThread.build_DetachTestImgThread();
-
-	QObject::connect(globalThread.detachTestImgThread, &DetachTestImgThread::frameCaptured,
-		globalThread.modelCamera1.get(), &ImageProcessingModuleWetPapers::onFrameCaptured);
-	/*QObject::connect(globalThread.detachTestImgThread, &DetachTestImgThread::frameCaptured,
-		globalThread.modelCamera2.get(), &ImageProcessingModuleWetPapers::onFrameCaptured);*/
-}
-
-void WetPapers::destroy_DetachTestImgThread()
-{
-	auto& globalThread = GlobalThread::getInstance();
-	globalThread.destroy_DetachTestImgThread();
-}
-
-void WetPapers::start_DetachTestImgThread()
-{
-	auto& globalThread = GlobalThread::getInstance();
-	if (globalThread.detachTestImgThread)
-	{
-		globalThread.detachTestImgThread->startThread();
-	}
-}
-
-void WetPapers::stop_DetachTestImgThread()
-{
-	auto& globalThread = GlobalThread::getInstance();
-	if (globalThread.detachTestImgThread)
-	{
-		globalThread.detachTestImgThread->stopThread();
-	}
-}
-#endif

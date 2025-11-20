@@ -1,10 +1,8 @@
 #include "TestImgGenerated.hpp"
 
-#include "GlobalStruct.hpp"
-
 DetachTestImgThread::DetachTestImgThread(QObject* parent)
 	: QThread(parent), _running(false) {
-	mat1 = cv::imread(R"(C:\Users\zfkj4090\Desktop\TestImg\shijin\Image_20250730144219347_30.jpg)");
+	matInfo1.mat = cv::imread(R"(C:\Users\zfkj4090\Desktop\TestImg\shijin\Image_20250730144219347_30.jpg)");
 }
 
 DetachTestImgThread::~DetachTestImgThread()
@@ -30,6 +28,6 @@ void DetachTestImgThread::run()
 {
 	while (_running) {
 		QThread::msleep(500);
-		emit frameCaptured(mat1, 1);
+		emit frameCaptured(matInfo1, 1, 0);
 	}
 }

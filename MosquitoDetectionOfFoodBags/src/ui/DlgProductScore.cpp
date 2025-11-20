@@ -2,7 +2,6 @@
 
 #include <QMessageBox>
 #include <QLabel>
-#include "GlobalStruct.hpp"
 #include "Modules.hpp"
 #include "NumberKeyboard.h"
 #include "ui_DlgProductScore.h"
