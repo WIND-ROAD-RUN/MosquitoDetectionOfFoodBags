@@ -64,12 +64,13 @@ private:
 	std::map<int, QString> _workStationTitleMap{};
 
 	QPixmap _lastImage1{};
-	QPixmap _lastImageNg{};
-	QPixmap _lastImageNg1{};
-	QPixmap _lastImageNg2{};
-	QPixmap _lastImageNg3{};
-	QPixmap _lastImageNg4{};
-	QPixmap _lastImageNg5{};
+	std::vector<QPixmap> _lastImageNgList;  // 存储最多6张NG图片
+	static constexpr size_t MAX_NG_IMAGES = 6;
+
+	void processLastImageNg(const QPixmap& img);
+	void updateNgImageDisplay(size_t index, const QPixmap& pixmap);
+	void updateAllNgImageDisplays();
+	rw::rqw::ClickableLabel* getNgLabelByIndex(size_t index);
 
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg = nullptr;

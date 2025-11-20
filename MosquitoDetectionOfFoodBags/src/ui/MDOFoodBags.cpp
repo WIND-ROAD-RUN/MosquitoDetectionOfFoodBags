@@ -191,6 +191,8 @@ void MDOFoodBags::getMotionStateAndUpdateUi()
 
 void MDOFoodBags::build_ImageEnlargedDisplay()
 {
+	_lastImageNgList.reserve(MAX_NG_IMAGES);
+
 	imgDis1 = new rw::rqw::ClickableLabel(this);
 	imgDis1->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
 
@@ -258,7 +260,7 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 	_imageEnlargedDisplay->setMonitorValue(&_isImageEnlargedDisplay);
 	_imageEnlargedDisplay->setMonitorDisImgIndex(&_currentImageEnlargedDisplayIndex);
 	_imageEnlargedDisplay->initWorkStationTitleMap(_workStationTitleMap);
-	_imageEnlargedDisplay->setNum(1);
+	_imageEnlargedDisplay->setNum(7);
 	_imageEnlargedDisplay->show();
 	_imageEnlargedDisplay->close();
 }
@@ -319,8 +321,7 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad)
 			imgDis1->setPixmap(image.scaled(imgDis1->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 			if (isbad)
 			{
-				imgDisNg1->setPixmap(image.scaled(imgDisNg1->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-				_lastImageNg1 = image;
+				processLastImageNg(image);
 			}
 		}
 		else
@@ -332,7 +333,7 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad)
 			if (isbad && _currentImageEnlargedDisplayIndex == 2)
 			{
 				_imageEnlargedDisplay->setShowImg(image);
-				_lastImageNg1 = image;
+				processLastImageNg(image);
 			}
 		}
 		_lastImage1 = image;
@@ -513,6 +514,67 @@ void MDOFoodBags::pbtn_resetProduct_clicked()
 	wetPapersConfig.productionYield = 0.0f;
 }
 
+void MDOFoodBags::processLastImageNg(const QPixmap& img)
+{
+	if (img.isNull()) {
+		return;
+	}
+
+	// 查找第一个空位置（isNull的位置）
+	for (size_t i = 0; i < _lastImageNgList.size(); ++i) {
+		if (_lastImageNgList[i].isNull()) {
+			_lastImageNgList[i] = img;
+			updateNgImageDisplay(i, img);
+			return;
+		}
+	}
+
+	// 如果没有空位置且未满，则添加新元素
+	if (_lastImageNgList.size() < MAX_NG_IMAGES) {
+		_lastImageNgList.push_back(img);
+		updateNgImageDisplay(_lastImageNgList.size() - 1, img);
+	}
+	else {
+		// 如果已满，移除最早的图片，添加新图片（队列行为）
+		_lastImageNgList.erase(_lastImageNgList.begin());
+		_lastImageNgList.push_back(img);
+		updateAllNgImageDisplays();
+	}
+}
+
+void MDOFoodBags::updateNgImageDisplay(size_t index, const QPixmap& pixmap)
+{
+	if (!_isImageEnlargedDisplay) {
+		rw::rqw::ClickableLabel* label = getNgLabelByIndex(index);
+		if (label) {
+			label->setPixmap(pixmap.scaled(label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+		}
+	}
+	else if (static_cast<size_t>(_currentImageEnlargedDisplayIndex) == index + 1) {
+		_imageEnlargedDisplay->setShowImg(pixmap);
+	}
+}
+
+void MDOFoodBags::updateAllNgImageDisplays()
+{
+	for (size_t i = 0; i < _lastImageNgList.size(); ++i) {
+		updateNgImageDisplay(i, _lastImageNgList[i]);
+	}
+}
+
+rw::rqw::ClickableLabel* MDOFoodBags::getNgLabelByIndex(size_t index)
+{
+	switch (index) {
+	case 0: return imgDisNg;
+	case 1: return imgDisNg1;
+	case 2: return imgDisNg2;
+	case 3: return imgDisNg3;
+	case 4: return imgDisNg4;
+	case 5: return imgDisNg5;
+	default: return nullptr;
+	}
+}
+
 void MDOFoodBags::imgDis1_clicked()
 {
 	if (!_lastImage1.isNull())
@@ -530,9 +592,9 @@ void MDOFoodBags::imgDis1_clicked()
 
 void MDOFoodBags::imgDisNg_clicked()
 {
-	if (!_lastImageNg.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[0].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[0]);
 	}
 	else
 	{
@@ -545,9 +607,9 @@ void MDOFoodBags::imgDisNg_clicked()
 
 void MDOFoodBags::imgDisNg1_clicked()
 {
-	if (!_lastImageNg1.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[1].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg1);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[1]);
 	}
 	else
 	{
@@ -560,9 +622,9 @@ void MDOFoodBags::imgDisNg1_clicked()
 
 void MDOFoodBags::imgDisNg2_clicked()
 {
-	if (!_lastImageNg2.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[2].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg2);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[2]);
 	}
 	else
 	{
@@ -575,9 +637,9 @@ void MDOFoodBags::imgDisNg2_clicked()
 
 void MDOFoodBags::imgDisNg3_clicked()
 {
-	if (!_lastImageNg3.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[3].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg3);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[3]);
 	}
 	else
 	{
@@ -590,9 +652,9 @@ void MDOFoodBags::imgDisNg3_clicked()
 
 void MDOFoodBags::imgDisNg4_clicked()
 {
-	if (!_lastImageNg4.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[4].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg4);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[4]);
 	}
 	else
 	{
@@ -605,9 +667,9 @@ void MDOFoodBags::imgDisNg4_clicked()
 
 void MDOFoodBags::imgDisNg5_clicked()
 {
-	if (!_lastImageNg5.isNull())
+	if (!_lastImageNgList.empty() && !_lastImageNgList[5].isNull())
 	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNg5);
+		_imageEnlargedDisplay->setShowImg(_lastImageNgList[5]);
 	}
 	else
 	{
