@@ -74,29 +74,19 @@ void TestImgPushThread::readImg(size_t s)
 		return;
 	}
 
-	if (s % _pushImgTime == 0 && imgCache.size() >= 4)
+	if (s % _pushImgTime == 0 && !imgCache.isEmpty())
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, imgCache.size() - 1);
 
-		QSet<int> indexSet;
-		while (indexSet.size() < 4) {
-			indexSet.insert(dis(gen));
-		}
+		int randomIndex = dis(gen);
 
-		QVector<rw::rqw::MatInfo> selectedImgs;
-		selectedImgs.reserve(4);
+		rw::rqw::MatInfo selectedImg{};
 
-		for (int idx : indexSet) {
-			rw::rqw::MatInfo matInfo;
-			matInfo.mat = imgCache[idx].clone();
-			selectedImgs.append(matInfo);
-		}
+		selectedImg.mat = imgCache[randomIndex].clone();
 
-		for (int i = 0; i < 4; ++i) {
-			emit imgReady(selectedImgs[i], 1, static_cast<float>(s * 100 + i));
-		}
+		emit imgReady(selectedImg, 1, static_cast<float>(s * 100));
 	}
 }
 

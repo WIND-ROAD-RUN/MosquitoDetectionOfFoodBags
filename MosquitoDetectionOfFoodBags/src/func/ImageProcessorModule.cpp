@@ -59,47 +59,27 @@ void ImageProcessor::run()
 
 void ImageProcessor::run_debug(MatInfo& frame)
 {
-	auto& imgPro = *_imgProcess;
-	imgPro(frame.image);
-	auto maskImg = imgPro.getMaskImg(frame.image);
-	auto defectResult = imgPro.getDefectResultInfo();
+	//auto& imgPro = *_imgProcess;
+	//imgPro(frame.image);
+	//auto maskImg = imgPro.getMaskImg(frame.image);
+	//auto defectResult = imgPro.getDefectResultInfo();
 
+	auto image = rw::rqw::cvMatToQImage(frame.image);
 
-	emit imageNGReady(QPixmap::fromImage(maskImg), frame.index, defectResult.isBad);
+	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
 }
 
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
-	DefectBox.clear();
-	_isbad = false;
-	auto& imgPro = *_imgProcess;
-	imgPro(frame.image);
-	auto maskImg = imgPro.getMaskImg(frame.image);
-	auto defectResult = imgPro.getDefectResultInfo();
-	auto imageRealLocation = frame.location;
+	auto image = rw::rqw::cvMatToQImage(frame.image);
 
-	auto& context = _imgProcess->context();
+	run_OpenRemoveFunc_emitErrorInfo(false);
 
-	if (context.customFields.find("DefectBox") != context.customFields.end())
-	{
-		DefectBox = std::any_cast<std::vector<int>>(context.customFields.at("DefectBox"));
-	}
+	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
 
-	for (auto& item : DefectBox)
-	{
-		item = imageRealLocation + item;
-	}
-	run_OpenRemoveFunc_emitErrorInfo(defectResult.isBad);
-
-	emit imageNGReady(QPixmap::fromImage(maskImg), frame.index, defectResult.isBad);
-
-	if (defectResult.isBad)
-	{
-		_isbad = true;
-	}
 	rw::rqw::ImageInfo imageInfo(rw::rqw::cvMatToQImage(frame.image));
 
-	save_image(imageInfo, maskImg);
+	save_image(imageInfo, image);
 }
 
 void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
