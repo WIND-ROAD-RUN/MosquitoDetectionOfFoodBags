@@ -7,9 +7,6 @@ namespace cdm {
 		tifeichixushijian1 : double :default = 0;
 		tifeijuli1 : double :default = 0;
 
-		defectIgnoreX : int :default = 0;
-		defectIgnoreY : int :default = 0;
-
 		shangXianWei1 : double :default = 0;
 		xiaXianWei1 : double :default = 0;
 		zuoXianWei1 : double :default = 0;
@@ -18,14 +15,6 @@ namespace cdm {
 		zengyi1 : double :default = 0;
 		xiangSuDangLiang1 : double :default = 0;
 
-		takeWork1Pictures : bool :default = false;
-		takeWork2Pictures : bool :default = false;
-		saveNGImg : bool :default = false;
-		saveMaskImg : bool :default = false;
-		saveOKImg : bool :default = false;
-
-		qiyongerxiangji : bool :default = false;
-		qiyongyundongkongzhiqi : bool :default = false;
 		yundongkongzhiqichonglian : bool :default = false;
 
 		debugMode : bool :default = false;
@@ -37,14 +26,5 @@ namespace cdm {
 		xiangjichufachangdu : double :default = 0;
 		meizhuanmaichongshu : double :default = 0;
 		shedingzhouchang : double :default = 0;
-
-		isZangWu : bool :default = false;
-		isXiaoZangWu : bool :default = false;
-		isJieTou : bool :default = false;
-		isBody : bool :default = false;
-		isHuaPo : bool :default = false;
-		isWeiZhiQueXian : bool :default = false;
-
-		isTichuDongzuo : bool : default = true;
 	};
 }

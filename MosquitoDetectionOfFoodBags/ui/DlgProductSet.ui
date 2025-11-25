@@ -89,7 +89,7 @@ QGroupBox::title {
        <property name="title">
         <string/>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_19" stretch="3,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_19" stretch="3">
         <item>
          <widget class="QGroupBox" name="groupBox_10">
           <property name="styleSheet">
@@ -406,384 +406,6 @@ QPushButton:pressed {
               </item>
              </layout>
             </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_15">
-          <property name="styleSheet">
-           <string notr="true">QGroupBox {
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    font: bold 14px;
-    color: #666;
-    background-color: #F8F8F8;
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left;
-    left: 10px;
-    padding: 0 5px;
-}</string>
-          </property>
-          <property name="title">
-           <string/>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_22">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_21">
-             <item>
-              <widget class="QCheckBox" name="cBox_takeCamera1Pictures">
-               <property name="styleSheet">
-                <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-               </property>
-               <property name="text">
-                <string>1工位采图</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cBox_takeCamera2Pictures">
-               <property name="styleSheet">
-                <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-               </property>
-               <property name="text">
-                <string>2工位采图</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_20">
-             <item>
-              <widget class="QCheckBox" name="cBox_takeNgPictures">
-               <property name="styleSheet">
-                <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-               </property>
-               <property name="text">
-                <string>采Ng图</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cBox_takeMaskPictures">
-               <property name="styleSheet">
-                <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-               </property>
-               <property name="text">
-                <string>采Mask图</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cBox_takeOkPictures">
-               <property name="styleSheet">
-                <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-               </property>
-               <property name="text">
-                <string>采Ok图</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </item>
           </layout>
          </widget>
@@ -2815,301 +2437,6 @@ QPushButton:pressed {
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="styleSheet">
-        <string notr="true">QGroupBox {
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    font: bold 14px;
-    color: #666;
-    background-color: #F8F8F8;
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left;
-    left: 10px;
-    padding: 0 5px;
-}</string>
-       </property>
-       <property name="title">
-        <string/>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label_77">
-            <property name="styleSheet">
-             <string notr="true">/* 基础标签样式 */
-QLabel {
-    color: #444444;          /* 主文字色 */
-    font-size: 14px;         /* 标准字号 */
-    background: transparent; /* 透明背景 */
-    padding: 2px 4px;        /* 基础内边距 */
-}
-
-/* 标题样式 */
-QLabel.title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333333;
-    border-bottom: 1px solid #DDDDDD; /* 下划线装饰 */
-    padding-bottom: 4px;
-}
-
-/* 副标题/次要文本 */
-QLabel.subtitle {
-    color: #666666;
-    font-size: 13px;
-    font-style: italic;
-}
-
-/* 强调文本 */
-QLabel.emphasis {
-    color: #333333;
-    font-weight: 500;
-    background-color: #F5F5F5;
-    border-radius: 3px;
-    padding: 4px 8px;
-}
-
-/* 状态标签（成功/警告/错误） */
-QLabel[state=&quot;success&quot;] {
-    color: #228B22;          /* 森林绿 */
-    border-left: 3px solid #228B22;
-    padding-left: 8px;
-}
-
-QLabel[state=&quot;warning&quot;] {
-    color: #FF8C00;          /* 暗橙 */
-    border-left: 3px solid #FF8C00;
-    padding-left: 8px;
-}
-
-QLabel[state=&quot;error&quot;] {
-    color: #B22222;          /* 砖红 */
-    border-left: 3px solid #B22222;
-    padding-left: 8px;
-}
-
-/* 数据展示标签 */
-QLabel.data {
-    color: #2F4F4F;          /* 深石板灰 */
-    font-family: monospace;
-    border: 1px solid #E0E0E0;
-    background-color: #FFFFFF;
-    padding: 6px 12px;
-    border-radius: 4px;
-}
-
-/* 禁用状态 */
-QLabel:disabled {
-    color: #AAAAAA;
-    background-color: transparent;
-}
-
-/* 链接样式（伪链接效果） */
-QLabel.link {
-    color: #4682B4;          /* 钢蓝 */
-    text-decoration: underline;
-    border-bottom: 1px dotted #4682B4;
-}
-
-/* 图标标签 */
-QLabel.icon {
-    qproperty-alignment: AlignCenter;
-    border: 1px solid #E0E0E0;
-    border-radius: 4px;
-    background-color: #FFFFFF;
-    padding: 12px;
-}</string>
-            </property>
-            <property name="text">
-             <string>未知缺陷边缘忽略X</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_defectIgnoreX">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-    padding: 6px 14px;
-    border: 2px solid #CCC;
-    border-radius: 4px;
-    background-color: white;
-    color: #444;
-}
-
-QPushButton:hover {
-    border-color: #999;
-    background-color: #F5F5F5;
-}
-
-QPushButton:pressed {
-    border-color: #777;
-    background-color: #EEE;
-}</string>
-            </property>
-            <property name="text">
-             <string>value</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_80">
-            <property name="text">
-             <string>MM</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_81">
-            <property name="styleSheet">
-             <string notr="true">/* 基础标签样式 */
-QLabel {
-    color: #444444;          /* 主文字色 */
-    font-size: 14px;         /* 标准字号 */
-    background: transparent; /* 透明背景 */
-    padding: 2px 4px;        /* 基础内边距 */
-}
-
-/* 标题样式 */
-QLabel.title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333333;
-    border-bottom: 1px solid #DDDDDD; /* 下划线装饰 */
-    padding-bottom: 4px;
-}
-
-/* 副标题/次要文本 */
-QLabel.subtitle {
-    color: #666666;
-    font-size: 13px;
-    font-style: italic;
-}
-
-/* 强调文本 */
-QLabel.emphasis {
-    color: #333333;
-    font-weight: 500;
-    background-color: #F5F5F5;
-    border-radius: 3px;
-    padding: 4px 8px;
-}
-
-/* 状态标签（成功/警告/错误） */
-QLabel[state=&quot;success&quot;] {
-    color: #228B22;          /* 森林绿 */
-    border-left: 3px solid #228B22;
-    padding-left: 8px;
-}
-
-QLabel[state=&quot;warning&quot;] {
-    color: #FF8C00;          /* 暗橙 */
-    border-left: 3px solid #FF8C00;
-    padding-left: 8px;
-}
-
-QLabel[state=&quot;error&quot;] {
-    color: #B22222;          /* 砖红 */
-    border-left: 3px solid #B22222;
-    padding-left: 8px;
-}
-
-/* 数据展示标签 */
-QLabel.data {
-    color: #2F4F4F;          /* 深石板灰 */
-    font-family: monospace;
-    border: 1px solid #E0E0E0;
-    background-color: #FFFFFF;
-    padding: 6px 12px;
-    border-radius: 4px;
-}
-
-/* 禁用状态 */
-QLabel:disabled {
-    color: #AAAAAA;
-    background-color: transparent;
-}
-
-/* 链接样式（伪链接效果） */
-QLabel.link {
-    color: #4682B4;          /* 钢蓝 */
-    text-decoration: underline;
-    border-bottom: 1px dotted #4682B4;
-}
-
-/* 图标标签 */
-QLabel.icon {
-    qproperty-alignment: AlignCenter;
-    border: 1px solid #E0E0E0;
-    border-radius: 4px;
-    background-color: #FFFFFF;
-    padding: 12px;
-}</string>
-            </property>
-            <property name="text">
-             <string>未知缺陷边缘忽略Y</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_defectIgnoreY">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-    padding: 6px 14px;
-    border: 2px solid #CCC;
-    border-radius: 4px;
-    background-color: white;
-    color: #444;
-}
-
-QPushButton:hover {
-    border-color: #999;
-    background-color: #F5F5F5;
-}
-
-QPushButton:pressed {
-    border-color: #777;
-    background-color: #EEE;
-}</string>
-            </property>
-            <property name="text">
-             <string>value</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_82">
-            <property name="text">
-             <string>MM</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -3189,143 +2516,11 @@ QGroupBox::title {
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_18">
                  <item>
-                  <widget class="QCheckBox" name="cbox_qiyongerxiangji">
-                   <property name="styleSheet">
-                    <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 24px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                   </property>
-                   <property name="text">
-                    <string>启用二相机</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="cbox_qiyongyundongkongzhiqi">
-                   <property name="styleSheet">
-                    <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                   </property>
-                   <property name="text">
-                    <string>启用运动控制器</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
                   <widget class="QCheckBox" name="cbox_yundongkongzhiqichonglian">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
-    font-size: 14px;
+    font-size: 24px;
     color: #333;
     font-weight: bold;        
     color:  rgb(0, 0, 0);       
@@ -3387,7 +2582,7 @@ QCheckBox::indicator:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_isTifeidongzuo">
+                  <widget class="QCheckBox" name="cbox_DI2_2">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -3448,7 +2643,139 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>启用踢废动作</string>
+                    <string>DI2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cbox_DI3_2">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 8px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;        
+    color:  rgb(0, 0, 0);       
+}
+
+/* 未选中状态 */
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px; /* 方形，圆角可适当调整 */
+    border: 2px solid #999;
+    background: #ffffff;
+}
+
+/* 悬停效果 */
+QCheckBox::indicator:hover {
+    border: 2px solid #666;
+}
+
+/* 选中状态 */
+QCheckBox::indicator:checked {
+    border: 2px solid #2196F3;
+    background-color: qradialgradient(
+        cx:0.5, cy:0.5,
+        radius:0.4,
+        fx:0.5, fy:0.5,
+        stop:0 #2196F3,
+        stop:1 transparent
+    );
+}
+
+/* 禁用状态 */
+QCheckBox::indicator:disabled {
+    border: 2px solid #ccc;
+    background: #eee;
+}
+
+/* 选中时的文字颜色 */
+QCheckBox:checked {
+    color: #2196F3;
+    font-weight: 500;
+}
+
+/* 点击动画效果 */
+QCheckBox::indicator:pressed {
+    border: 2px solid #1565C0;
+    background-color: qradialgradient(
+        cx:0.5, cy:0.5,
+        radius:0.5,
+        fx:0.5, fy:0.5,
+        stop:0 #BBDEFB,
+        stop:1 transparent
+    );
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>DI3</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cbox_DI4">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 8px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;        
+    color:  rgb(0, 0, 0);       
+}
+
+/* 未选中状态 */
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px; /* 方形，圆角可适当调整 */
+    border: 2px solid #999;
+    background: #ffffff;
+}
+
+/* 悬停效果 */
+QCheckBox::indicator:hover {
+    border: 2px solid #666;
+}
+
+/* 选中状态 */
+QCheckBox::indicator:checked {
+    border: 2px solid #2196F3;
+    background-color: qradialgradient(
+        cx:0.5, cy:0.5,
+        radius:0.4,
+        fx:0.5, fy:0.5,
+        stop:0 #2196F3,
+        stop:1 transparent
+    );
+}
+
+/* 禁用状态 */
+QCheckBox::indicator:disabled {
+    border: 2px solid #ccc;
+    background: #eee;
+}
+
+/* 选中时的文字颜色 */
+QCheckBox:checked {
+    color: #2196F3;
+    font-weight: 500;
+}
+
+/* 点击动画效果 */
+QCheckBox::indicator:pressed {
+    border: 2px solid #1565C0;
+    background-color: qradialgradient(
+        cx:0.5, cy:0.5,
+        radius:0.5,
+        fx:0.5, fy:0.5,
+        stop:0 #BBDEFB,
+        stop:1 transparent
+    );
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>DI4</string>
                    </property>
                   </widget>
                  </item>
@@ -6170,626 +5497,6 @@ QLabel.icon {
                </item>
               </layout>
              </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>分数界面内容可选显示</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_11">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_33">
-         <property name="styleSheet">
-          <string notr="true">QGroupBox {
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    font: bold 14px;
-    color: #666;
-    background-color: #F8F8F8;
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left;
-    left: 10px;
-    padding: 0 5px;
-}</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_23">
-          <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_26">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_90">
-              <item>
-               <widget class="QCheckBox" name="ckb_zangwu">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>脏污</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_xiaozangwu">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>小脏污</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_jietou">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>接头</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_body">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>本体</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_91">
-              <item>
-               <widget class="QCheckBox" name="ckb_huapo">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>划破</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_weizhiquexian">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>未知缺陷</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_extra4">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>额外2</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="ckb_extra5">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QCheckBox {
-    spacing: 8px;
-    font-size: 20px;
-    color: #333;
-    font-weight: bold;        
-    color:  rgb(0, 0, 0);       
-}
-
-/* 未选中状态 */
-QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px; /* 方形，圆角可适当调整 */
-    border: 2px solid #999;
-    background: #ffffff;
-}
-
-/* 悬停效果 */
-QCheckBox::indicator:hover {
-    border: 2px solid #666;
-}
-
-/* 选中状态 */
-QCheckBox::indicator:checked {
-    border: 2px solid #2196F3;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.4,
-        fx:0.5, fy:0.5,
-        stop:0 #2196F3,
-        stop:1 transparent
-    );
-}
-
-/* 禁用状态 */
-QCheckBox::indicator:disabled {
-    border: 2px solid #ccc;
-    background: #eee;
-}
-
-/* 选中时的文字颜色 */
-QCheckBox:checked {
-    color: #2196F3;
-    font-weight: 500;
-}
-
-/* 点击动画效果 */
-QCheckBox::indicator:pressed {
-    border: 2px solid #1565C0;
-    background-color: qradialgradient(
-        cx:0.5, cy:0.5,
-        radius:0.5,
-        fx:0.5, fy:0.5,
-        stop:0 #BBDEFB,
-        stop:1 transparent
-    );
-}</string>
-                </property>
-                <property name="text">
-                 <string>额外3</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>

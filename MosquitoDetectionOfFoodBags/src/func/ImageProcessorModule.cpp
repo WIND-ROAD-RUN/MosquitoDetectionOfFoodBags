@@ -110,7 +110,6 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 
 void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image)
 {
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	auto& isTakePictures = Modules::getInstance().runtimeInfoModule.isTakePictures;
 
 	if (!isTakePictures)
@@ -118,7 +117,7 @@ void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& ima
 		return;
 	}
 
-	if ((imageProcessingModuleIndex == 1 && setConfig.takeWork1Pictures) || (imageProcessingModuleIndex == 2 && setConfig.takeWork2Pictures))
+	if ((imageProcessingModuleIndex == 1))
 	{
 		save_image_work(imageInfo, image);
 	}
@@ -127,49 +126,30 @@ void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& ima
 void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image)
 {
 	auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	if (_isbad) {
-		if (setConfig.saveNGImg)
+
+		if (1 == imageProcessingModuleIndex)
 		{
-			if (1 == imageProcessingModuleIndex)
-			{
-				imageInfo.classify = "NG1";
-				imageSaveEngine->pushImage(imageInfo);
-			}
-			else if (2 == imageProcessingModuleIndex)
-			{
-				imageInfo.classify = "NG2";
-				imageSaveEngine->pushImage(imageInfo);
-			}
+			imageInfo.classify = "NG1";
+			imageSaveEngine->pushImage(imageInfo);
 		}
-		if (setConfig.saveMaskImg)
+		else if (2 == imageProcessingModuleIndex)
 		{
-			rw::rqw::ImageInfo mask(image);
-			if (1 == imageProcessingModuleIndex)
-			{
-				mask.classify = "Mask1";
-				imageSaveEngine->pushImage(mask);
-			}
-			else if (2 == imageProcessingModuleIndex)
-			{
-				mask.classify = "Mask2";
-				imageSaveEngine->pushImage(mask);
-			}
+			imageInfo.classify = "NG2";
+			imageSaveEngine->pushImage(imageInfo);
 		}
 	}
 	else {
-		if (setConfig.saveOKImg)
+
+		if (1 == imageProcessingModuleIndex)
 		{
-			if (1 == imageProcessingModuleIndex)
-			{
-				imageInfo.classify = "OK1";
-				imageSaveEngine->pushImage(imageInfo);
-			}
-			else if (2 == imageProcessingModuleIndex)
-			{
-				imageInfo.classify = "OK2";
-				imageSaveEngine->pushImage(imageInfo);
-			}
+			imageInfo.classify = "OK1";
+			imageSaveEngine->pushImage(imageInfo);
+		}
+		else if (2 == imageProcessingModuleIndex)
+		{
+			imageInfo.classify = "OK2";
+			imageSaveEngine->pushImage(imageInfo);
 		}
 	}
 }

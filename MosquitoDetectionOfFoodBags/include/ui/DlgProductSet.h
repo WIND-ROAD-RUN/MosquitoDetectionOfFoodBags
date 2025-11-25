@@ -59,16 +59,7 @@ private slots:
 	void pbtn_baoguang1_clicked();
 	void pbtn_zengyi1_clicked();
 	void pbtn_xiangsudangliang1_clicked();
-	void btn_defectIgnoreX_clicked();
-	void btn_defectIgnoreY_clicked();
 
-	void cBox_takeNgPictures_checked();
-	void cBox_takeMaskPictures_checked();
-	void cBox_takeOkPictures_checked();
-	void cBox_takeCamera1Pictures_checked();
-	void cBox_takeCamera2Pictures_checked();
-	void cbox_qiyongerxiangji_checked();
-	void cbox_qiyongyundongkongzhiqi_checked();
 	void cbox_yundongkongzhiqichonglian_checked();
 
 	// 基本参数
@@ -87,15 +78,6 @@ private slots:
 	void btn_setDOtifeixinhao_clicked();
 	void btn_setDOxiangjichufa1_clicked();
 	void btn_setDOxiangjichufa2_clicked();
-
-	// 分数界面内容可选显示
-	void ckb_zangwu_checked(bool isChecked);
-	void ckb_xiaozangwu_checked(bool isChecked);
-	void ckb_jietou_checked(bool isChecked);
-	void ckb_body_checked(bool isChecked);
-	void ckb_huapo_checked(bool isChecked);
-	void ckb_weizhiquexian_checked(bool isChecked);
-	void cbox_isTifeidongzuo_checked(bool isChecked);
 
 	void tabWidget_indexChanged(int index);
 

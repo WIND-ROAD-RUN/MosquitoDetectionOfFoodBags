@@ -47,12 +47,6 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 		if (((nowLocation)-(minlocation)) >= 0)
 		{
 			queue->tryPopTop(nowLocation);
-			auto cfg = Modules::getInstance().configManagerModule.setConfig;
-			if (!cfg.isTichuDongzuo)
-			{
-				return;
-			}
-			std::cout << "pop1: " << static_cast<int>(nowLocation) << std::endl;
 
 			auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
 		}

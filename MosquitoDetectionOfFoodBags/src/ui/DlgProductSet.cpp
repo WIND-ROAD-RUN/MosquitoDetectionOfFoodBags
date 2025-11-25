@@ -43,15 +43,6 @@ void DlgProductSet::read_config()
 	// 剔废时间
 	ui->pbtn_tifeijuli1->setText(QString::number(setConfig.tifeijuli1));
 
-	// 采图
-	ui->cBox_takeCamera1Pictures->setChecked(setConfig.takeWork1Pictures);
-	ui->cBox_takeCamera2Pictures->setChecked(setConfig.takeWork2Pictures);
-
-	// 存图
-	ui->cBox_takeNgPictures->setChecked(setConfig.saveNGImg);
-	ui->cBox_takeMaskPictures->setChecked(setConfig.saveMaskImg);
-	ui->cBox_takeOkPictures->setChecked(setConfig.saveOKImg);
-
 	// 一工位
 	ui->pbtn_shangxianwei1->setText(QString::number(setConfig.shangXianWei1));
 	ui->pbtn_xiaxianwei1->setText(QString::number(setConfig.xiaXianWei1));
@@ -66,8 +57,6 @@ void DlgProductSet::read_config()
 	ui->cbox_debugMode->setChecked(setConfig.debugMode);
 
 	// 基本功能
-	ui->cbox_qiyongerxiangji->setChecked(setConfig.qiyongerxiangji);
-	ui->cbox_qiyongyundongkongzhiqi->setChecked(setConfig.qiyongyundongkongzhiqi);
 	ui->cbox_yundongkongzhiqichonglian->setChecked(setConfig.yundongkongzhiqichonglian);
 
 	// 基本参数
@@ -80,22 +69,8 @@ void DlgProductSet::read_config()
 	ui->btn_setDOxiangjichufa1->setText(QString::number(setConfig.xiangjichufa1OUT));
 	ui->btn_setDOxiangjichufa2->setText(QString::number(setConfig.xiangjichufa2OUT));
 
-	// 分数界面可选显示
-	ui->ckb_zangwu->setChecked(setConfig.isZangWu);
-	ui->ckb_xiaozangwu->setChecked(setConfig.isXiaoZangWu);
-	ui->ckb_jietou->setChecked(setConfig.isJieTou);
-	ui->ckb_body->setChecked(setConfig.isBody);
-	ui->ckb_huapo->setChecked(setConfig.isHuaPo);
-	ui->ckb_weizhiquexian->setChecked(setConfig.isWeiZhiQueXian);
-
-	//未知缺陷
-	ui->btn_defectIgnoreX->setText(QString::number(setConfig.defectIgnoreX));
-	ui->btn_defectIgnoreY->setText(QString::number(setConfig.defectIgnoreY));
-
 	// 默认显示第一个
 	ui->tabWidget->setCurrentIndex(0);
-
-	ui->cbox_isTifeidongzuo->setChecked(setConfig.isTichuDongzuo);
 
 	updateControlLines();
 
@@ -123,30 +98,13 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_zengyi1_clicked);
 	QObject::connect(ui->pbtn_xiangsudangliang1, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_xiangsudangliang1_clicked);
-	QObject::connect(ui->cBox_takeNgPictures, &QCheckBox::clicked,
-		this, &DlgProductSet::cBox_takeNgPictures_checked);
-	QObject::connect(ui->cBox_takeMaskPictures, &QCheckBox::clicked,
-		this, &DlgProductSet::cBox_takeMaskPictures_checked);
-	QObject::connect(ui->cBox_takeOkPictures, &QCheckBox::clicked,
-		this, &DlgProductSet::cBox_takeOkPictures_checked);
+
 	QObject::connect(ui->cbox_debugMode, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_debugMode_checked);
 	QObject::connect(ui->pbtn_close, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_close_clicked);
-	QObject::connect(ui->cBox_takeCamera1Pictures, &QCheckBox::clicked,
-		this, &DlgProductSet::cBox_takeCamera1Pictures_checked);
-	QObject::connect(ui->cBox_takeCamera2Pictures, &QCheckBox::clicked,
-		this, &DlgProductSet::cBox_takeCamera2Pictures_checked);
-	QObject::connect(ui->cbox_qiyongerxiangji, &QCheckBox::clicked,
-		this, &DlgProductSet::cbox_qiyongerxiangji_checked);
-	QObject::connect(ui->cbox_qiyongyundongkongzhiqi, &QCheckBox::clicked,
-		this, &DlgProductSet::cbox_qiyongyundongkongzhiqi_checked);
 	QObject::connect(ui->cbox_yundongkongzhiqichonglian, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_yundongkongzhiqichonglian_checked);
-	QObject::connect(ui->btn_defectIgnoreX, &QPushButton::clicked,
-		this, &DlgProductSet::btn_defectIgnoreX_clicked);
-	QObject::connect(ui->btn_defectIgnoreY, &QPushButton::clicked,
-		this, &DlgProductSet::btn_defectIgnoreY_clicked);
 
 	// 基本参数
 	QObject::connect(ui->btn_xiangjichufachangdu, &QPushButton::clicked,
@@ -173,23 +131,6 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_setDOxiangjichufa1_clicked);
 	QObject::connect(ui->btn_setDOxiangjichufa2, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOxiangjichufa2_clicked);
-
-	// 分数界面可选显示
-	QObject::connect(ui->ckb_zangwu, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_zangwu_checked);
-	QObject::connect(ui->ckb_xiaozangwu, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_xiaozangwu_checked);
-	QObject::connect(ui->ckb_jietou, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_jietou_checked);
-	QObject::connect(ui->ckb_body, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_body_checked);
-	QObject::connect(ui->ckb_huapo, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_huapo_checked);
-	QObject::connect(ui->ckb_weizhiquexian, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_weizhiquexian_checked);
-
-	QObject::connect(ui->cbox_isTifeidongzuo, &QCheckBox::clicked,
-		this, &DlgProductSet::ckb_zangwu_checked);
 }
 
 void DlgProductSet::setDIErrorInfo(const std::vector<std::vector<int>>& index)
@@ -537,62 +478,6 @@ void DlgProductSet::pbtn_xiangsudangliang1_clicked()
 	}
 }
 
-void DlgProductSet::btn_defectIgnoreX_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->btn_defectIgnoreX->setText(value);
-		setConfig.defectIgnoreX = value.toDouble();
-	}
-}
-
-void DlgProductSet::btn_defectIgnoreY_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->btn_defectIgnoreY->setText(value);
-		setConfig.defectIgnoreY = value.toDouble();
-	}
-}
-
-void DlgProductSet::cBox_takeNgPictures_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.saveNGImg = ui->cBox_takeNgPictures->isChecked();
-}
-
-void DlgProductSet::cBox_takeMaskPictures_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.saveMaskImg = ui->cBox_takeMaskPictures->isChecked();
-}
-
-void DlgProductSet::cBox_takeOkPictures_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.saveOKImg = ui->cBox_takeOkPictures->isChecked();
-}
-
 void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 {
 	auto& monitorZMotionMonitorThread = Modules::getInstance().motionControllerModule.monitorMotionIoStateThread;
@@ -723,72 +608,6 @@ void DlgProductSet::btn_setDOxiangjichufa2_clicked()
 		auto indicesDI = DIFindAllDuplicateIndices();
 		setDIErrorInfo(indicesDI);
 	}
-}
-
-void DlgProductSet::ckb_zangwu_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isTichuDongzuo = isChecked;
-}
-
-void DlgProductSet::ckb_xiaozangwu_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isXiaoZangWu = isChecked;
-}
-
-void DlgProductSet::ckb_jietou_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isJieTou = isChecked;
-}
-
-void DlgProductSet::ckb_body_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isBody = isChecked;
-}
-
-void DlgProductSet::ckb_huapo_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isHuaPo = isChecked;
-}
-
-void DlgProductSet::ckb_weizhiquexian_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isWeiZhiQueXian = isChecked;
-}
-
-void DlgProductSet::cbox_isTifeidongzuo_checked(bool isChecked)
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.isTichuDongzuo = isChecked;
-}
-
-void DlgProductSet::cBox_takeCamera1Pictures_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.takeWork1Pictures = ui->cBox_takeCamera1Pictures->isChecked();
-}
-
-void DlgProductSet::cBox_takeCamera2Pictures_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.takeWork2Pictures = ui->cBox_takeCamera2Pictures->isChecked();
-}
-
-void DlgProductSet::cbox_qiyongerxiangji_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.qiyongerxiangji = ui->cbox_qiyongerxiangji->isChecked();
-}
-
-void DlgProductSet::cbox_qiyongyundongkongzhiqi_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.qiyongyundongkongzhiqi = ui->cbox_qiyongyundongkongzhiqi->isChecked();
 }
 
 void DlgProductSet::cbox_yundongkongzhiqichonglian_checked()
