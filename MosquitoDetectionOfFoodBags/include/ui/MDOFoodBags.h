@@ -60,9 +60,6 @@ private slots:
 
 signals:
 	void shibiekuangChanged();
-	void wenziChanged();
-	void changeToDebugMode();
-	void changeToRemoveMode();
 
 private:
 	bool _isImageEnlargedDisplay{ false };

@@ -93,6 +93,9 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	ui->ckb_shibiekuang->setChecked(wetPapersConfig.isshibiekuang);
 	ui->ckb_wenzi->setChecked(wetPapersConfig.iswenzi);
 
+	// 隐藏分数按钮
+	ui->pbtn_score->setVisible(false);
+
 	// release版本
 #ifdef NDEBUG
 	wetPapersConfig.isSaveImg = true;
@@ -399,7 +402,6 @@ void MDOFoodBags::rbtn_debug_checked(bool checked)
 				camera1->setFrameTriggered(false);
 				camera1->setLineTriggered(false);
 			}
-			ui->rbtn_takePicture->setChecked(false);
 		}
 		else {
 			runningState = RunningState::Stop;
@@ -410,8 +412,6 @@ void MDOFoodBags::rbtn_debug_checked(bool checked)
 	else {
 		ui->rbtn_debug->setChecked(false);
 	}
-
-	emit changeToDebugMode();
 }
 
 void MDOFoodBags::pbtn_openSaveLocation_clicked()
@@ -426,10 +426,6 @@ void MDOFoodBags::pbtn_openSaveLocation_clicked()
 
 void MDOFoodBags::rbtn_takePicture_checked()
 {
-	if (ui->rbtn_debug->isChecked() == true)
-	{
-		ui->rbtn_takePicture->setChecked(false);
-	}
 	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	auto& isTakePictures = Modules::getInstance().runtimeInfoModule.isTakePictures;
 	wetPapersConfig.isSaveImg = ui->rbtn_takePicture->isChecked();
@@ -457,8 +453,6 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 	{
 		runningState = RunningState::Stop;
 	}
-
-	emit changeToRemoveMode();
 }
 
 void MDOFoodBags::ckb_shibiekuang_checked(bool checked)
@@ -473,8 +467,6 @@ void MDOFoodBags::ckb_wenzi_checked(bool checked)
 {
 	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	wetPapersConfig.iswenzi = ui->ckb_wenzi->isChecked();
-
-	emit wenziChanged();
 }
 
 void MDOFoodBags::pbtn_resetProduct_clicked()

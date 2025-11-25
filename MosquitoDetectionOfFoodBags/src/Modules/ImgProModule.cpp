@@ -38,10 +38,10 @@ void ImgProModule::buildImgProContext()
 void ImgProModule::buildImgProContextMain()
 {
 	auto& runningState = Modules::getInstance().runtimeInfoModule.runningState;
-	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 
 #pragma region  build base
-	imageProcessContext_Main.imageProcessPrepare = [this, &runningState, &wetPapersConfig](rw::imgPro::ImageProcessContext& context)
+	imageProcessContext_Main.imageProcessPrepare = [this, &runningState, &mainWindowConfig](rw::imgPro::ImageProcessContext& context)
 		{
 			
 		};

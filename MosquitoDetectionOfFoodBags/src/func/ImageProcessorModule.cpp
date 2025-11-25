@@ -67,6 +67,9 @@ void ImageProcessor::run_debug(MatInfo& frame)
 	auto image = rw::rqw::cvMatToQImage(frame.image);
 
 	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
+
+	rw::rqw::ImageInfo imageInfo(rw::rqw::cvMatToQImage(frame.image));
+	save_image(imageInfo, image);
 }
 
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
@@ -78,7 +81,6 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
 
 	rw::rqw::ImageInfo imageInfo(rw::rqw::cvMatToQImage(frame.image));
-
 	save_image(imageInfo, image);
 }
 
