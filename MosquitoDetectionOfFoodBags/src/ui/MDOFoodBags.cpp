@@ -396,8 +396,8 @@ void MDOFoodBags::rbtn_debug_checked(bool checked)
 			runningState = RunningState::Debug;
 			if (camera1)
 			{
-				camera1->setTriggerState(false);
-				camera1->setFrameRate(5);
+				camera1->setFrameTriggered(false);
+				camera1->setLineTriggered(false);
 			}
 			ui->rbtn_takePicture->setChecked(false);
 		}
@@ -446,8 +446,8 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 		runningState = RunningState::OpenRemoveFunc;
 		if (camera1)
 		{
-			camera1->setTriggerState(true);
-			camera1->setFrameRate(50);
+			camera1->setFrameTriggered(true);
+			camera1->setLineTriggered(true);
 		}
 		ui->rbtn_debug->setChecked(false);
 		ui->ckb_shibiekuang->setVisible(false);

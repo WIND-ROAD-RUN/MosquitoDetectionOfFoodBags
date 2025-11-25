@@ -47,7 +47,7 @@ void CameraModule::stop()
 
 bool CameraModule::build_camera1()
 {
-	auto cameraList = rw::rqw::CheckCameraList();
+	auto cameraList = rw::rqw::CheckCameraList(rw::rqw::CameraProvider::DS);
 
 	auto cameraMetaData1 = cameraMetaDataCheck(Utility::cameraIp1, cameraList);
 
@@ -65,12 +65,15 @@ bool CameraModule::build_camera1()
 					matInfo.customField["loc"] = static_cast<float>(loc);
 				};
 			camera1->initCamera(cameraMetaData1, rw::rqw::CameraObjectTrigger::Hardware);
-			camera1->setTriggerState(true);
+			//camera1->setTriggerState(true);
 			camera1->cameraIndex = 1;
-			camera1->setFrameRate(50);
-			camera1->setHeartbeatTime(5000);
+			camera1->setFrameTriggered(true);
+			camera1->setLineTriggered(true);
+			camera1->setLineHeight(16000);
 			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang1));
 			camera1->setGain(static_cast<size_t>(setConfig.zengyi1));
+			camera1->setMultiplier(1);
+			camera1->setPostDivider(1);
 
 			QObject::connect(camera1.get(), &rw::rqw::CameraPassiveThread::frameCaptured,
 				this, &CameraModule::onFrameCaptured);
@@ -78,7 +81,7 @@ bool CameraModule::build_camera1()
 			return true;
 		}
 		catch (const std::exception&)
-		{
+		{ 
 			return false;
 		}
 	}
