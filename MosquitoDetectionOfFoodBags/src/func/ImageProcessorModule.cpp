@@ -96,7 +96,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		++statisticalInfo.produceCount;
 	}
 
-	if (isbad)
+	/*if (isbad)
 	{
 		for (const auto& item : DefectBox)
 		{
@@ -105,7 +105,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 				priorityQueue1->push(item);
 			}
 		}
-	}
+	}*/
 }
 
 void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image)

@@ -62,8 +62,6 @@ private:
 	int _workIndex;
 public:
 	int imageProcessingModuleIndex;
-
-	std::vector<int> DefectBox{};
 };
 
 
@@ -85,11 +83,6 @@ public slots:
 
 signals:
 	void imageNGReady(QPixmap image, size_t index, bool isbad);
-	void shibiekuangChanged();
-	void wenziChanged();
-	void changeToDebugMode();
-	void changeToRemoveMode();
-	void paramMapsChanged();
 
 public:
 	std::vector<ImageProcessor*> getProcessors() const {
