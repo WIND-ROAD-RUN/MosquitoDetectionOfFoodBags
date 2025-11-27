@@ -885,7 +885,7 @@ QGroupBox::title {
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QPushButton" name="pbtn_score">
+            <widget class="QPushButton" name="pbtn_start">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -913,7 +913,7 @@ QPushButton:pressed {
 }</string>
              </property>
              <property name="text">
-              <string>分数</string>
+              <string>启动</string>
              </property>
             </widget>
            </item>

@@ -1,7 +1,9 @@
 #include "ImageProcessorModule.hpp"
 #include "imet_Utility.cuh"
 #include "ime_ModelEngineFactory.h"
+#include "MDOFoodBags.h"
 #include "Modules.hpp"
+#include "rqw_HalconUtilty.hpp"
 #include "Utilty.hpp"
 
 ImageProcessor::ImageProcessor(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
@@ -232,6 +234,15 @@ void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t ind
 		return; // 跳过空帧
 	}
 
+	auto isModelNeedGet = MDOFoodBags::getIsModelImageLoaded();
+	if (!isModelNeedGet)
+	{
+		HalconCpp::HObject hImage = rw::rqw::CvMatToHImage(matInfo.mat);
+		HalconCpp::Rgb1ToGray(hImage, &hImage);
+		HalconCpp::MeanImage(hImage, &hImage, 3, 3);
+		MDOFoodBags::setModelImage(hImage);
+		MDOFoodBags::setIsModelImageLoaded(true);
+	}
 
 	QMutexLocker locker(&_mutex);
 	MatInfo mat;

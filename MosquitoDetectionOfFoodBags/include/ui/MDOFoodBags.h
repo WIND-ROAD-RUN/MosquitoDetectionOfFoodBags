@@ -4,6 +4,7 @@
 #include "PictureViewerThumbnails.h"
 #include "ImageEnlargedDisplay.h"
 #include"rqw_LabelClickable.h"
+#include <halconcpp/HalconCpp.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MDOFoodBagsClass; };
@@ -49,7 +50,6 @@ private slots:
 private slots:
 	void pbtn_exit_clicked();
 	void pbtn_set_clicked();
-	void pbtn_score_clicked();
 	void rbtn_debug_checked(bool checked);
 	void pbtn_openSaveLocation_clicked();
 	void rbtn_takePicture_checked();
@@ -57,9 +57,19 @@ private slots:
 	void ckb_shibiekuang_checked(bool checked);
 	void ckb_wenzi_checked(bool checked);
 	void pbtn_resetProduct_clicked();
+	void pbtn_start_clicked();
 
 signals:
 	void shibiekuangChanged();
+
+public:
+	static void setModelImage(const HalconCpp::HObject& img);
+	static std::shared_ptr<const HalconCpp::HObject> getModelImage();
+	static void setIsModelImageLoaded(bool isLoaded);
+	static bool getIsModelImageLoaded();
+private:
+	static std::shared_ptr<const HalconCpp::HObject> modelImage;
+	static std::atomic_bool isModelImageLoaded;
 
 private:
 	bool _isImageEnlargedDisplay{ false };

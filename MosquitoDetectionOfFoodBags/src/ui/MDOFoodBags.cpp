@@ -1,7 +1,6 @@
 #include "ui_MDOFoodBags.h"
 
 #include "MDOFoodBags.h"
-
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -13,6 +12,9 @@
 #include "Modules.hpp"
 #include "NumberKeyboard.h"
 #include"Utilty.hpp"
+
+std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::modelImage{};
+std::atomic_bool MDOFoodBags::isModelImageLoaded{ false };
 
 MDOFoodBags::MDOFoodBags(QWidget* parent)
 	: QMainWindow(parent)
@@ -62,7 +64,7 @@ void MDOFoodBags::build_connect()
 {
 	connect(ui->pbtn_exit, &QPushButton::clicked, this, &MDOFoodBags::pbtn_exit_clicked);
 	connect(ui->pbtn_set, &QPushButton::clicked, this, &MDOFoodBags::pbtn_set_clicked);
-	connect(ui->pbtn_score, &QPushButton::clicked, this, &MDOFoodBags::pbtn_score_clicked);
+	connect(ui->pbtn_start, &QPushButton::clicked, this, &MDOFoodBags::pbtn_start_clicked);
 	connect(ui->rbtn_debug, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_debug_checked);
 	connect(ui->rbtn_takePicture, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_takePicture_checked);
 	connect(ui->rbtn_removeFunc, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_removeFunc_checked);
@@ -92,9 +94,6 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	ui->rbtn_removeFunc->setChecked(wetPapersConfig.isDefect);
 	ui->ckb_shibiekuang->setChecked(wetPapersConfig.isshibiekuang);
 	ui->ckb_wenzi->setChecked(wetPapersConfig.iswenzi);
-
-	// 隐藏分数按钮
-	ui->pbtn_score->setVisible(false);
 
 	// release版本
 #ifdef NDEBUG
@@ -134,6 +133,8 @@ void MDOFoodBags::initializeComponents()
 	getCameraStateAndUpdateUi();
 
 	build_connect();
+
+	pbtn_start_clicked();
 
 #ifdef BUILD_WITHOUT_HARDWARE
 #endif
@@ -381,14 +382,6 @@ void MDOFoodBags::pbtn_set_clicked()
 	}
 }
 
-void MDOFoodBags::pbtn_score_clicked()
-{
-	auto& _dlgProductScore = Modules::getInstance().uiModule._dlgProductScore;
-	_dlgProductScore->setFixedSize(this->width(), this->height());
-	_dlgProductScore->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	_dlgProductScore->exec();
-}
-
 void MDOFoodBags::rbtn_debug_checked(bool checked)
 {
 	auto isRuning = ui->rbtn_removeFunc->isChecked();
@@ -480,6 +473,41 @@ void MDOFoodBags::pbtn_resetProduct_clicked()
 	wetPapersConfig.totalProductionVolume = 0;
 	wetPapersConfig.totalDefectiveVolume = 0;
 	wetPapersConfig.productionYield = 0.0f;
+}
+
+void MDOFoodBags::pbtn_start_clicked()
+{
+	setIsModelImageLoaded(false);
+
+	auto& camera = Modules::getInstance().cameraModule.camera1;
+	if (camera)
+	{
+		camera->softwareTrigger();
+	}
+}
+
+void MDOFoodBags::setModelImage(const HalconCpp::HObject& img)
+{
+	auto sp = std::make_shared<HalconCpp::HObject>(img);
+	std::shared_ptr<const HalconCpp::HObject> csp = sp;
+
+	std::atomic_store_explicit(&modelImage, csp, std::memory_order_release);
+	isModelImageLoaded.store(img.IsInitialized(), std::memory_order_relaxed);
+}
+
+std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::getModelImage()
+{
+	return std::atomic_load_explicit(&modelImage, std::memory_order_acquire);
+}
+
+void MDOFoodBags::setIsModelImageLoaded(bool isLoaded)
+{
+	isModelImageLoaded.store(isLoaded, std::memory_order_relaxed);
+}
+
+bool MDOFoodBags::getIsModelImageLoaded()
+{
+	return isModelImageLoaded.load(std::memory_order_relaxed);
 }
 
 void MDOFoodBags::processLastImageNg(const QPixmap& img)

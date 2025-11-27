@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.27)
 
 project(MosquitoDetectionOfFoodBags VERSION 0.1 LANGUAGES CXX)
 
@@ -57,11 +57,13 @@ target_include_directories(${PROJECT_NAME}
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/NoHardWare
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/osoInclude
 	PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+	PUBLIC ${Halcon_include}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets Qt6::Concurrent)
 target_link_libraries(${PROJECT_NAME} 
 	PRIVATE ${OpenCV_LIBS}
+	PUBLIC ${Halcon_libs}
 )
 
 target_link_libraries(${PROJECT_NAME} 
@@ -71,7 +73,9 @@ target_link_libraries(${PROJECT_NAME}
 	PRIVATE hoem
 	PRIVATE imgPro
 	PRIVATE ime
+	PRIVATE rqwime
 	PRIVATE rqwscc
+	PRIVATE rqwhalcon
 	PRIVATE rqwm
 )
 
