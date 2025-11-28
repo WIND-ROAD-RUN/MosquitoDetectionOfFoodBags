@@ -52,6 +52,8 @@ bool CameraModule::build_camera1()
 	auto cameraMetaData1 = cameraMetaDataCheck(Utility::cameraIp1, cameraList);
 
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	double xiangsudangliang= setConfig.xiangSuDangLiang1;
+	double xiangjichufachangdu = setConfig.xiangjichufachangdu;
 
 	if (cameraMetaData1.ip != "0")
 	{
@@ -67,9 +69,13 @@ bool CameraModule::build_camera1()
 			camera1->initCamera(cameraMetaData1, rw::rqw::CameraObjectTrigger::Hardware);
 			//camera1->setTriggerState(true);
 			camera1->cameraIndex = 1;
-			camera1->setFrameTriggered(true);
+			camera1->setFrameTriggered(false);
 			camera1->setLineTriggered(true);
-			camera1->setLineHeight(16000);
+
+			//TODO:设置相机行高
+			double hanggao = xiangjichufachangdu / xiangsudangliang;
+			
+			camera1->setLineHeight((int)hanggao);
 			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang1));
 			camera1->setGain(static_cast<size_t>(setConfig.zengyi1));
 			camera1->setMultiplier(1);

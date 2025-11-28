@@ -71,23 +71,13 @@ target_link_libraries(${PROJECT_NAME}
 	PRIVATE oso
 	PRIVATE rqwhoec
 	PRIVATE hoem
-	PRIVATE imgPro
-	PRIVATE ime
-	PRIVATE rqwime
 	PRIVATE rqwscc
 	PRIVATE rqwhalcon
-	PRIVATE rqwm
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${QT_PATH}/bin/windeployqt.exe --no-compiler-runtime --no-opengl-sw $<TARGET_FILE:${PROJECT_NAME}>
     COMMENT "Running windeployqt to package Qt dependencies"
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${TensorRT_dlls} ${TensorRT_exes} ${OnnxRuntime_dlls}
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

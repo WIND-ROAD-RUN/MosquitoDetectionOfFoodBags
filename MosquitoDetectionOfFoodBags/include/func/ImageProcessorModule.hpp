@@ -4,7 +4,6 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <QPixmap>
-#include <imgPro_ImageProcess.hpp>
 
 #include "rqw_CameraObjectCore.hpp"
 #include "rqw_ImageSaveEngine.h"
@@ -37,6 +36,36 @@ private:
 	void run_OpenRemoveFunc(MatInfo& frame);	// 开启剔废功能时的处理模式
 
 	void run_OpenRemoveFunc_emitErrorInfo(bool isbad) const;
+	void halconPRocess(cv::Mat image, QVector< double>& R1, QVector< double>& C1, QVector< double>& R2, QVector< double>& C2, QVector< double>& Area);
+	// 在图像上绘制矩形
+	void drawRectanglesOnImage(QImage& image,
+		const QVector<double>& R1,
+		const QVector<double>& C1,
+		const QVector<double>& R2,
+		const QVector<double>& C2,
+		const QVector<double>& Areas,
+		const QColor& color = Qt::red,
+		int penWidth = 2);
+	bool checkDefectAndDrawOnImage(QImage& image, const QVector<double>& R1, const QVector<double>& C1,
+	                               const QVector<double>& R2, const QVector<double>& C2, const QVector<double>& Areas,
+	                               double minArea, double allMinArea);
+	// 在图像上绘制单个矩形
+	void drawSingleRectangleOnImage(QImage& image,
+		double R1,
+		double C1,
+		double R2,
+		double C2,
+		double area,
+		const QColor& color = Qt::red,
+		int penWidth = 2);
+
+
+
+	void drawLimitLines(QImage& image,
+	                    double leftLimit,
+	                    double rightLimit,
+	                    const QColor& color = Qt::yellow,
+	                    int penWidth = 2);
 
 	// 存图
 	void save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image);
@@ -45,8 +74,6 @@ private:
 signals:
 	void imageNGReady(QPixmap image, size_t index, bool isbad);
 
-private:
-	std::unique_ptr<rw::imgPro::ImageProcess> _imgProcess;
 public:
 	// 构建模型引擎
 	void buildSegModelEngine(const QString& enginePath);		// Segmentation 模型
@@ -98,5 +125,11 @@ private:
 public:
 	size_t index;
 };
+
+
+
+
+
+
 
 

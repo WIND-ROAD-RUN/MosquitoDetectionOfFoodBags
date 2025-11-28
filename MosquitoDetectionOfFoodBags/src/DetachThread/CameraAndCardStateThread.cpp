@@ -1,7 +1,6 @@
 #include "CameraAndCardStateThread.h"
 
 #include "Modules.hpp"
-#include "rqw_CameraObjectZMotion.hpp"
 
 size_t CameraAndCardStateThreadMDOFoodBags::runtimeCounts=0;
 

@@ -394,6 +394,11 @@ void MDOFoodBags::rbtn_debug_checked(bool checked)
 			{
 				camera1->setFrameTriggered(false);
 				camera1->setLineTriggered(false);
+				camera1->setLineHeight(500);
+
+
+
+
 			}
 		}
 		else {
@@ -435,8 +440,19 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 		runningState = RunningState::OpenRemoveFunc;
 		if (camera1)
 		{
-			camera1->setFrameTriggered(true);
+
+
+			camera1->setFrameTriggered(false);
 			camera1->setLineTriggered(true);
+			auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+			double xiangsudangliang = setConfig.xiangSuDangLiang1;
+			double xiangjichufachangdu = setConfig.xiangjichufachangdu;
+			double hanggao = xiangjichufachangdu / xiangsudangliang;
+
+			camera1->setLineHeight((int)hanggao);
+
+
+
 		}
 		ui->rbtn_debug->setChecked(false);
 		ui->ckb_shibiekuang->setVisible(false);
@@ -482,6 +498,8 @@ void MDOFoodBags::pbtn_start_clicked()
 	auto& camera = Modules::getInstance().cameraModule.camera1;
 	if (camera)
 	{
+		
+		
 		camera->softwareTrigger();
 	}
 }

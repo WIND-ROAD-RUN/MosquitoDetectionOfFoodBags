@@ -2,7 +2,6 @@
 
 #include<QObject>
 #include "ImageProcessorModule.hpp"
-#include "imgPro_ImageProcess.hpp"
 #include"IModule.hpp"
 
 class ImgProModule
@@ -22,8 +21,6 @@ private:
 
 	void resetImgProIsUpdate(bool state);
 public:
-	rw::imgPro::ImageProcessContext imageProcessContext_Main;
-
 	std::atomic<bool> imgProIsUpdate[4];
 private:
 	void buildImageProcessingModule(size_t num);

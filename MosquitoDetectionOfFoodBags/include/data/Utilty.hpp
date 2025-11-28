@@ -1,7 +1,6 @@
 #pragma once
 #include <QString>
 
-#include "imgPro_ImageProcessUtilty.hpp"
 
 struct Utility
 {
@@ -25,8 +24,6 @@ struct ClassId
 
 	static constexpr int maxNum = 6;
 	static constexpr int indexCount = 7;
-	static std::unordered_map<rw::imgPro::ClassId, rw::imgPro::ClassIdName> classIdNameMap;
-	static std::vector<rw::imgPro::ClassId> classids;
 };
 
 struct ControlLines

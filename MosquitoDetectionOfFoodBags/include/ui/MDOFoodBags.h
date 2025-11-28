@@ -61,7 +61,7 @@ private slots:
 
 signals:
 	void shibiekuangChanged();
-
+	
 public:
 	static void setModelImage(const HalconCpp::HObject& img);
 	static std::shared_ptr<const HalconCpp::HObject> getModelImage();
