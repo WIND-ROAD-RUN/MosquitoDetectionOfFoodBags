@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QCheckBox>
 #include <QMainWindow>
 #include "PictureViewerThumbnails.h"
 #include "ImageEnlargedDisplay.h"
@@ -78,7 +79,7 @@ private:
 
 	QPixmap _lastImage1{};
 	std::vector<QPixmap> _lastImageNgList;  // 存储最多6张NG图片
-	static constexpr size_t MAX_NG_IMAGES = 6;
+	static constexpr size_t MAX_NG_IMAGES = 5;
 
 	void processLastImageNg(const QPixmap& img);
 	void updateNgImageDisplay(size_t index, const QPixmap& pixmap);
@@ -86,7 +87,6 @@ private:
 	rw::rqw::ClickableLabel* getNgLabelByIndex(size_t index);
 
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
-	rw::rqw::ClickableLabel* imgDisNg = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg2 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg3 = nullptr;
@@ -94,7 +94,6 @@ private:
 	rw::rqw::ClickableLabel* imgDisNg5 = nullptr;
 private slots:
 	void imgDis1_clicked();
-	void imgDisNg_clicked();
 	void imgDisNg1_clicked();
 	void imgDisNg2_clicked();
 	void imgDisNg3_clicked();

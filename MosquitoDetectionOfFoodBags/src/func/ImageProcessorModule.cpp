@@ -78,9 +78,11 @@ void ImageProcessor::run_debug(MatInfo& frame)
 
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
-	//auto image = rw::rqw::cvMatToQImage(frame.image);
-	QString imagePath = "C:/Users/zfkj4090/Desktop/temp/image.jpg";
-	QImage image(imagePath);
+	auto image = rw::rqw::cvMatToQImage(frame.image);
+
+	//显示图片测试
+	//QString imagePath = "C:/Users/zfkj4090/Desktop/temp/image.jpg";
+	//QImage image(imagePath);
 	//进行图像处理
 	//4个qvector用来存坏的数据的位置，还有面积
 	QVector< double> R1, C1, R2, C2, Areas;
@@ -92,15 +94,15 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	double allMinArea = 0;
 
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
-	bool isbad = checkDefectAndDrawOnImage(image, R1, C1, R2, C2, Areas, minArea, allMinArea);
+	_isbad = checkDefectAndDrawOnImage(image, R1, C1, R2, C2, Areas, minArea, allMinArea);
 
 
 
-	run_OpenRemoveFunc_emitErrorInfo(false);
+	run_OpenRemoveFunc_emitErrorInfo(_isbad);
 
-	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
+	emit imageNGReady(QPixmap::fromImage(image), frame.index, _isbad);
 
-	rw::rqw::ImageInfo imageInfo(rw::rqw::cvMatToQImage(frame.image));
+	rw::rqw::ImageInfo imageInfo(image);
 	save_image(imageInfo, image);
 }
 
@@ -131,12 +133,15 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 
 
 
-	auto modelimage = MDOFoodBags::getModelImage();
-
-	HalconCpp::ReadImage(&ho_ImageModel, "C:/Users/zfkj4090/Desktop/temp/model.jpg");
+	// ho_ImageModel = MDOFoodBags::getModelImage();
+	 auto modelImagePtr = MDOFoodBags::getModelImage();
+	 if (modelImagePtr && modelImagePtr->IsInitialized()) {
+		 ho_ImageModel = *modelImagePtr;
+	 }
+	/*HalconCpp::ReadImage(&ho_ImageModel, "C:/Users/zfkj4090/Desktop/temp/model.jpg");
 	HalconCpp::Rgb1ToGray(ho_ImageModel, &ho_ImageModel);
-	MDOFoodBags::setModelImage(ho_ImageModel);
-	modelimage = MDOFoodBags::getModelImage();
+	MDOFoodBags::setModelImage(ho_ImageModel);*/
+	//modelimage = MDOFoodBags::getModelImage();
 
 
 
@@ -145,7 +150,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 
 	//当前图片
 	ho_Image = rw::rqw::CvMatToHImage(image);
-	HalconCpp::ReadImage(&ho_Image, "C:/Users/zfkj4090/Desktop/temp/image.jpg");
+	//HalconCpp::ReadImage(&ho_Image, "C:/Users/zfkj4090/Desktop/temp/image.jpg");
 	HalconCpp::Rgb1ToGray(ho_Image, &ho_Image);
 
 	//获取图片尺寸
@@ -155,8 +160,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 
 
 
-	if (!modelimage)
-	{
+	if (!modelImagePtr || !modelImagePtr->IsInitialized()) {
 		return;
 	}
 	MeanImage(ho_ImageModel, &ho_ImageModelMean, hv_marskx, hv_marsky);
@@ -487,24 +491,6 @@ void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage
 			imageInfo.classify = "NG1";
 			imageSaveEngine->pushImage(imageInfo);
 		}
-		else if (2 == imageProcessingModuleIndex)
-		{
-			imageInfo.classify = "NG2";
-			imageSaveEngine->pushImage(imageInfo);
-		}
-	}
-	else {
-
-		if (1 == imageProcessingModuleIndex)
-		{
-			imageInfo.classify = "OK1";
-			imageSaveEngine->pushImage(imageInfo);
-		}
-		else if (2 == imageProcessingModuleIndex)
-		{
-			imageInfo.classify = "OK2";
-			imageSaveEngine->pushImage(imageInfo);
-		}
 	}
 }
 
@@ -520,7 +506,7 @@ void ImageProcessingModule::BuildModule()
 		ImageProcessor* processor = new ImageProcessor(_queue, _mutex, _condition, workIndexCount, this);
 		workIndexCount++;
 		processor->imageProcessingModuleIndex = index;
-		processor->buildSegModelEngine(modelEnginePath);
+		//processor->buildSegModelEngine(modelEnginePath);
 		connect(processor, &ImageProcessor::imageNGReady, this, &ImageProcessingModule::imageNGReady, Qt::QueuedConnection);
 		_processors.push_back(processor);
 		processor->start();

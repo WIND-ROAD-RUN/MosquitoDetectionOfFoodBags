@@ -36,6 +36,9 @@ private:
 	void run_OpenRemoveFunc(MatInfo& frame);	// 开启剔废功能时的处理模式
 
 	void run_OpenRemoveFunc_emitErrorInfo(bool isbad) const;
+
+
+
 	void halconPRocess(cv::Mat image, QVector< double>& R1, QVector< double>& C1, QVector< double>& R2, QVector< double>& C2, QVector< double>& Area);
 	// 在图像上绘制矩形
 	void drawRectanglesOnImage(QImage& image,

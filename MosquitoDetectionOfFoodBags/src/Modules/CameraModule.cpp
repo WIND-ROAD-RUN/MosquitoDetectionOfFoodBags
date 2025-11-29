@@ -78,8 +78,8 @@ bool CameraModule::build_camera1()
 			camera1->setLineHeight((int)hanggao);
 			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang1));
 			camera1->setGain(static_cast<size_t>(setConfig.zengyi1));
-			camera1->setMultiplier(1);
-			camera1->setPostDivider(1);
+			camera1->setMultiplier(20);
+			camera1->setPostDivider(19);
 
 			QObject::connect(camera1.get(), &rw::rqw::CameraPassiveThread::frameCaptured,
 				this, &CameraModule::onFrameCaptured);

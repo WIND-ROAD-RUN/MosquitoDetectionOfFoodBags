@@ -171,13 +171,10 @@ void MDOFoodBags::getMotionStateAndUpdateUi()
 
 void MDOFoodBags::build_ImageEnlargedDisplay()
 {
-	_lastImageNgList.reserve(MAX_NG_IMAGES);
+	_lastImageNgList.resize(MAX_NG_IMAGES);
 
 	imgDis1 = new rw::rqw::ClickableLabel(this);
 	imgDis1->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
-
-	imgDisNg = new rw::rqw::ClickableLabel(this);
-	imgDisNg->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
 
 	imgDisNg1 = new rw::rqw::ClickableLabel(this);
 	imgDisNg1->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
@@ -196,7 +193,6 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 
 	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgDisplay_1, imgDis1);
 
-	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgNgDisplay, imgDisNg);
 	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgNgDisplay_1, imgDisNg1);
 	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgNgDisplay_2, imgDisNg2);
 	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgNgDisplay_3, imgDisNg3);
@@ -204,7 +200,6 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 	ui->gBoix_ImageDisplay->layout()->replaceWidget(ui->label_imgNgDisplay_5, imgDisNg5);
 
 	delete ui->label_imgDisplay_1;
-	delete ui->label_imgNgDisplay;
 	delete ui->label_imgNgDisplay_1;
 	delete ui->label_imgNgDisplay_2;
 	delete ui->label_imgNgDisplay_3;
@@ -213,8 +208,6 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 
 	QObject::connect(imgDis1, &rw::rqw::ClickableLabel::clicked
 		, this, &MDOFoodBags::imgDis1_clicked);
-	QObject::connect(imgDisNg, &rw::rqw::ClickableLabel::clicked
-		, this, &MDOFoodBags::imgDisNg_clicked);
 	QObject::connect(imgDisNg1, &rw::rqw::ClickableLabel::clicked
 		, this, &MDOFoodBags::imgDisNg1_clicked);
 	QObject::connect(imgDisNg2, &rw::rqw::ClickableLabel::clicked
@@ -228,19 +221,18 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 
 	_workStationTitleMap = {
 		{0,"一号工位"},
-		{1,"NG总工位"},
-		{2,"NG一号工位"},
-		{3,"NG二号工位"},
-		{4,"NG三号工位"},
-		{5,"NG四号工位"},
-		{6,"NG五号工位"}
+		{1,"NG一号工位"},
+		{2,"NG二号工位"},
+		{3,"NG三号工位"},
+		{4,"NG四号工位"},
+		{5,"NG五号工位"}
 	};
 
 	_imageEnlargedDisplay = new ImageEnlargedDisplay(this);
 	_imageEnlargedDisplay->setMonitorValue(&_isImageEnlargedDisplay);
 	_imageEnlargedDisplay->setMonitorDisImgIndex(&_currentImageEnlargedDisplayIndex);
 	_imageEnlargedDisplay->initWorkStationTitleMap(_workStationTitleMap);
-	_imageEnlargedDisplay->setNum(7);
+	_imageEnlargedDisplay->setNum(6);
 	_imageEnlargedDisplay->show();
 	_imageEnlargedDisplay->close();
 }
@@ -579,12 +571,11 @@ void MDOFoodBags::updateAllNgImageDisplays()
 rw::rqw::ClickableLabel* MDOFoodBags::getNgLabelByIndex(size_t index)
 {
 	switch (index) {
-	case 0: return imgDisNg;
-	case 1: return imgDisNg1;
-	case 2: return imgDisNg2;
-	case 3: return imgDisNg3;
-	case 4: return imgDisNg4;
-	case 5: return imgDisNg5;
+	case 0: return imgDisNg1;
+	case 1: return imgDisNg2;
+	case 2: return imgDisNg3;
+	case 3: return imgDisNg4;
+	case 4: return imgDisNg5;
 	default: return nullptr;
 	}
 }
@@ -604,7 +595,7 @@ void MDOFoodBags::imgDis1_clicked()
 	_imageEnlargedDisplay->show();
 }
 
-void MDOFoodBags::imgDisNg_clicked()
+void MDOFoodBags::imgDisNg1_clicked()
 {
 	if (!_lastImageNgList.empty() && !_lastImageNgList[0].isNull())
 	{
@@ -619,7 +610,7 @@ void MDOFoodBags::imgDisNg_clicked()
 	_imageEnlargedDisplay->show();
 }
 
-void MDOFoodBags::imgDisNg1_clicked()
+void MDOFoodBags::imgDisNg2_clicked()
 {
 	if (!_lastImageNgList.empty() && !_lastImageNgList[1].isNull())
 	{
@@ -634,7 +625,7 @@ void MDOFoodBags::imgDisNg1_clicked()
 	_imageEnlargedDisplay->show();
 }
 
-void MDOFoodBags::imgDisNg2_clicked()
+void MDOFoodBags::imgDisNg3_clicked()
 {
 	if (!_lastImageNgList.empty() && !_lastImageNgList[2].isNull())
 	{
@@ -649,7 +640,7 @@ void MDOFoodBags::imgDisNg2_clicked()
 	_imageEnlargedDisplay->show();
 }
 
-void MDOFoodBags::imgDisNg3_clicked()
+void MDOFoodBags::imgDisNg4_clicked()
 {
 	if (!_lastImageNgList.empty() && !_lastImageNgList[3].isNull())
 	{
@@ -664,7 +655,7 @@ void MDOFoodBags::imgDisNg3_clicked()
 	_imageEnlargedDisplay->show();
 }
 
-void MDOFoodBags::imgDisNg4_clicked()
+void MDOFoodBags::imgDisNg5_clicked()
 {
 	if (!_lastImageNgList.empty() && !_lastImageNgList[4].isNull())
 	{
@@ -675,21 +666,6 @@ void MDOFoodBags::imgDisNg4_clicked()
 		_imageEnlargedDisplay->clearImgDis();
 	}
 	_currentImageEnlargedDisplayIndex = 5;
-	_imageEnlargedDisplay->setGboxTitle(_workStationTitleMap[_currentImageEnlargedDisplayIndex]);
-	_imageEnlargedDisplay->show();
-}
-
-void MDOFoodBags::imgDisNg5_clicked()
-{
-	if (!_lastImageNgList.empty() && !_lastImageNgList[5].isNull())
-	{
-		_imageEnlargedDisplay->setShowImg(_lastImageNgList[5]);
-	}
-	else
-	{
-		_imageEnlargedDisplay->clearImgDis();
-	}
-	_currentImageEnlargedDisplayIndex = 6;
 	_imageEnlargedDisplay->setGboxTitle(_workStationTitleMap[_currentImageEnlargedDisplayIndex]);
 	_imageEnlargedDisplay->show();
 }
