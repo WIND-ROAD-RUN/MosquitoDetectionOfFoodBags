@@ -78,9 +78,10 @@ private:
 	bool _isImageEnlargedDisplay{ false };
 	int _currentImageEnlargedDisplayIndex{ 0 };
 	std::map<int, QString> _workStationTitleMap{};
+	std::map<int, QPixmap> _workStationImageMap{};
 
 	QPixmap _lastImage1{};
-	std::vector<QPixmap> _lastImageNgList;  // 存储最多6张NG图片
+	std::vector<QPixmap> _lastImageNgList;  // 存储最多5张NG图片
 	static constexpr size_t MAX_NG_IMAGES = 5;
 
 	void processLastImageNg(const QPixmap& img);

@@ -225,17 +225,22 @@ void MDOFoodBags::build_ImageEnlargedDisplay()
 
 	_workStationTitleMap = {
 		{0,"一号工位"},
-		{1,"NG一号工位"},
-		{2,"NG二号工位"},
-		{3,"NG三号工位"},
-		{4,"NG四号工位"},
-		{5,"NG五号工位"}
+		{1,"NG一号图片"},
+		{2,"NG二号图片"},
+		{3,"NG三号图片"},
+		{4,"NG四号图片"},
+		{5,"NG五号图片"}
 	};
+
+	for (int i = 0; i < 6; ++i) {
+		_workStationImageMap[i] = QPixmap();
+	}
 
 	_imageEnlargedDisplay = new ImageEnlargedDisplay(this);
 	_imageEnlargedDisplay->setMonitorValue(&_isImageEnlargedDisplay);
 	_imageEnlargedDisplay->setMonitorDisImgIndex(&_currentImageEnlargedDisplayIndex);
 	_imageEnlargedDisplay->initWorkStationTitleMap(_workStationTitleMap);
+	_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
 	_imageEnlargedDisplay->setNum(6);
 	_imageEnlargedDisplay->show();
 	_imageEnlargedDisplay->close();
@@ -292,13 +297,12 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad)
 {
 	if (index == 1)
 	{
+		_workStationImageMap[0] = image;
+		_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
+
 		if (!_isImageEnlargedDisplay)
 		{
 			imgDis1->setPixmap(image.scaled(imgDis1->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-			if (isbad)
-			{
-				processLastImageNg(image);
-			}
 		}
 		else
 		{
@@ -306,13 +310,12 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad)
 			{
 				_imageEnlargedDisplay->setShowImg(image);
 			}
-			if (isbad && _currentImageEnlargedDisplayIndex == 2)
-			{
-				_imageEnlargedDisplay->setShowImg(image);
-				processLastImageNg(image);
-			}
 		}
 		_lastImage1 = image;
+		if (isbad)
+		{
+			processLastImageNg(image);
+		}
 	}
 }
 
@@ -558,6 +561,8 @@ void MDOFoodBags::processLastImageNg(const QPixmap& img)
 	for (size_t i = 0; i < _lastImageNgList.size(); ++i) {
 		if (_lastImageNgList[i].isNull()) {
 			_lastImageNgList[i] = img;
+			_workStationImageMap[i + 1] = img;
+			_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
 			updateNgImageDisplay(i, img);
 			return;
 		}
@@ -566,12 +571,19 @@ void MDOFoodBags::processLastImageNg(const QPixmap& img)
 	// 如果没有空位置且未满，则添加新元素
 	if (_lastImageNgList.size() < MAX_NG_IMAGES) {
 		_lastImageNgList.push_back(img);
+		size_t newIndex = _lastImageNgList.size() - 1;
+		_workStationImageMap[newIndex + 1] = img;
+		_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
 		updateNgImageDisplay(_lastImageNgList.size() - 1, img);
 	}
 	else {
 		// 如果已满，移除最早的图片，添加新图片（队列行为）
 		_lastImageNgList.erase(_lastImageNgList.begin());
 		_lastImageNgList.push_back(img);
+		for (size_t i = 0; i < _lastImageNgList.size(); ++i) {
+			_workStationImageMap[i + 1] = _lastImageNgList[i];
+		}
+		_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
 		updateAllNgImageDisplays();
 	}
 }
