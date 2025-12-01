@@ -89,17 +89,16 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	//QImage image(imagePath);
 	//进行图像处理
 	//4个qvector用来存坏的数据的位置，还有面积
-	QVector< double> R1, C1, R2, C2, Areas;
+	QVector< MatProcess> _matProcess;
 
-	halconPRocess(frame.image, R1, C1, R2, C2, Areas);
+	halconPRocess(frame.image, _matProcess);
 	//TODO:这两个最小面积和最小总面积设置成系统参数
 
 	double minArea = 0;
 	double allMinArea = 0;
 
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
-	_isbad = checkDefectAndDrawOnImage(image, R1, C1, R2, C2, Areas, minArea, allMinArea);
-
+	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea);
 	run_OpenRemoveFunc_emitErrorInfo(_isbad);
 
 	auto endTime = std::chrono::high_resolution_clock::now();
@@ -117,14 +116,16 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	save_image(imageInfo1, saveRowImg, 2);
 }
 
-void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector< double>& C1, QVector< double>& R2, QVector< double>& C2, QVector< double>& Area)
+void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processResults)
 {
-	//模板图片
+	// 清空结果容器
+	processResults.clear();
+
+	// 模板图片
 	HalconCpp::HObject  ho_ImageModel, ho_Image;
 	HalconCpp::HObject   ho_ImageModelMean;
 	HalconCpp::HObject  ho_ImageMean, ho_ImageSub, ho_Rectangle, ho_ImageReduced;
 	HalconCpp::HObject  ho_Regions, ho_RegionTrans;
-
 
 	HalconCpp::HTuple  hv_Width, hv_Height, hv_marskx, hv_marsky;
 	HalconCpp::HTuple  hv_zuoxianwei, hv_youxianwei, hv_huidumin, hv_Area, hv_shangxiasuojin;
@@ -132,63 +133,43 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 	HalconCpp::HTuple  hv_shapetransRow2, hv_shapetransColumn2, hv_Index;
 	double xiangsudangliang = Modules::getInstance().configManagerModule.setConfig.xiangSuDangLiang;
 
-	//需要认为设置的参数现在硬编码了
+	// 需要认为设置的参数现在硬编码了
 	hv_marskx = 9;
 	hv_marsky = 9;
 	hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
 	hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
 	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangXianWei;
 
-
 	hv_huidumin = 100;
 
-
-
-	// ho_ImageModel = MDOFoodBags::getModelImage();
+	// 获取模板图像
 	auto modelImagePtr = MDOFoodBags::getModelImage();
 	if (modelImagePtr && modelImagePtr->IsInitialized()) {
 		ho_ImageModel = *modelImagePtr;
 	}
-	/*HalconCpp::ReadImage(&ho_ImageModel, "C:/Users/zfkj4090/Desktop/temp/model.jpg");
-	HalconCpp::Rgb1ToGray(ho_ImageModel, &ho_ImageModel);
-	MDOFoodBags::setModelImage(ho_ImageModel);*/
-	//modelimage = MDOFoodBags::getModelImage();
 
-
-
-
-
-
-	//当前图片
+	// 当前图片
 	ho_Image = rw::rqw::CvMatToHImage(image);
-	//HalconCpp::ReadImage(&ho_Image, "C:/Users/zfkj4090/Desktop/temp/image.jpg");
 	HalconCpp::Rgb1ToGray(ho_Image, &ho_Image);
 
-	//获取图片尺寸
-
+	// 获取图片尺寸
 	GetImageSize(ho_Image, &hv_Width, &hv_Height);
-
-
-
 
 	if (!modelImagePtr || !modelImagePtr->IsInitialized()) {
 		return;
 	}
+
 	MeanImage(ho_ImageModel, &ho_ImageModelMean, hv_marskx, hv_marsky);
-
-
 	MeanImage(ho_Image, &ho_ImageMean, hv_marskx, hv_marsky);
 
-
-
 	SubImage(ho_ImageModelMean, ho_ImageMean, &ho_ImageSub, 20, 0);
+
 	if (hv_Height < hv_shangxiasuojin)
 	{
-
 		hv_shangxiasuojin = 0;
 	}
-	GenRectangle1(&ho_Rectangle, 20, hv_zuoxianwei, hv_Height - 20, hv_youxianwei);
 
+	GenRectangle1(&ho_Rectangle, 20, hv_zuoxianwei, hv_Height - 20, hv_youxianwei);
 	ReduceDomain(ho_ImageSub, ho_Rectangle, &ho_ImageReduced);
 
 	Threshold(ho_ImageReduced, &ho_Regions, hv_huidumin, 255);
@@ -199,37 +180,32 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 	SmallestRectangle1(ho_RegionTrans, &hv_shapetransRow1, &hv_shapetransColumn1, &hv_shapetransRow2,
 		&hv_shapetransColumn2);
 
-
 	if (0 != (int((hv_shapetransRow1.TupleLength()) > 0)))
 	{
+		HalconCpp::HTuple end_val39 = (hv_shapetransRow1.TupleLength()) - 1;
+		HalconCpp::HTuple step_val39 = 1;
+		for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
 		{
-			HalconCpp::HTuple end_val39 = (hv_shapetransRow1.TupleLength()) - 1;
-			HalconCpp::HTuple step_val39 = 1;
-			for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
+			if (hv_shapetransRow1[hv_Index] > 0)
 			{
-				if (hv_shapetransRow1[hv_Index] > 0)
-				{
-					R1.append(hv_shapetransRow1[hv_Index]);
-					C1.append(hv_shapetransColumn1[hv_Index]);
-					R2.append(hv_shapetransRow2[hv_Index]);
-					C2.append(hv_shapetransColumn2[hv_Index]);
-					Area.append(hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang);
-				}
+				MatProcess result;
+				result.R1 = hv_shapetransRow1[hv_Index];
+				result.C1 = hv_shapetransColumn1[hv_Index];
+				result.R2 = hv_shapetransRow2[hv_Index];
+				result.C2 = hv_shapetransColumn2[hv_Index];
+				result.Area = hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang;
+				result.MeanThreshold = hv_huidumin;
+				result.image = image.clone(); // 保存原始图像副本
+
+				processResults.append(result);
 			}
 		}
-
-
-		//有坏的
-
-
 	}
-
-
-
-
-
 }
-void ImageProcessor::drawSingleRectangleOnImage(QImage& image, double R1, double C1, double R2, double C2, double area, const QColor& color, int penWidth)
+void ImageProcessor::drawSingleRectangleOnImage(QImage& image,
+	const MatProcess& result,
+	const QColor& color,
+	int penWidth)
 {
 	// 检查图像是否有效
 	if (image.isNull())
@@ -251,10 +227,10 @@ void ImageProcessor::drawSingleRectangleOnImage(QImage& image, double R1, double
 	// Halcon 坐标系: R 表示 Row (行,对应 y 坐标), C 表示 Column (列,对应 x 坐标)
 	// R1, C1 是矩形左上角坐标
 	// R2, C2 是矩形右下角坐标
-	int x1 = static_cast<int>(C1);
-	int y1 = static_cast<int>(R1);
-	int x2 = static_cast<int>(C2);
-	int y2 = static_cast<int>(R2);
+	int x1 = static_cast<int>(result.C1);
+	int y1 = static_cast<int>(result.R1);
+	int x2 = static_cast<int>(result.C2);
+	int y2 = static_cast<int>(result.R2);
 
 	// 计算矩形的宽度和高度
 	int width = x2 - x1;
@@ -270,7 +246,7 @@ void ImageProcessor::drawSingleRectangleOnImage(QImage& image, double R1, double
 	painter.setFont(font);
 
 	// 准备文本内容
-	QString areaText = QString("%1 mm²").arg(area, 0, 'f', 2);
+	QString areaText = QString("%1 mm²").arg(result.Area, 0, 'f', 2);
 
 	// 计算文本位置(矩形左上角上方)
 	QFontMetrics metrics(font);
@@ -299,7 +275,10 @@ void ImageProcessor::drawSingleRectangleOnImage(QImage& image, double R1, double
 	// 结束绘制
 	painter.end();
 }
-void ImageProcessor::drawRectanglesOnImage(QImage& image, const QVector<double>& R1, const QVector<double>& C1, const QVector<double>& R2, const QVector<double>& C2, const QVector<double>& Areas, const QColor& color, int penWidth)
+void ImageProcessor::drawRectanglesOnImage(QImage& image,
+	const QVector<MatProcess>& processResults,
+	const QColor& color,
+	int penWidth)
 {
 	// 检查图像是否有效
 	if (image.isNull())
@@ -307,14 +286,8 @@ void ImageProcessor::drawRectanglesOnImage(QImage& image, const QVector<double>&
 		return;
 	}
 
-	// 检查所有向量大小是否一致
-	if (R1.size() != C1.size() || R1.size() != R2.size() || R1.size() != C2.size())
-	{
-		return;
-	}
-
 	// 如果没有矩形需要绘制,直接返回
-	if (R1.isEmpty())
+	if (processResults.isEmpty())
 	{
 		return;
 	}
@@ -332,9 +305,9 @@ void ImageProcessor::drawRectanglesOnImage(QImage& image, const QVector<double>&
 
 	// 计算总面积
 	double totalArea = 0.0;
-	for (const auto& area : Areas)
+	for (const auto& result : processResults)
 	{
-		totalArea += area;
+		totalArea += result.Area;
 	}
 
 	// 在图片左上角绘制总面积文本
@@ -364,15 +337,15 @@ void ImageProcessor::drawRectanglesOnImage(QImage& image, const QVector<double>&
 	painter.setPen(pen);
 
 	// 遍历所有矩形并绘制
-	for (int i = 0; i < R1.size(); ++i)
+	for (const auto& result : processResults)
 	{
 		// Halcon 坐标系: R 表示 Row (行,对应 y 坐标), C 表示 Column (列,对应 x 坐标)
 		// R1, C1 是矩形左上角坐标
 		// R2, C2 是矩形右下角坐标
-		int x1 = static_cast<int>(C1[i]);
-		int y1 = static_cast<int>(R1[i]);
-		int x2 = static_cast<int>(C2[i]);
-		int y2 = static_cast<int>(R2[i]);
+		int x1 = static_cast<int>(result.C1);
+		int y1 = static_cast<int>(result.R1);
+		int x2 = static_cast<int>(result.C2);
+		int y2 = static_cast<int>(result.R2);
 
 		// 计算矩形的宽度和高度
 		int width = x2 - x1;
@@ -389,29 +362,24 @@ void ImageProcessor::drawRectanglesOnImage(QImage& image, const QVector<double>&
 
 bool ImageProcessor::checkDefectAndDrawOnImage(
 	QImage& image,
-	const QVector<double>& R1,
-	const QVector<double>& C1,
-	const QVector<double>& R2,
-	const QVector<double>& C2,
-	const QVector<double>& Areas,
+	const QVector<MatProcess>& processResults,
 	double minArea,
 	double allMinArea)
 {
 	bool isbad = false;
 
-	//绘制左右限位
+	// 绘制左右限位
 	double zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
 	double youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
-	
 
 	// 说明有瑕疵
-	if (Areas.size() > 0)
+	if (processResults.size() > 0)
 	{
 		// 计算总面积
 		double totalArea = 0.0;
-		for (const auto& area : Areas)
+		for (const auto& result : processResults)
 		{
-			totalArea += area;
+			totalArea += result.Area;
 		}
 
 		// 判断是否为坏袋子:
@@ -420,14 +388,14 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 
 		// 检查是否有单个面积超过阈值并绘制
 		auto paintimage = image.copy();
-		for (int i = 0; i < Areas.size(); i++)
+		for (const auto& result : processResults)
 		{
-			if (Areas[i] >= minArea)
+			if (result.Area >= minArea)
 			{
+				drawSingleRectangleOnImage(image, result, Qt::red, 3);
 
-				drawSingleRectangleOnImage(image, R1[i], C1[i], R2[i], C2[i], Areas[i], Qt::red, 3);
 				// 提取缺陷区域图像
-				QImage defectRegion = extractDefectRegion(paintimage, R1[i], C1[i], R2[i], C2[i]);
+				QImage defectRegion = extractDefectRegion(paintimage, result);
 
 				if (!defectRegion.isNull())
 				{
@@ -437,13 +405,12 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 					auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
 					imageSaveEngine->pushImage(defectInfo);
 				}
-				
-				
+
 				isbad = true;
 			}
 			else
 			{
-				drawSingleRectangleOnImage(image, R1[i], C1[i], R2[i], C2[i], Areas[i], Qt::green, 3);
+				drawSingleRectangleOnImage(image, result, Qt::green, 3);
 			}
 		}
 
@@ -451,11 +418,13 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 		if (totalArea >= allMinArea)
 		{
 			isbad = true;
+
 			// 在图像上绘制检测到的矩形区域
 			// 红色表示缺陷区域，线宽为3像素
-			drawRectanglesOnImage(image, R1, C1, R2, C2, Areas, Qt::red, 3);
+			drawRectanglesOnImage(image, processResults, Qt::red, 3);
 		}
 	}
+
 	// 绘制限位线
 	drawLimitLines(image, zuoxianwei, youxianwei, Qt::yellow, 3);
 
@@ -689,7 +658,8 @@ void ImageProcessor::drawLimitLines(QImage& image, double leftLimit, double righ
 	painter.end();
 }
 
-QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage, double R1, double C1, double R2, double C2,
+QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
+	const MatProcess& result,
 	int minSize)
 {
 	// 检查源图像是否有效
@@ -699,10 +669,10 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage, double R1,
 	}
 
 	// 转换坐标系: R(行/y), C(列/x)
-	int x1 = static_cast<int>(C1);
-	int y1 = static_cast<int>(R1);
-	int x2 = static_cast<int>(C2);
-	int y2 = static_cast<int>(R2);
+	int x1 = static_cast<int>(result.C1);
+	int y1 = static_cast<int>(result.R1);
+	int x2 = static_cast<int>(result.C2);
+	int y2 = static_cast<int>(result.R2);
 
 	// 确保坐标顺序正确
 	if (x1 > x2) {
@@ -788,6 +758,7 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage, double R1,
 
 	return extractedImage;
 }
+
 
 void ImageProcessor::drawProcessingTime(QImage& image, double timeMs, const QColor& backgroundColor,
 	const QColor& textColor)

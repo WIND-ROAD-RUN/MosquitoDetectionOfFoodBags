@@ -14,7 +14,20 @@ struct MatInfo {
 	float location;	// 记录拍照瞬间的时间点
 	size_t index;	// 拍照的相机的下标
 };
+// 数据处理完以后的数据存储结构体
+struct MatProcess {
+	cv::Mat image;	// 分割后的图像
+	double R1;
+	double R2;
+	double C1;
+	double C2;
+	double Area;
+	double MeanThreshold;
 
+
+
+	
+};
 
 class ImageProcessor : public QThread
 {
@@ -39,26 +52,20 @@ private:
 
 
 
-	void halconPRocess(cv::Mat image, QVector< double>& R1, QVector< double>& C1, QVector< double>& R2, QVector< double>& C2, QVector< double>& Area);
+	void halconPRocess(cv::Mat image, QVector<MatProcess>& processResults);
 	// 在图像上绘制矩形
 	void drawRectanglesOnImage(QImage& image,
-		const QVector<double>& R1,
-		const QVector<double>& C1,
-		const QVector<double>& R2,
-		const QVector<double>& C2,
-		const QVector<double>& Areas,
+		const QVector<MatProcess>& processResults,
 		const QColor& color = Qt::red,
 		int penWidth = 2);
-	bool checkDefectAndDrawOnImage(QImage& image, const QVector<double>& R1, const QVector<double>& C1,
-	                               const QVector<double>& R2, const QVector<double>& C2, const QVector<double>& Areas,
-	                               double minArea, double allMinArea);
+	bool checkDefectAndDrawOnImage(QImage& image,
+		const QVector<MatProcess>& processResults,
+		double minArea,
+		double allMinArea);
+
 	// 在图像上绘制单个矩形
 	void drawSingleRectangleOnImage(QImage& image,
-		double R1,
-		double C1,
-		double R2,
-		double C2,
-		double area,
+		const MatProcess& result,
 		const QColor& color = Qt::red,
 		int penWidth = 2);
 
@@ -70,13 +77,10 @@ private:
 	                    const QColor& color = Qt::yellow,
 	                    int penWidth = 2);
 
-	// 从图像中提取指定区域,确保最小尺寸为50像素
+	// 从图像中提取指定区域,确保最小尺寸为100像素
 	QImage extractDefectRegion(const QImage& sourceImage,
-	                           double R1,
-	                           double C1,
-	                           double R2,
-	                           double C2,
-	                           int minSize = 100);
+		const MatProcess& result,
+		int minSize = 100);
 	void drawProcessingTime(QImage& image,
 		double timeMs,
 		const QColor& backgroundColor = QColor(0, 0, 0, 180),
