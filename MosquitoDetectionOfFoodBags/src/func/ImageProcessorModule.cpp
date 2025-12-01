@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QColor>
+
 ImageProcessor::ImageProcessor(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
 	: QThread(parent), _queue(queue), _mutex(mutex), _condition(condition), _workIndex(workIndex)
 {
@@ -78,6 +79,8 @@ void ImageProcessor::run_debug(MatInfo& frame)
 
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+
 	auto image = rw::rqw::cvMatToQImage(frame.image);
 	auto saveRowImg = image.copy();
 
@@ -97,9 +100,13 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
 	_isbad = checkDefectAndDrawOnImage(image, R1, C1, R2, C2, Areas, minArea, allMinArea);
 
-
-
 	run_OpenRemoveFunc_emitErrorInfo(_isbad);
+
+	auto endTime = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+	double processingTimeMs = duration.count();
+
+	drawProcessingTime(image, processingTimeMs);
 
 	emit imageNGReady(QPixmap::fromImage(image), frame.index, _isbad);
 
@@ -780,4 +787,47 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage, double R1,
 	QImage extractedImage = sourceImage.copy(extractRect);
 
 	return extractedImage;
+}
+
+void ImageProcessor::drawProcessingTime(QImage& image, double timeMs, const QColor& backgroundColor,
+	const QColor& textColor)
+{
+	// 检查图像是否有效
+	if (image.isNull())
+	{
+		return;
+	}
+
+	// 创建 QPainter 对象用于在图像上绘制
+	QPainter painter(&image);
+
+	// 设置抗锯齿
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+	// 设置字体
+	QFont font = painter.font();
+	font.setPointSize(24);  // 字体大小
+	font.setBold(true);     // 加粗
+	painter.setFont(font);
+
+	// 准备文本内容
+	QString timeText = QString("处理时间: %1 ms").arg(timeMs, 0, 'f', 2);
+
+	// 计算文本位置
+	QFontMetrics metrics(font);
+	QRect textRect = metrics.boundingRect(timeText);
+
+	// 放置在左上角，留10像素边距
+	textRect.moveTo(10, 10);
+	textRect.adjust(-5, -5, 5, 5);  // 扩展矩形边距
+
+	// 绘制半透明背景
+	painter.fillRect(textRect, backgroundColor);
+
+	// 绘制文本
+	painter.setPen(textColor);
+	painter.drawText(textRect, Qt::AlignCenter, timeText);
+
+	// 结束绘制
+	painter.end();
 }

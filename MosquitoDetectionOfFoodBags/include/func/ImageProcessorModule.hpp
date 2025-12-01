@@ -77,7 +77,10 @@ private:
 	                           double R2,
 	                           double C2,
 	                           int minSize = 100);
-
+	void drawProcessingTime(QImage& image,
+		double timeMs,
+		const QColor& backgroundColor = QColor(0, 0, 0, 180),
+		const QColor& textColor = Qt::white);
 public:
 	// 存图
 	void save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex);
