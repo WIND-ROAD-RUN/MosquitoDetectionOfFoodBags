@@ -293,25 +293,29 @@ void MDOFoodBags::onUpdateStatisticalInfoUI()
 	ui->label_productionYieldValue->setText(QString::number(statisticalInfo.productionYield.load(), 'f', 2) + "%");*/
 }
 
-void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad)
+void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool isSmallNgImg)
 {
 	if (index == 1)
 	{
-		_workStationImageMap[0] = image;
-		_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
+		if (!isSmallNgImg)
+		{
+			_workStationImageMap[0] = image;
+			_imageEnlargedDisplay->initWorkStationImageMap(_workStationImageMap);
 
-		if (!_isImageEnlargedDisplay)
-		{
-			imgDis1->setPixmap(image.scaled(imgDis1->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-		}
-		else
-		{
-			if (_currentImageEnlargedDisplayIndex == 0)
+			if (!_isImageEnlargedDisplay)
 			{
-				_imageEnlargedDisplay->setShowImg(image);
+				imgDis1->setPixmap(image.scaled(imgDis1->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 			}
+			else
+			{
+				if (_currentImageEnlargedDisplayIndex == 0)
+				{
+					_imageEnlargedDisplay->setShowImg(image);
+				}
+			}
+			_lastImage1 = image;
 		}
-		_lastImage1 = image;
+		
 		if (isbad)
 		{
 			processLastImageNg(image);

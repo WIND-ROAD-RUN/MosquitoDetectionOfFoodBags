@@ -91,7 +91,7 @@ public:
 	void save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex);
 
 signals:
-	void imageNGReady(QPixmap image, size_t index, bool isbad);
+	void imageNGReady(QPixmap image, size_t index, bool isbad, bool isSmallNgImg);
 
 public:
 	// 构建模型引擎
@@ -128,7 +128,7 @@ public slots:
 	void onFrameCaptured(rw::rqw::MatInfo matInfo, size_t index, float loc);
 
 signals:
-	void imageNGReady(QPixmap image, size_t index, bool isbad);
+	void imageNGReady(QPixmap image, size_t index, bool isbad, bool isSmallNgImg);
 
 public:
 	std::vector<ImageProcessor*> getProcessors() const {

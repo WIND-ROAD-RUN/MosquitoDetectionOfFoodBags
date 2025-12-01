@@ -71,7 +71,7 @@ void ImageProcessor::run_debug(MatInfo& frame)
 
 	auto image = rw::rqw::cvMatToQImage(frame.image);
 
-	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
+	emit imageNGReady(QPixmap::fromImage(image), frame.index, false, false);
 
 	/*rw::rqw::ImageInfo imageInfo(image);
 	save_image(imageInfo, image, 1);*/
@@ -107,7 +107,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 
 	drawProcessingTime(image, processingTimeMs);
 
-	emit imageNGReady(QPixmap::fromImage(image), frame.index, _isbad);
+	emit imageNGReady(QPixmap::fromImage(image), frame.index, false, false);
 
 	rw::rqw::ImageInfo imageInfo(image);
 	save_image(imageInfo, image, 1);
@@ -404,6 +404,8 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 					defectInfo.classify = QString("Defect1");
 					auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
 					imageSaveEngine->pushImage(defectInfo);
+
+					emit imageNGReady(QPixmap::fromImage(defectRegion), 1, true, true);
 				}
 
 				isbad = true;

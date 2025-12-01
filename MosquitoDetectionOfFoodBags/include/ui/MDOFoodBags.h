@@ -41,7 +41,7 @@ public:
 	void destroy_ImageEnlargedDisplay();
 
 public slots:
-	void onCameraDisplay(QPixmap image, size_t index, bool isbad);
+	void onCameraDisplay(QPixmap image, size_t index, bool isbad, bool isSmallNgImg);
 
 	void updateCameraLabelState(int cameraIndex, bool state);
 
