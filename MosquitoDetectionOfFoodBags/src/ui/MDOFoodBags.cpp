@@ -72,6 +72,9 @@ void MDOFoodBags::build_connect()
 	connect(ui->ckb_wenzi, &QCheckBox::toggled, this, &MDOFoodBags::ckb_wenzi_checked);
 	connect(ui->pbtn_openSaveLocation, &QPushButton::clicked, this, &MDOFoodBags::pbtn_openSaveLocation_clicked);
 
+	connect(ui->pbtn_baoguang, &QPushButton::clicked, this, &MDOFoodBags::pbtn_baoguang_clicked);
+
+
 	// 连接显示标题
 	QObject::connect(clickableTitle, &rw::rqw::ClickableLabel::clicked,
 		this, &MDOFoodBags::lb_title_clicked);
@@ -80,20 +83,21 @@ void MDOFoodBags::build_connect()
 
 void MDOFoodBags::build_MDOFoodBagsData()
 {
-	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-	wetPapersConfig.isDebug = false;
-	wetPapersConfig.isDefect = true;		// 默认开启剔废
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+	mainWindowConfig.isDebug = false;
+	mainWindowConfig.isDefect = true;		// 默认开启剔废
 	rbtn_removeFunc_checked(true);
-	wetPapersConfig.isshibiekuang = true;
-	wetPapersConfig.iswenzi = true;
+	mainWindowConfig.isshibiekuang = true;
+	mainWindowConfig.iswenzi = true;
 
 	/*ui->label_produceTotalValue->setText(QString::number(wetPapersConfig.totalProductionVolume));
 	ui->label_wasteProductsValue->setText(QString::number(wetPapersConfig.totalDefectiveVolume));
 	ui->label_productionYieldValue->setText(QString::number(wetPapersConfig.productionYield));*/
-	ui->rbtn_takePicture->setChecked(wetPapersConfig.isSaveImg);
-	ui->rbtn_removeFunc->setChecked(wetPapersConfig.isDefect);
-	ui->ckb_shibiekuang->setChecked(wetPapersConfig.isshibiekuang);
-	ui->ckb_wenzi->setChecked(wetPapersConfig.iswenzi);
+	ui->rbtn_takePicture->setChecked(mainWindowConfig.isSaveImg);
+	ui->rbtn_removeFunc->setChecked(mainWindowConfig.isDefect);
+	ui->ckb_shibiekuang->setChecked(mainWindowConfig.isshibiekuang);
+	ui->ckb_wenzi->setChecked(mainWindowConfig.iswenzi);
+	ui->pbtn_baoguang->setText(QString::number(mainWindowConfig.baoguang));
 
 	// release版本
 #ifdef NDEBUG
@@ -103,7 +107,7 @@ void MDOFoodBags::build_MDOFoodBagsData()
 #endif
 
 
-	Modules::getInstance().runtimeInfoModule.isTakePictures = wetPapersConfig.isSaveImg;
+	Modules::getInstance().runtimeInfoModule.isTakePictures = mainWindowConfig.isSaveImg;
 
 	// 初始化图像查看器
 	_picturesViewer = new PictureViewerThumbnails(this);
@@ -493,6 +497,30 @@ void MDOFoodBags::pbtn_start_clicked()
 		
 		
 		camera->softwareTrigger();
+	}
+}
+
+void MDOFoodBags::pbtn_baoguang_clicked()
+{
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+		ui->pbtn_baoguang->setText(value);
+		mainWindowConfig.baoguang = value.toDouble();
+		auto& camera1 = Modules::getInstance().cameraModule.camera1;
+		if (camera1)
+		{
+			camera1->setExposureTime(static_cast<size_t>(value.toDouble()));
+		}
 	}
 }
 

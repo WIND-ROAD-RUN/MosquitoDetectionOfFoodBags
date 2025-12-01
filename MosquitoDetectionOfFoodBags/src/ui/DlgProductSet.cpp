@@ -48,7 +48,6 @@ void DlgProductSet::read_config()
 	ui->pbtn_xiaxianwei->setText(QString::number(setConfig.xiaXianWei));
 	ui->pbtn_zuoxianwei->setText(QString::number(setConfig.zuoXianWei));
 	ui->pbtn_youxianwei->setText(QString::number(setConfig.youXianWei));
-	ui->pbtn_baoguang->setText(QString::number(setConfig.baoguang));
 	ui->pbtn_zengyi->setText(QString::number(setConfig.zengyi));
 	ui->pbtn_xiangsudangliang->setText(QString::number(setConfig.xiangSuDangLiang));
 	ui->pbtn_houfenpin->setText(QString::number(setConfig.houFenPin));
@@ -94,8 +93,6 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_zuoxianwei_clicked);
 	QObject::connect(ui->pbtn_youxianwei, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_youxianwei_clicked);
-	QObject::connect(ui->pbtn_baoguang, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_baoguang_clicked);
 	QObject::connect(ui->pbtn_zengyi, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_zengyi_clicked);
 	QObject::connect(ui->pbtn_xiangsudangliang, &QPushButton::clicked,
@@ -409,30 +406,6 @@ void DlgProductSet::pbtn_youxianwei_clicked()
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 		ui->pbtn_youxianwei->setText(value);
 		setConfig.youXianWei = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_baoguang_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		auto& camera1 = Modules::getInstance().cameraModule.camera1;
-		ui->pbtn_baoguang->setText(value);
-		setConfig.baoguang = value.toDouble();
-		if (camera1)
-		{
-			camera1->setExposureTime(static_cast<size_t>(value.toDouble()));
-		}
 	}
 }
 

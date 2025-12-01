@@ -12,5 +12,7 @@ namespace cdm {
 		isSaveImg : bool :default = false;
 		isshibiekuang : bool :default = true;
 		iswenzi : bool :default = true;
+
+		baoguang : double :default = 0.0;
 	};
 }

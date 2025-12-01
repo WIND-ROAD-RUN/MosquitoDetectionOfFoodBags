@@ -52,6 +52,7 @@ bool CameraModule::build_camera1()
 	auto cameraMetaData1 = cameraMetaDataCheck(Utility::cameraIp1, cameraList);
 
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	double xiangsudangliang= setConfig.xiangSuDangLiang;
 	double xiangjichufachangdu = setConfig.xiangjichufachangdu;
 
@@ -72,14 +73,13 @@ bool CameraModule::build_camera1()
 			camera1->setFrameTriggered(false);
 			camera1->setLineTriggered(true);
 
-			//TODO:设置相机行高
 			double hanggao = xiangjichufachangdu / xiangsudangliang;
 			
 			camera1->setLineHeight((int)hanggao);
-			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang));
+			camera1->setExposureTime(static_cast<size_t>(mainWindowConfig.baoguang));
 			camera1->setGain(static_cast<size_t>(setConfig.zengyi));
-			camera1->setMultiplier(setConfig.chengFaQi);
-			camera1->setPostDivider(setConfig.houFenPin);
+			camera1->setMultiplier(static_cast<size_t>(setConfig.chengFaQi));
+			camera1->setPostDivider(static_cast<size_t>(setConfig.houFenPin));
 
 			QObject::connect(camera1.get(), &rw::rqw::CameraPassiveThread::frameCaptured,
 				this, &CameraModule::onFrameCaptured);

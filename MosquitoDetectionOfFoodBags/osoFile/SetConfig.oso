@@ -11,7 +11,6 @@ namespace cdm {
 		xiaXianWei : double :default = 0;
 		zuoXianWei : double :default = 0;
 		youXianWei : double :default = 0;
-		baoguang : double :default = 0;
 		zengyi : double :default = 0;
 		houFenPin : double :default = 0;
 		chengFaQi : double :default = 0;
