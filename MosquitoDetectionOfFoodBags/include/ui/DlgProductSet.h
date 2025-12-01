@@ -50,15 +50,15 @@ private:
 private slots:
 	void pbtn_close_clicked();
 
-	void pbtn_tifeichixushijian1_clicked();
-	void pbtn_tifeijuli1_clicked();
-	void pbtn_shangxianwei1_clicked();
-	void pbtn_xiaxianwei1_clicked();
-	void pbtn_zuoxianwei1_clicked();
-	void pbtn_youxianwei1_clicked();
-	void pbtn_baoguang1_clicked();
-	void pbtn_zengyi1_clicked();
-	void pbtn_xiangsudangliang1_clicked();
+	void pbtn_tifeichixushijian_clicked();
+	void pbtn_tifeijuli_clicked();
+	void pbtn_shangxianwei_clicked();
+	void pbtn_xiaxianwei_clicked();
+	void pbtn_zuoxianwei_clicked();
+	void pbtn_youxianwei_clicked();
+	void pbtn_baoguang_clicked();
+	void pbtn_zengyi_clicked();
+	void pbtn_xiangsudangliang_clicked();
 
 	void cbox_yundongkongzhiqichonglian_checked();
 

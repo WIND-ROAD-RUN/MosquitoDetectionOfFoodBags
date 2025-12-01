@@ -123,14 +123,14 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 	HalconCpp::HTuple  hv_zuoxianwei, hv_youxianwei, hv_huidumin, hv_Area, hv_shangxiasuojin;
 	HalconCpp::HTuple  hv_Row, hv_Column, hv_shapetransRow1, hv_shapetransColumn1;
 	HalconCpp::HTuple  hv_shapetransRow2, hv_shapetransColumn2, hv_Index;
-	double xiangsudangliang = Modules::getInstance().configManagerModule.setConfig.xiangSuDangLiang1;
+	double xiangsudangliang = Modules::getInstance().configManagerModule.setConfig.xiangSuDangLiang;
 
 	//需要认为设置的参数现在硬编码了
 	hv_marskx = 9;
 	hv_marsky = 9;
-	hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei1;
-	hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei1;
-	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangXianWei1;
+	hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
+	hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
+	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangXianWei;
 
 
 	hv_huidumin = 100;
@@ -393,8 +393,8 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 	bool isbad = false;
 
 	//绘制左右限位
-	double zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei1;
-	double youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei1;
+	double zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
+	double youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
 	
 
 	// 说明有瑕疵

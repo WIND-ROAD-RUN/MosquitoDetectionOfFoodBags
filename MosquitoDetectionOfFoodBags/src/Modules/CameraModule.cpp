@@ -52,7 +52,7 @@ bool CameraModule::build_camera1()
 	auto cameraMetaData1 = cameraMetaDataCheck(Utility::cameraIp1, cameraList);
 
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	double xiangsudangliang= setConfig.xiangSuDangLiang1;
+	double xiangsudangliang= setConfig.xiangSuDangLiang;
 	double xiangjichufachangdu = setConfig.xiangjichufachangdu;
 
 	if (cameraMetaData1.ip != "0")
@@ -76,10 +76,10 @@ bool CameraModule::build_camera1()
 			double hanggao = xiangjichufachangdu / xiangsudangliang;
 			
 			camera1->setLineHeight((int)hanggao);
-			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang1));
-			camera1->setGain(static_cast<size_t>(setConfig.zengyi1));
-			camera1->setMultiplier(20);
-			camera1->setPostDivider(19);
+			camera1->setExposureTime(static_cast<size_t>(setConfig.baoguang));
+			camera1->setGain(static_cast<size_t>(setConfig.zengyi));
+			camera1->setMultiplier(setConfig.chengFaQi);
+			camera1->setPostDivider(setConfig.houFenPin);
 
 			QObject::connect(camera1.get(), &rw::rqw::CameraPassiveThread::frameCaptured,
 				this, &CameraModule::onFrameCaptured);

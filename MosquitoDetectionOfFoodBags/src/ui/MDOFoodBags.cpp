@@ -437,7 +437,7 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 			camera1->setFrameTriggered(false);
 			camera1->setLineTriggered(true);
 			auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-			double xiangsudangliang = setConfig.xiangSuDangLiang1;
+			double xiangsudangliang = setConfig.xiangSuDangLiang;
 			double xiangjichufachangdu = setConfig.xiangjichufachangdu;
 			double hanggao = xiangjichufachangdu / xiangsudangliang;
 

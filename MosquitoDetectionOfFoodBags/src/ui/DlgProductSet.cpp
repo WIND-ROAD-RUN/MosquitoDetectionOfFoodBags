@@ -39,18 +39,20 @@ void DlgProductSet::read_config()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	// 剔废持续时间
-	ui->pbtn_tifeichixushijian1->setText(QString::number(setConfig.tifeichixushijian1));
+	ui->pbtn_tifeichixushijian->setText(QString::number(setConfig.tifeichixushijian));
 	// 剔废时间
-	ui->pbtn_tifeijuli1->setText(QString::number(setConfig.tifeijuli1));
+	ui->pbtn_tifeijuli->setText(QString::number(setConfig.tifeijuli));
 
 	// 一工位
-	ui->pbtn_shangxianwei1->setText(QString::number(setConfig.shangXianWei1));
-	ui->pbtn_xiaxianwei1->setText(QString::number(setConfig.xiaXianWei1));
-	ui->pbtn_zuoxianwei1->setText(QString::number(setConfig.zuoXianWei1));
-	ui->pbtn_youxianwei1->setText(QString::number(setConfig.youXianWei1));
-	ui->pbtn_baoguang1->setText(QString::number(setConfig.baoguang1));
-	ui->pbtn_zengyi1->setText(QString::number(setConfig.zengyi1));
-	ui->pbtn_xiangsudangliang1->setText(QString::number(setConfig.xiangSuDangLiang1));
+	ui->pbtn_shangxianwei->setText(QString::number(setConfig.shangXianWei));
+	ui->pbtn_xiaxianwei->setText(QString::number(setConfig.xiaXianWei));
+	ui->pbtn_zuoxianwei->setText(QString::number(setConfig.zuoXianWei));
+	ui->pbtn_youxianwei->setText(QString::number(setConfig.youXianWei));
+	ui->pbtn_baoguang->setText(QString::number(setConfig.baoguang));
+	ui->pbtn_zengyi->setText(QString::number(setConfig.zengyi));
+	ui->pbtn_xiangsudangliang->setText(QString::number(setConfig.xiangSuDangLiang));
+	ui->pbtn_houfenpin->setText(QString::number(setConfig.houFenPin));
+	ui->pbtn_chengfaqi->setText(QString::number(setConfig.chengFaQi));
 
 	// 调试模式默认为关闭
 	setConfig.debugMode = false;
@@ -80,24 +82,24 @@ void DlgProductSet::read_config()
 
 void DlgProductSet::build_connect()
 {
-	QObject::connect(ui->pbtn_tifeichixushijian1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_tifeichixushijian1_clicked);
-	QObject::connect(ui->pbtn_tifeijuli1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_tifeijuli1_clicked);
-	QObject::connect(ui->pbtn_shangxianwei1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_shangxianwei1_clicked);
-	QObject::connect(ui->pbtn_xiaxianwei1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_xiaxianwei1_clicked);
-	QObject::connect(ui->pbtn_zuoxianwei1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_zuoxianwei1_clicked);
-	QObject::connect(ui->pbtn_youxianwei1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_youxianwei1_clicked);
-	QObject::connect(ui->pbtn_baoguang1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_baoguang1_clicked);
-	QObject::connect(ui->pbtn_zengyi1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_zengyi1_clicked);
-	QObject::connect(ui->pbtn_xiangsudangliang1, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_xiangsudangliang1_clicked);
+	QObject::connect(ui->pbtn_tifeichixushijian, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_tifeichixushijian_clicked);
+	QObject::connect(ui->pbtn_tifeijuli, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_tifeijuli_clicked);
+	QObject::connect(ui->pbtn_shangxianwei, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_shangxianwei_clicked);
+	QObject::connect(ui->pbtn_xiaxianwei, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_xiaxianwei_clicked);
+	QObject::connect(ui->pbtn_zuoxianwei, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_zuoxianwei_clicked);
+	QObject::connect(ui->pbtn_youxianwei, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_youxianwei_clicked);
+	QObject::connect(ui->pbtn_baoguang, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_baoguang_clicked);
+	QObject::connect(ui->pbtn_zengyi, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_zengyi_clicked);
+	QObject::connect(ui->pbtn_xiangsudangliang, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_xiangsudangliang_clicked);
 
 	QObject::connect(ui->cbox_debugMode, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_debugMode_checked);
@@ -295,7 +297,7 @@ void DlgProductSet::pbtn_close_clicked()
 	this->close();
 }
 
-void DlgProductSet::pbtn_tifeichixushijian1_clicked()
+void DlgProductSet::pbtn_tifeichixushijian_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -309,12 +311,12 @@ void DlgProductSet::pbtn_tifeichixushijian1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_tifeichixushijian1->setText(value);
-		setConfig.tifeichixushijian1 = value.toDouble();
+		ui->pbtn_tifeichixushijian->setText(value);
+		setConfig.tifeichixushijian = value.toDouble();
 	}
 }
 
-void DlgProductSet::pbtn_tifeijuli1_clicked()
+void DlgProductSet::pbtn_tifeijuli_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -328,13 +330,13 @@ void DlgProductSet::pbtn_tifeijuli1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_tifeijuli1->setText(value);
-		setConfig.tifeijuli1 = value.toDouble();
+		ui->pbtn_tifeijuli->setText(value);
+		setConfig.tifeijuli = value.toDouble();
 		emit tifeijuliChanged();
 	}
 }
 
-void DlgProductSet::pbtn_shangxianwei1_clicked()
+void DlgProductSet::pbtn_shangxianwei_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -348,12 +350,12 @@ void DlgProductSet::pbtn_shangxianwei1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_shangxianwei1->setText(value);
-		setConfig.shangXianWei1 = value.toDouble();
+		ui->pbtn_shangxianwei->setText(value);
+		setConfig.shangXianWei = value.toDouble();
 	}
 }
 
-void DlgProductSet::pbtn_xiaxianwei1_clicked()
+void DlgProductSet::pbtn_xiaxianwei_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -367,12 +369,12 @@ void DlgProductSet::pbtn_xiaxianwei1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_xiaxianwei1->setText(value);
-		setConfig.xiaXianWei1 = value.toDouble();
+		ui->pbtn_xiaxianwei->setText(value);
+		setConfig.xiaXianWei = value.toDouble();
 	}
 }
 
-void DlgProductSet::pbtn_zuoxianwei1_clicked()
+void DlgProductSet::pbtn_zuoxianwei_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -386,12 +388,12 @@ void DlgProductSet::pbtn_zuoxianwei1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_zuoxianwei1->setText(value);
-		setConfig.zuoXianWei1 = value.toDouble();
+		ui->pbtn_zuoxianwei->setText(value);
+		setConfig.zuoXianWei = value.toDouble();
 	}
 }
 
-void DlgProductSet::pbtn_youxianwei1_clicked()
+void DlgProductSet::pbtn_youxianwei_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -405,12 +407,12 @@ void DlgProductSet::pbtn_youxianwei1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_youxianwei1->setText(value);
-		setConfig.youXianWei1 = value.toDouble();
+		ui->pbtn_youxianwei->setText(value);
+		setConfig.youXianWei = value.toDouble();
 	}
 }
 
-void DlgProductSet::pbtn_baoguang1_clicked()
+void DlgProductSet::pbtn_baoguang_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -425,8 +427,8 @@ void DlgProductSet::pbtn_baoguang1_clicked()
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 		auto& camera1 = Modules::getInstance().cameraModule.camera1;
-		ui->pbtn_baoguang1->setText(value);
-		setConfig.baoguang1 = value.toDouble();
+		ui->pbtn_baoguang->setText(value);
+		setConfig.baoguang = value.toDouble();
 		if (camera1)
 		{
 			camera1->setExposureTime(static_cast<size_t>(value.toDouble()));
@@ -434,7 +436,7 @@ void DlgProductSet::pbtn_baoguang1_clicked()
 	}
 }
 
-void DlgProductSet::pbtn_zengyi1_clicked()
+void DlgProductSet::pbtn_zengyi_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -449,8 +451,8 @@ void DlgProductSet::pbtn_zengyi1_clicked()
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 		auto& camera1 = Modules::getInstance().cameraModule.camera1;
-		ui->pbtn_zengyi1->setText(value);
-		setConfig.zengyi1 = value.toDouble();
+		ui->pbtn_zengyi->setText(value);
+		setConfig.zengyi = value.toDouble();
 		if (camera1)
 		{
 			camera1->setGain(static_cast<size_t>(value.toDouble()));
@@ -458,7 +460,7 @@ void DlgProductSet::pbtn_zengyi1_clicked()
 	}
 }
 
-void DlgProductSet::pbtn_xiangsudangliang1_clicked()
+void DlgProductSet::pbtn_xiangsudangliang_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -472,8 +474,8 @@ void DlgProductSet::pbtn_xiangsudangliang1_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_xiangsudangliang1->setText(value);
-		setConfig.xiangSuDangLiang1 = value.toDouble();
+		ui->pbtn_xiangsudangliang->setText(value);
+		setConfig.xiangSuDangLiang = value.toDouble();
 		emit pixToWorldChanged();
 	}
 }
