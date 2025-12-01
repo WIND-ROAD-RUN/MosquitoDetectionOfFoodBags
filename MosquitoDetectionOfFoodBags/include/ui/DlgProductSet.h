@@ -80,6 +80,16 @@ private slots:
 
 	void tabWidget_indexChanged(int index);
 
+	// 参数设置
+	void btn_wenchongzuidahuiduchazhi_clicked();
+	void btn_wenchongzuixiaohuiduchazhi_clicked();
+	void btn_wenchongzuidamianji_clicked();
+	void btn_wenchongzuixiaomianji_clicked();
+	void btn_maofazuidahuiduchazhi_clicked();
+	void btn_maofazuixiaohuiduchazhi_clicked();
+	void btn_maofazuidamianji_clicked();
+	void btn_maofazuixiaomianji_clicked();
+
 public slots:
 	// 监控IO函数
 	void monitorInPutSignal(size_t index, bool state);

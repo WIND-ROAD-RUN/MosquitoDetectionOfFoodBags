@@ -37,6 +37,14 @@ namespace cdm {
         double xiangjichufachangdu{ 0 };
         double meizhuanmaichongshu{ 0 };
         double shedingzhouchang{ 0 };
+        double wenchongzuidahuiduchazhi{ 0 };
+        double wenchongzuixiaohuiduchazhi{ 0 };
+        double wenchongzuidamianji{ 0 };
+        double wenchongzuixiaomianji{ 0 };
+        double maofazuidahuiduchazhi{ 0 };
+        double maofazuixiaohuiduchazhi{ 0 };
+        double maofazuidamianji{ 0 };
+        double maofazuixiaomianji{ 0 };
     };
 
     inline SetConfig::SetConfig(const rw::oso::ObjectStoreAssembly& assembly)
@@ -136,6 +144,46 @@ namespace cdm {
             throw std::runtime_error("$variable$shedingzhouchang is not found");
         }
         shedingzhouchang = shedingzhouchangItem->getValueAsDouble();
+        auto wenchongzuidahuiduchazhiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$wenchongzuidahuiduchazhi$"));
+        if (!wenchongzuidahuiduchazhiItem) {
+            throw std::runtime_error("$variable$wenchongzuidahuiduchazhi is not found");
+        }
+        wenchongzuidahuiduchazhi = wenchongzuidahuiduchazhiItem->getValueAsDouble();
+        auto wenchongzuixiaohuiduchazhiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$wenchongzuixiaohuiduchazhi$"));
+        if (!wenchongzuixiaohuiduchazhiItem) {
+            throw std::runtime_error("$variable$wenchongzuixiaohuiduchazhi is not found");
+        }
+        wenchongzuixiaohuiduchazhi = wenchongzuixiaohuiduchazhiItem->getValueAsDouble();
+        auto wenchongzuidamianjiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$wenchongzuidamianji$"));
+        if (!wenchongzuidamianjiItem) {
+            throw std::runtime_error("$variable$wenchongzuidamianji is not found");
+        }
+        wenchongzuidamianji = wenchongzuidamianjiItem->getValueAsDouble();
+        auto wenchongzuixiaomianjiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$wenchongzuixiaomianji$"));
+        if (!wenchongzuixiaomianjiItem) {
+            throw std::runtime_error("$variable$wenchongzuixiaomianji is not found");
+        }
+        wenchongzuixiaomianji = wenchongzuixiaomianjiItem->getValueAsDouble();
+        auto maofazuidahuiduchazhiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$maofazuidahuiduchazhi$"));
+        if (!maofazuidahuiduchazhiItem) {
+            throw std::runtime_error("$variable$maofazuidahuiduchazhi is not found");
+        }
+        maofazuidahuiduchazhi = maofazuidahuiduchazhiItem->getValueAsDouble();
+        auto maofazuixiaohuiduchazhiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$maofazuixiaohuiduchazhi$"));
+        if (!maofazuixiaohuiduchazhiItem) {
+            throw std::runtime_error("$variable$maofazuixiaohuiduchazhi is not found");
+        }
+        maofazuixiaohuiduchazhi = maofazuixiaohuiduchazhiItem->getValueAsDouble();
+        auto maofazuidamianjiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$maofazuidamianji$"));
+        if (!maofazuidamianjiItem) {
+            throw std::runtime_error("$variable$maofazuidamianji is not found");
+        }
+        maofazuidamianji = maofazuidamianjiItem->getValueAsDouble();
+        auto maofazuixiaomianjiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$maofazuixiaomianji$"));
+        if (!maofazuixiaomianjiItem) {
+            throw std::runtime_error("$variable$maofazuixiaomianji is not found");
+        }
+        maofazuixiaomianji = maofazuixiaomianjiItem->getValueAsDouble();
     }
 
     inline SetConfig::SetConfig(const SetConfig& obj)
@@ -158,6 +206,14 @@ namespace cdm {
         xiangjichufachangdu = obj.xiangjichufachangdu;
         meizhuanmaichongshu = obj.meizhuanmaichongshu;
         shedingzhouchang = obj.shedingzhouchang;
+        wenchongzuidahuiduchazhi = obj.wenchongzuidahuiduchazhi;
+        wenchongzuixiaohuiduchazhi = obj.wenchongzuixiaohuiduchazhi;
+        wenchongzuidamianji = obj.wenchongzuidamianji;
+        wenchongzuixiaomianji = obj.wenchongzuixiaomianji;
+        maofazuidahuiduchazhi = obj.maofazuidahuiduchazhi;
+        maofazuixiaohuiduchazhi = obj.maofazuixiaohuiduchazhi;
+        maofazuidamianji = obj.maofazuidamianji;
+        maofazuixiaomianji = obj.maofazuixiaomianji;
     }
 
     inline SetConfig& SetConfig::operator=(const SetConfig& obj)
@@ -181,6 +237,14 @@ namespace cdm {
             xiangjichufachangdu = obj.xiangjichufachangdu;
             meizhuanmaichongshu = obj.meizhuanmaichongshu;
             shedingzhouchang = obj.shedingzhouchang;
+            wenchongzuidahuiduchazhi = obj.wenchongzuidahuiduchazhi;
+            wenchongzuixiaohuiduchazhi = obj.wenchongzuixiaohuiduchazhi;
+            wenchongzuidamianji = obj.wenchongzuidamianji;
+            wenchongzuixiaomianji = obj.wenchongzuixiaomianji;
+            maofazuidahuiduchazhi = obj.maofazuidahuiduchazhi;
+            maofazuixiaohuiduchazhi = obj.maofazuixiaohuiduchazhi;
+            maofazuidamianji = obj.maofazuidamianji;
+            maofazuixiaomianji = obj.maofazuixiaomianji;
         }
         return *this;
     }
@@ -261,12 +325,44 @@ namespace cdm {
         shedingzhouchangItem->setName("$variable$shedingzhouchang$");
         shedingzhouchangItem->setValueFromDouble(shedingzhouchang);
         assembly.addItem(shedingzhouchangItem);
+        auto wenchongzuidahuiduchazhiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        wenchongzuidahuiduchazhiItem->setName("$variable$wenchongzuidahuiduchazhi$");
+        wenchongzuidahuiduchazhiItem->setValueFromDouble(wenchongzuidahuiduchazhi);
+        assembly.addItem(wenchongzuidahuiduchazhiItem);
+        auto wenchongzuixiaohuiduchazhiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        wenchongzuixiaohuiduchazhiItem->setName("$variable$wenchongzuixiaohuiduchazhi$");
+        wenchongzuixiaohuiduchazhiItem->setValueFromDouble(wenchongzuixiaohuiduchazhi);
+        assembly.addItem(wenchongzuixiaohuiduchazhiItem);
+        auto wenchongzuidamianjiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        wenchongzuidamianjiItem->setName("$variable$wenchongzuidamianji$");
+        wenchongzuidamianjiItem->setValueFromDouble(wenchongzuidamianji);
+        assembly.addItem(wenchongzuidamianjiItem);
+        auto wenchongzuixiaomianjiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        wenchongzuixiaomianjiItem->setName("$variable$wenchongzuixiaomianji$");
+        wenchongzuixiaomianjiItem->setValueFromDouble(wenchongzuixiaomianji);
+        assembly.addItem(wenchongzuixiaomianjiItem);
+        auto maofazuidahuiduchazhiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        maofazuidahuiduchazhiItem->setName("$variable$maofazuidahuiduchazhi$");
+        maofazuidahuiduchazhiItem->setValueFromDouble(maofazuidahuiduchazhi);
+        assembly.addItem(maofazuidahuiduchazhiItem);
+        auto maofazuixiaohuiduchazhiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        maofazuixiaohuiduchazhiItem->setName("$variable$maofazuixiaohuiduchazhi$");
+        maofazuixiaohuiduchazhiItem->setValueFromDouble(maofazuixiaohuiduchazhi);
+        assembly.addItem(maofazuixiaohuiduchazhiItem);
+        auto maofazuidamianjiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        maofazuidamianjiItem->setName("$variable$maofazuidamianji$");
+        maofazuidamianjiItem->setValueFromDouble(maofazuidamianji);
+        assembly.addItem(maofazuidamianjiItem);
+        auto maofazuixiaomianjiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        maofazuixiaomianjiItem->setName("$variable$maofazuixiaomianji$");
+        maofazuixiaomianjiItem->setValueFromDouble(maofazuixiaomianji);
+        assembly.addItem(maofazuixiaomianjiItem);
         return assembly;
     }
 
     inline bool SetConfig::operator==(const SetConfig& obj) const
     {
-        return tifeichixushijian == obj.tifeichixushijian && tifeijuli == obj.tifeijuli && shangXianWei == obj.shangXianWei && xiaXianWei == obj.xiaXianWei && zuoXianWei == obj.zuoXianWei && youXianWei == obj.youXianWei && zengyi == obj.zengyi && houFenPin == obj.houFenPin && chengFaQi == obj.chengFaQi && xiangSuDangLiang == obj.xiangSuDangLiang && yundongkongzhiqichonglian == obj.yundongkongzhiqichonglian && debugMode == obj.debugMode && tifeixinhaoOUT == obj.tifeixinhaoOUT && xiangjichufa1OUT == obj.xiangjichufa1OUT && xiangjichufa2OUT == obj.xiangjichufa2OUT && xiangjichufachangdu == obj.xiangjichufachangdu && meizhuanmaichongshu == obj.meizhuanmaichongshu && shedingzhouchang == obj.shedingzhouchang;
+        return tifeichixushijian == obj.tifeichixushijian && tifeijuli == obj.tifeijuli && shangXianWei == obj.shangXianWei && xiaXianWei == obj.xiaXianWei && zuoXianWei == obj.zuoXianWei && youXianWei == obj.youXianWei && zengyi == obj.zengyi && houFenPin == obj.houFenPin && chengFaQi == obj.chengFaQi && xiangSuDangLiang == obj.xiangSuDangLiang && yundongkongzhiqichonglian == obj.yundongkongzhiqichonglian && debugMode == obj.debugMode && tifeixinhaoOUT == obj.tifeixinhaoOUT && xiangjichufa1OUT == obj.xiangjichufa1OUT && xiangjichufa2OUT == obj.xiangjichufa2OUT && xiangjichufachangdu == obj.xiangjichufachangdu && meizhuanmaichongshu == obj.meizhuanmaichongshu && shedingzhouchang == obj.shedingzhouchang && wenchongzuidahuiduchazhi == obj.wenchongzuidahuiduchazhi && wenchongzuixiaohuiduchazhi == obj.wenchongzuixiaohuiduchazhi && wenchongzuidamianji == obj.wenchongzuidamianji && wenchongzuixiaomianji == obj.wenchongzuixiaomianji && maofazuidahuiduchazhi == obj.maofazuidahuiduchazhi && maofazuixiaohuiduchazhi == obj.maofazuixiaohuiduchazhi && maofazuidamianji == obj.maofazuidamianji && maofazuixiaomianji == obj.maofazuixiaomianji;
     }
 
     inline bool SetConfig::operator!=(const SetConfig& obj) const

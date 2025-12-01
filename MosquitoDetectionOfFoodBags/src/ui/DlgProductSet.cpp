@@ -73,6 +73,16 @@ void DlgProductSet::read_config()
 	// 默认显示第一个
 	ui->tabWidget->setCurrentIndex(0);
 
+	// 参数设置
+	ui->btn_wenchongzuidahuiduchazhi->setText(QString::number(setConfig.wenchongzuidahuiduchazhi));
+	ui->btn_wenchongzuixiaohuiduchazhi->setText(QString::number(setConfig.wenchongzuixiaohuiduchazhi));
+	ui->btn_wenchongzuidamianji->setText(QString::number(setConfig.wenchongzuidamianji));
+	ui->btn_wenchongzuixiaomianji->setText(QString::number(setConfig.wenchongzuixiaomianji));
+	ui->btn_maofazuidahuiduchazhi->setText(QString::number(setConfig.maofazuidahuiduchazhi));
+	ui->btn_maofazuixiaohuiduchazhi->setText(QString::number(setConfig.maofazuixiaohuiduchazhi));
+	ui->btn_maofazuidamianji->setText(QString::number(setConfig.maofazuidamianji));
+	ui->btn_maofazuixiaomianji->setText(QString::number(setConfig.maofazuixiaomianji));
+
 	updateControlLines();
 
 	initDOCheckItems();
@@ -130,6 +140,24 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_setDOxiangjichufa1_clicked);
 	QObject::connect(ui->btn_setDOxiangjichufa2, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOxiangjichufa2_clicked);
+
+	// 参数设置
+	QObject::connect(ui->btn_wenchongzuidahuiduchazhi, &QPushButton::clicked,
+		this, &DlgProductSet::btn_wenchongzuidahuiduchazhi_clicked);
+	QObject::connect(ui->btn_wenchongzuixiaohuiduchazhi, &QPushButton::clicked,
+		this, &DlgProductSet::btn_wenchongzuixiaohuiduchazhi_clicked);
+	QObject::connect(ui->btn_wenchongzuidamianji, &QPushButton::clicked,
+		this, &DlgProductSet::btn_wenchongzuidamianji_clicked);
+	QObject::connect(ui->btn_wenchongzuixiaomianji, &QPushButton::clicked,
+		this, &DlgProductSet::btn_wenchongzuixiaomianji_clicked);
+	QObject::connect(ui->btn_maofazuidahuiduchazhi, &QPushButton::clicked,
+		this, &DlgProductSet::btn_maofazuidahuiduchazhi_clicked);
+	QObject::connect(ui->btn_maofazuixiaohuiduchazhi, &QPushButton::clicked,
+		this, &DlgProductSet::btn_maofazuixiaohuiduchazhi_clicked);
+	QObject::connect(ui->btn_maofazuidamianji, &QPushButton::clicked,
+		this, &DlgProductSet::btn_maofazuidamianji_clicked);
+	QObject::connect(ui->btn_maofazuixiaomianji, &QPushButton::clicked,
+		this, &DlgProductSet::btn_maofazuixiaomianji_clicked);
 }
 
 void DlgProductSet::setDIErrorInfo(const std::vector<std::vector<int>>& index)
@@ -681,6 +709,158 @@ void DlgProductSet::tabWidget_indexChanged(int index)
 		_isUpdateMonitorInfo = false;
 		monitorZMotionMonitorThread->setRunning(false);
 		break;
+	}
+}
+
+void DlgProductSet::btn_wenchongzuidahuiduchazhi_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_wenchongzuidahuiduchazhi->setText(value);
+		setConfig.wenchongzuidahuiduchazhi = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_wenchongzuixiaohuiduchazhi_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_wenchongzuixiaohuiduchazhi->setText(value);
+		setConfig.wenchongzuixiaohuiduchazhi = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_wenchongzuidamianji_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_wenchongzuidamianji->setText(value);
+		setConfig.wenchongzuidamianji = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_wenchongzuixiaomianji_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_wenchongzuixiaomianji->setText(value);
+		setConfig.wenchongzuixiaomianji = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_maofazuidahuiduchazhi_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_maofazuidahuiduchazhi->setText(value);
+		setConfig.maofazuidahuiduchazhi = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_maofazuixiaohuiduchazhi_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_maofazuixiaohuiduchazhi->setText(value);
+		setConfig.maofazuixiaohuiduchazhi = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_maofazuidamianji_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_maofazuidamianji->setText(value);
+		setConfig.maofazuidamianji = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_maofazuixiaomianji_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_maofazuixiaomianji->setText(value);
+		setConfig.maofazuixiaomianji = value.toDouble();
 	}
 }
 

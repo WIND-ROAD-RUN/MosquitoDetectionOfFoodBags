@@ -27,5 +27,15 @@ namespace cdm {
 		xiangjichufachangdu : double :default = 0;
 		meizhuanmaichongshu : double :default = 0;
 		shedingzhouchang : double :default = 0;
+
+		wenchongzuidahuiduchazhi : double :default = 0;
+		wenchongzuixiaohuiduchazhi : double :default = 0;
+		wenchongzuidamianji : double :default = 0;
+		wenchongzuixiaomianji : double :default = 0;
+
+		maofazuidahuiduchazhi : double :default = 0;
+		maofazuixiaohuiduchazhi : double :default = 0;
+		maofazuidamianji : double :default = 0;
+		maofazuixiaomianji : double :default = 0;
 	};
 }
