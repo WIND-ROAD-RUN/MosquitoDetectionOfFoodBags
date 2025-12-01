@@ -70,9 +70,18 @@ private:
 	                    const QColor& color = Qt::yellow,
 	                    int penWidth = 2);
 
+	// 从图像中提取指定区域,确保最小尺寸为50像素
+	QImage extractDefectRegion(const QImage& sourceImage,
+	                           double R1,
+	                           double C1,
+	                           double R2,
+	                           double C2,
+	                           int minSize = 100);
+
+public:
 	// 存图
-	void save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image);
-	void save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image);
+	void save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex);
+	void save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex);
 
 signals:
 	void imageNGReady(QPixmap image, size_t index, bool isbad);
@@ -128,6 +137,13 @@ private:
 public:
 	size_t index;
 };
+
+
+
+
+
+
+
 
 
 

@@ -72,13 +72,14 @@ void ImageProcessor::run_debug(MatInfo& frame)
 
 	emit imageNGReady(QPixmap::fromImage(image), frame.index, false);
 
-	rw::rqw::ImageInfo imageInfo(rw::rqw::cvMatToQImage(frame.image));
-	save_image(imageInfo, image);
+	/*rw::rqw::ImageInfo imageInfo(image);
+	save_image(imageInfo, image, 1);*/
 }
 
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
 	auto image = rw::rqw::cvMatToQImage(frame.image);
+	auto saveRowImg = image.copy();
 
 	//显示图片测试
 	//QString imagePath = "C:/Users/zfkj4090/Desktop/temp/image.jpg";
@@ -103,7 +104,10 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	emit imageNGReady(QPixmap::fromImage(image), frame.index, _isbad);
 
 	rw::rqw::ImageInfo imageInfo(image);
-	save_image(imageInfo, image);
+	save_image(imageInfo, image, 1);
+
+	rw::rqw::ImageInfo imageInfo1(saveRowImg);
+	save_image(imageInfo1, saveRowImg, 2);
 }
 
 void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector< double>& C1, QVector< double>& R2, QVector< double>& C2, QVector< double>& Area)
@@ -129,15 +133,15 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangXianWei1;
 
 
-	hv_huidumin = 140;
+	hv_huidumin = 100;
 
 
 
 	// ho_ImageModel = MDOFoodBags::getModelImage();
-	 auto modelImagePtr = MDOFoodBags::getModelImage();
-	 if (modelImagePtr && modelImagePtr->IsInitialized()) {
-		 ho_ImageModel = *modelImagePtr;
-	 }
+	auto modelImagePtr = MDOFoodBags::getModelImage();
+	if (modelImagePtr && modelImagePtr->IsInitialized()) {
+		ho_ImageModel = *modelImagePtr;
+	}
 	/*HalconCpp::ReadImage(&ho_ImageModel, "C:/Users/zfkj4090/Desktop/temp/model.jpg");
 	HalconCpp::Rgb1ToGray(ho_ImageModel, &ho_ImageModel);
 	MDOFoodBags::setModelImage(ho_ImageModel);*/
@@ -170,7 +174,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 
 
 
-	SubImage(ho_ImageModelMean, ho_ImageMean, &ho_ImageSub, 1, 128);
+	SubImage(ho_ImageModelMean, ho_ImageMean, &ho_ImageSub, 20, 0);
 	if (hv_Height < hv_shangxiasuojin)
 	{
 
@@ -181,7 +185,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector< double>& R1, QVector<
 	ReduceDomain(ho_ImageSub, ho_Rectangle, &ho_ImageReduced);
 
 	Threshold(ho_ImageReduced, &ho_Regions, hv_huidumin, 255);
-
+	HalconCpp::Connection(ho_Regions, &ho_Regions);
 	AreaCenter(ho_Regions, &hv_Area, &hv_Row, &hv_Column);
 
 	ShapeTrans(ho_Regions, &ho_RegionTrans, "rectangle1");
@@ -391,9 +395,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 	//绘制左右限位
 	double zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei1;
 	double youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei1;
-	// 绘制限位线
-	drawLimitLines(image, zuoxianwei, youxianwei, Qt::yellow, 3);
-
+	
 
 	// 说明有瑕疵
 	if (Areas.size() > 0)
@@ -410,11 +412,26 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 		// 2. 或者存在单个面积超过最小面积阈值
 
 		// 检查是否有单个面积超过阈值并绘制
+		auto paintimage = image.copy();
 		for (int i = 0; i < Areas.size(); i++)
 		{
 			if (Areas[i] >= minArea)
 			{
+
 				drawSingleRectangleOnImage(image, R1[i], C1[i], R2[i], C2[i], Areas[i], Qt::red, 3);
+				// 提取缺陷区域图像
+				QImage defectRegion = extractDefectRegion(paintimage, R1[i], C1[i], R2[i], C2[i]);
+
+				if (!defectRegion.isNull())
+				{
+					// 保存缺陷区域图像
+					rw::rqw::ImageInfo defectInfo(defectRegion);
+					defectInfo.classify = QString("Defect1");
+					auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
+					imageSaveEngine->pushImage(defectInfo);
+				}
+				
+				
 				isbad = true;
 			}
 			else
@@ -432,6 +449,8 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 			drawRectanglesOnImage(image, R1, C1, R2, C2, Areas, Qt::red, 3);
 		}
 	}
+	// 绘制限位线
+	drawLimitLines(image, zuoxianwei, youxianwei, Qt::yellow, 3);
 
 	return isbad;
 }
@@ -466,7 +485,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 	}*/
 }
 
-void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image)
+void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex)
 {
 	auto& isTakePictures = Modules::getInstance().runtimeInfoModule.isTakePictures;
 
@@ -477,19 +496,27 @@ void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& ima
 
 	if ((imageProcessingModuleIndex == 1))
 	{
-		save_image_work(imageInfo, image);
+		save_image_work(imageInfo, image, imageIndex);
 	}
 }
 
-void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image)
+void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex)
 {
 	auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
 	if (_isbad) {
 
 		if (1 == imageProcessingModuleIndex)
 		{
-			imageInfo.classify = "NG1";
-			imageSaveEngine->pushImage(imageInfo);
+			if (1 == imageIndex)
+			{
+				imageInfo.classify = "NG1";
+				imageSaveEngine->pushImage(imageInfo);
+			}
+			else if (2 == imageIndex)
+			{
+				imageInfo.classify = "OK1";
+				imageSaveEngine->pushImage(imageInfo);
+			}
 		}
 	}
 }
@@ -567,6 +594,16 @@ void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t ind
 		HalconCpp::MeanImage(hImage, &hImage, 3, 3);
 		MDOFoodBags::setModelImage(hImage);
 		MDOFoodBags::setIsModelImageLoaded(true);
+
+		// 保存模板图片
+		auto qImage = rw::rqw::cvMatToQImage(matInfo.mat);
+
+		rw::rqw::ImageInfo imageInfo(qImage);
+		auto& imageSaveEngine = Modules::getInstance().imgSaveModule.imageSaveEngine;
+
+		imageInfo.classify = "Module1";
+		imageSaveEngine->pushImage(imageInfo);
+
 	}
 
 	QMutexLocker locker(&_mutex);
@@ -643,4 +680,104 @@ void ImageProcessor::drawLimitLines(QImage& image, double leftLimit, double righ
 
 	// 结束绘制
 	painter.end();
+}
+
+QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage, double R1, double C1, double R2, double C2,
+	int minSize)
+{
+	// 检查源图像是否有效
+	if (sourceImage.isNull())
+	{
+		return QImage();
+	}
+
+	// 转换坐标系: R(行/y), C(列/x)
+	int x1 = static_cast<int>(C1);
+	int y1 = static_cast<int>(R1);
+	int x2 = static_cast<int>(C2);
+	int y2 = static_cast<int>(R2);
+
+	// 确保坐标顺序正确
+	if (x1 > x2) {
+		int temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+	if (y1 > y2) {
+		int temp = y1;
+		y1 = y2;
+		y2 = temp;
+	}
+
+	// 计算原始区域的宽度和高度
+	int width = x2 - x1;
+	int height = y2 - y1;
+
+	// 获取图像尺寸
+	int imageWidth = sourceImage.width();
+	int imageHeight = sourceImage.height();
+
+	// 如果区域小于最小尺寸,则扩展区域
+	if (width < minSize || height < minSize)
+	{
+		// 计算区域中心点
+		int centerX = (x1 + x2) / 2;
+		int centerY = (y1 + y2) / 2;
+
+		// 计算需要的扩展尺寸
+		int finalWidth = (width > minSize) ? width : minSize;
+		int finalHeight = (height > minSize) ? height : minSize;
+
+		// 以中心点为基准重新计算坐标
+		x1 = centerX - finalWidth / 2;
+		x2 = centerX + finalWidth / 2;
+		y1 = centerY - finalHeight / 2;
+		y2 = centerY + finalHeight / 2;
+
+		// 更新宽高
+		width = finalWidth;
+		height = finalHeight;
+	}
+
+	// 边界检查和调整,确保不超出图像范围
+	if (x1 < 0)
+	{
+		int offset = -x1;
+		x1 = 0;
+		x2 = (x2 + offset < imageWidth) ? (x2 + offset) : imageWidth;
+		width = x2 - x1;
+	}
+	if (y1 < 0)
+	{
+		int offset = -y1;
+		y1 = 0;
+		y2 = (y2 + offset < imageHeight) ? (y2 + offset) : imageHeight;
+		height = y2 - y1;
+	}
+	if (x2 > imageWidth)
+	{
+		int offset = x2 - imageWidth;
+		x2 = imageWidth;
+		x1 = (x1 - offset > 0) ? (x1 - offset) : 0;
+		width = x2 - x1;
+	}
+	if (y2 > imageHeight)
+	{
+		int offset = y2 - imageHeight;
+		y2 = imageHeight;
+		y1 = (y1 - offset > 0) ? (y1 - offset) : 0;
+		height = y2 - y1;
+	}
+
+	// 确保宽高为正数
+	if (width <= 0 || height <= 0)
+	{
+		return QImage();
+	}
+
+	// 提取图像区域
+	QRect extractRect(x1, y1, width, height);
+	QImage extractedImage = sourceImage.copy(extractRect);
+
+	return extractedImage;
 }
