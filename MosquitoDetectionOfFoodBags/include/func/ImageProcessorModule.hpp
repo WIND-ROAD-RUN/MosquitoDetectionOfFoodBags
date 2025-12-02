@@ -23,10 +23,6 @@ struct MatProcess {
 	double C2;
 	double Area;
 	double MeanThreshold;
-
-
-
-	
 };
 
 class ImageProcessor : public QThread
@@ -53,11 +49,13 @@ private:
 
 
 	void halconPRocess(cv::Mat image, QVector<MatProcess>& processResults);
+
 	// 在图像上绘制矩形
 	void drawRectanglesOnImage(QImage& image,
 		const QVector<MatProcess>& processResults,
 		const QColor& color = Qt::red,
 		int penWidth = 2);
+
 	bool checkDefectAndDrawOnImage(QImage& image,
 		const QVector<MatProcess>& processResults,
 		double minArea,
@@ -69,8 +67,6 @@ private:
 		const QColor& color = Qt::red,
 		int penWidth = 2);
 
-
-
 	void drawLimitLines(QImage& image,
 	                    double leftLimit,
 	                    double rightLimit,
@@ -81,6 +77,7 @@ private:
 	QImage extractDefectRegion(const QImage& sourceImage,
 		const MatProcess& result,
 		int minSize = 100);
+
 	void drawProcessingTime(QImage& image,
 		double timeMs,
 		const QColor& backgroundColor = QColor(0, 0, 0, 180),

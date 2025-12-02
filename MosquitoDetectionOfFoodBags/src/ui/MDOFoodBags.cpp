@@ -15,7 +15,7 @@
 #include"Utilty.hpp"
 
 std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::modelHImage{};
-std::shared_ptr<const QPixmap> MDOFoodBags::modelQPixmapImage{};
+std::shared_ptr<const QImage> MDOFoodBags::modelQImage{};
 std::atomic_bool MDOFoodBags::isModelImageLoaded{ false };
 
 MDOFoodBags::MDOFoodBags(QWidget* parent)
@@ -503,6 +503,7 @@ void MDOFoodBags::pbtn_limit_clicked()
 	auto& _dlgProductLimit = Modules::getInstance().uiModule._dlgProductLimit;
 	_dlgProductLimit->setFixedSize(this->width(), this->height());
 	_dlgProductLimit->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	_dlgProductLimit->updateShowImage();
 	_dlgProductLimit->exec();
 }
 
@@ -544,16 +545,16 @@ std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::getModelHImage()
 	return std::atomic_load_explicit(&modelHImage, std::memory_order_acquire);
 }
 
-void MDOFoodBags::setQPixmapImage(const QPixmap& img)
+void MDOFoodBags::setModelQImage(const QImage& img)
 {
-	auto sp = std::make_shared<QPixmap>(img);
-	std::shared_ptr<const QPixmap> csp = sp;
-	std::atomic_store_explicit(&modelQPixmapImage, csp, std::memory_order_release);
+	auto sp = std::make_shared<QImage>(img);
+	std::shared_ptr<const QImage> csp = sp;
+	std::atomic_store_explicit(&modelQImage, csp, std::memory_order_release);
 }
 
-std::shared_ptr<const QPixmap> MDOFoodBags::getQPixmapImage()
+std::shared_ptr<const QImage> MDOFoodBags::getModelQImage()
 {
-	return std::atomic_load_explicit(&modelQPixmapImage, std::memory_order_acquire);
+	return std::atomic_load_explicit(&modelQImage, std::memory_order_acquire);
 }
 
 void MDOFoodBags::setIsModelImageLoaded(bool isLoaded)

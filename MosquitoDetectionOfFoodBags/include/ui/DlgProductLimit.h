@@ -22,9 +22,15 @@ public:
 private slots:
 	void pbtn_close_clicked();
 
+public:
+	void updateShowImage();
 private:
 	void getImage();
+	void setImage();
+	QImage drawLimitLines();
 private:
 	Ui::DlgProductLimitClass *ui;
+
+	QImage showQImage{};
 };
 

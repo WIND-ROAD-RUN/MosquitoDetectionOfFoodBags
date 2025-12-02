@@ -92,7 +92,6 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	QVector< MatProcess> _matProcess;
 
 	halconPRocess(frame.image, _matProcess);
-	//TODO:这两个最小面积和最小总面积设置成系统参数
 
 	double minArea = 0;
 	double allMinArea = 0;
@@ -572,6 +571,8 @@ void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t ind
 		HalconCpp::MeanImage(hImage, &hImage, 3, 3);
 		MDOFoodBags::setModelHImage(hImage);
 		MDOFoodBags::setIsModelImageLoaded(true);
+		QImage modelQImage = rw::rqw::cvMatToQImage(matInfo.mat);
+		MDOFoodBags::setModelQImage(modelQImage);
 
 		// 保存模板图片
 		auto qImage = rw::rqw::cvMatToQImage(matInfo.mat);

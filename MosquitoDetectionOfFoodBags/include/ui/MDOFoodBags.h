@@ -68,13 +68,13 @@ signals:
 public:
 	static void setModelHImage(const HalconCpp::HObject& img);
 	static std::shared_ptr<const HalconCpp::HObject> getModelHImage();
-	static void setQPixmapImage(const QPixmap& img);
-	static std::shared_ptr<const QPixmap> getQPixmapImage();
+	static void setModelQImage(const QImage& img);
+	static std::shared_ptr<const QImage> getModelQImage();
 	static void setIsModelImageLoaded(bool isLoaded);
 	static bool getIsModelImageLoaded();
 private:
 	static std::shared_ptr<const HalconCpp::HObject> modelHImage;
-	static std::shared_ptr<const QPixmap> modelQPixmapImage;
+	static std::shared_ptr<const QImage> modelQImage;
 	static std::atomic_bool isModelImageLoaded;
 
 private:
