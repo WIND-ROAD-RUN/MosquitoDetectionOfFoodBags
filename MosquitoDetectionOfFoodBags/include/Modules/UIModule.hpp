@@ -14,6 +14,7 @@ class MDOFoodBags;
 class DlgProductScore;
 class DlgProductSet;
 class DlgCloseForm;
+class DlgProductLimit;
 
 class UIModule
 	: public QObject, public IModule<void>
@@ -35,6 +36,7 @@ public:
 	MDOFoodBags* _MDOFoodBags = nullptr;
 	rw::rqw::LabelWarning* labelWarning = nullptr;
 	DlgCloseForm* _dlgCloseForm = nullptr;
+	DlgProductLimit* _dlgProductLimit = nullptr;
 
 	QVector<QCheckBox*> _dlgProductSetCheckList{};
 	QVector<QWidget*> _dlgProductScoreGroupList{};

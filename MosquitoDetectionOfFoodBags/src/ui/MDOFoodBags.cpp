@@ -7,6 +7,7 @@
 #include <QProcess>
 
 #include "DlgCloseForm.h"
+#include "DlgProductLimit.h"
 #include "DlgProductScore.h"
 #include "DlgProductSet.h"
 #include "Modules.hpp"
@@ -71,7 +72,7 @@ void MDOFoodBags::build_connect()
 	connect(ui->ckb_shibiekuang, &QCheckBox::toggled, this, &MDOFoodBags::ckb_shibiekuang_checked);
 	connect(ui->ckb_wenzi, &QCheckBox::toggled, this, &MDOFoodBags::ckb_wenzi_checked);
 	connect(ui->pbtn_openSaveLocation, &QPushButton::clicked, this, &MDOFoodBags::pbtn_openSaveLocation_clicked);
-
+	connect(ui->pbtn_limit, &QPushButton::clicked, this, &MDOFoodBags::pbtn_limit_clicked);
 	connect(ui->pbtn_baoguang, &QPushButton::clicked, this, &MDOFoodBags::pbtn_baoguang_clicked);
 
 
@@ -398,10 +399,6 @@ void MDOFoodBags::rbtn_debug_checked(bool checked)
 				camera1->setFrameTriggered(false);
 				camera1->setLineTriggered(false);
 				camera1->setLineHeight(500);
-
-
-
-
 			}
 		}
 		else {
@@ -443,8 +440,6 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 		runningState = RunningState::OpenRemoveFunc;
 		if (camera1)
 		{
-
-
 			camera1->setFrameTriggered(false);
 			camera1->setLineTriggered(true);
 			auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
@@ -453,9 +448,6 @@ void MDOFoodBags::rbtn_removeFunc_checked(bool checked)
 			double hanggao = xiangjichufachangdu / xiangsudangliang;
 
 			camera1->setLineHeight((int)hanggao);
-
-
-
 		}
 		ui->rbtn_debug->setChecked(false);
 		ui->ckb_shibiekuang->setVisible(false);
@@ -501,10 +493,16 @@ void MDOFoodBags::pbtn_start_clicked()
 	auto& camera = Modules::getInstance().cameraModule.camera1;
 	if (camera)
 	{
-		
-		
 		camera->softwareTrigger();
 	}
+}
+
+void MDOFoodBags::pbtn_limit_clicked()
+{
+	auto& _dlgProductLimit = Modules::getInstance().uiModule._dlgProductLimit;
+	_dlgProductLimit->setFixedSize(this->width(), this->height());
+	_dlgProductLimit->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	_dlgProductLimit->exec();
 }
 
 void MDOFoodBags::pbtn_baoguang_clicked()

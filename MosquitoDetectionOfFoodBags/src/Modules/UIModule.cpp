@@ -5,6 +5,7 @@
 #include "ui_DlgProductScore.h"
 #include "ui_DlgProductSet.h"
 #include "DlgCloseForm.h"
+#include "DlgProductLimit.h"
 
 void UIModule::build()
 {
@@ -12,6 +13,7 @@ void UIModule::build()
 	_dlgProductScore = new DlgProductScore();
 	labelWarning = new rw::rqw::LabelWarning();
 	_dlgCloseForm = new DlgCloseForm();
+	_dlgProductLimit = new DlgProductLimit();
 
 	// 构建分数界面与设置界面的UI联动
 	ini_dlgProductScoreGroupList();
@@ -25,6 +27,7 @@ void UIModule::destroy()
 	delete _dlgProductScore;
 	delete labelWarning;
 	delete _dlgCloseForm;
+	delete _dlgProductLimit;
 }
 
 void UIModule::start()
