@@ -112,7 +112,4 @@ private:
 	PictureViewerThumbnails* _picturesViewer = nullptr;
 	ImageEnlargedDisplay* _imageEnlargedDisplay = nullptr;
 	rw::rqw::ClickableLabel* clickableTitle = nullptr;
-
-#ifdef BUILD_WITHOUT_HARDWARE
-#endif
 };

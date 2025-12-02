@@ -40,12 +40,6 @@
       "jobs": 8
     },
     {
-      "name": "vs2022-release-NoHardware",
-      "configurePreset": "vs2022-NoHardware",
-      "configuration": "Release",
-      "jobs": 8
-    },
-    {
       "name": "vs2022-debug",
       "configurePreset": "vs2022",
       "configuration": "Debug",
