@@ -22,7 +22,8 @@ public:
 private slots:
 	void pbtn_close_clicked();
 
-
+private:
+	void getImage();
 private:
 	Ui::DlgProductLimitClass *ui;
 };

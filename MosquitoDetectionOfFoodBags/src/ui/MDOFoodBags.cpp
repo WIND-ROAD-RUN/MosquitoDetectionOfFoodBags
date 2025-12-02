@@ -14,7 +14,8 @@
 #include "NumberKeyboard.h"
 #include"Utilty.hpp"
 
-std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::modelImage{};
+std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::modelHImage{};
+std::shared_ptr<const QPixmap> MDOFoodBags::modelQPixmapImage{};
 std::atomic_bool MDOFoodBags::isModelImageLoaded{ false };
 
 MDOFoodBags::MDOFoodBags(QWidget* parent)
@@ -529,18 +530,30 @@ void MDOFoodBags::pbtn_baoguang_clicked()
 	}
 }
 
-void MDOFoodBags::setModelImage(const HalconCpp::HObject& img)
+void MDOFoodBags::setModelHImage(const HalconCpp::HObject& img)
 {
 	auto sp = std::make_shared<HalconCpp::HObject>(img);
 	std::shared_ptr<const HalconCpp::HObject> csp = sp;
 
-	std::atomic_store_explicit(&modelImage, csp, std::memory_order_release);
+	std::atomic_store_explicit(&modelHImage, csp, std::memory_order_release);
 	isModelImageLoaded.store(img.IsInitialized(), std::memory_order_relaxed);
 }
 
-std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::getModelImage()
+std::shared_ptr<const HalconCpp::HObject> MDOFoodBags::getModelHImage()
 {
-	return std::atomic_load_explicit(&modelImage, std::memory_order_acquire);
+	return std::atomic_load_explicit(&modelHImage, std::memory_order_acquire);
+}
+
+void MDOFoodBags::setQPixmapImage(const QPixmap& img)
+{
+	auto sp = std::make_shared<QPixmap>(img);
+	std::shared_ptr<const QPixmap> csp = sp;
+	std::atomic_store_explicit(&modelQPixmapImage, csp, std::memory_order_release);
+}
+
+std::shared_ptr<const QPixmap> MDOFoodBags::getQPixmapImage()
+{
+	return std::atomic_load_explicit(&modelQPixmapImage, std::memory_order_acquire);
 }
 
 void MDOFoodBags::setIsModelImageLoaded(bool isLoaded)

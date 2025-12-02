@@ -143,7 +143,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	hv_huidumin = 100;
 
 	// 获取模板图像
-	auto modelImagePtr = MDOFoodBags::getModelImage();
+	auto modelImagePtr = MDOFoodBags::getModelHImage();
 	if (modelImagePtr && modelImagePtr->IsInitialized()) {
 		ho_ImageModel = *modelImagePtr;
 	}
@@ -570,7 +570,7 @@ void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t ind
 		HalconCpp::HObject hImage = rw::rqw::CvMatToHImage(matInfo.mat);
 		HalconCpp::Rgb1ToGray(hImage, &hImage);
 		HalconCpp::MeanImage(hImage, &hImage, 3, 3);
-		MDOFoodBags::setModelImage(hImage);
+		MDOFoodBags::setModelHImage(hImage);
 		MDOFoodBags::setIsModelImageLoaded(true);
 
 		// 保存模板图片

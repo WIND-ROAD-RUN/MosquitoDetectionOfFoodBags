@@ -1,4 +1,6 @@
 #include "DlgProductLimit.h"
+#include "MDOFoodBags.h"
+#include "rqw_HalconUtilty.hpp"
 
 DlgProductLimit::DlgProductLimit(QWidget *parent)
 	: QDialog(parent)
@@ -34,5 +36,10 @@ void DlgProductLimit::build_connect()
 void DlgProductLimit::pbtn_close_clicked()
 {
 	this->close();
+}
+
+void DlgProductLimit::getImage()
+{
+	
 }
 

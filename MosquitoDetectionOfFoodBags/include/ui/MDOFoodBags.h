@@ -66,12 +66,15 @@ signals:
 	void shibiekuangChanged();
 	
 public:
-	static void setModelImage(const HalconCpp::HObject& img);
-	static std::shared_ptr<const HalconCpp::HObject> getModelImage();
+	static void setModelHImage(const HalconCpp::HObject& img);
+	static std::shared_ptr<const HalconCpp::HObject> getModelHImage();
+	static void setQPixmapImage(const QPixmap& img);
+	static std::shared_ptr<const QPixmap> getQPixmapImage();
 	static void setIsModelImageLoaded(bool isLoaded);
 	static bool getIsModelImageLoaded();
 private:
-	static std::shared_ptr<const HalconCpp::HObject> modelImage;
+	static std::shared_ptr<const HalconCpp::HObject> modelHImage;
+	static std::shared_ptr<const QPixmap> modelQPixmapImage;
 	static std::atomic_bool isModelImageLoaded;
 
 private:
