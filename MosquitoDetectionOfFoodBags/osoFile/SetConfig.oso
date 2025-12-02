@@ -7,8 +7,7 @@ namespace cdm {
 		tifeichixushijian : double :default = 0;
 		tifeijuli : double :default = 0;
 
-		shangXianWei : double :default = 0;
-		xiaXianWei : double :default = 0;
+		shangxiasuojin : double :default = 0;
 		zuoXianWei : double :default = 0;
 		youXianWei : double :default = 0;
 		zengyi : double :default = 0;

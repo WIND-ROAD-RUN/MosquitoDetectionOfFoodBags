@@ -137,7 +137,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	hv_marsky = 9;
 	hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
 	hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
-	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangXianWei;
+	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangxiasuojin;
 
 	hv_huidumin = 100;
 

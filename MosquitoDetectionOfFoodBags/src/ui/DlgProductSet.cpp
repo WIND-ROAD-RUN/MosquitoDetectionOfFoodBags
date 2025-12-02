@@ -44,8 +44,7 @@ void DlgProductSet::read_config()
 	ui->pbtn_tifeijuli->setText(QString::number(setConfig.tifeijuli));
 
 	// 一工位
-	ui->pbtn_shangxianwei->setText(QString::number(setConfig.shangXianWei));
-	ui->pbtn_xiaxianwei->setText(QString::number(setConfig.xiaXianWei));
+	ui->pbtn_shangxiasuojin->setText(QString::number(setConfig.shangxiasuojin));
 	ui->pbtn_zuoxianwei->setText(QString::number(setConfig.zuoXianWei));
 	ui->pbtn_youxianwei->setText(QString::number(setConfig.youXianWei));
 	ui->pbtn_zengyi->setText(QString::number(setConfig.zengyi));
@@ -95,10 +94,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_tifeichixushijian_clicked);
 	QObject::connect(ui->pbtn_tifeijuli, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_tifeijuli_clicked);
-	QObject::connect(ui->pbtn_shangxianwei, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_shangxianwei_clicked);
-	QObject::connect(ui->pbtn_xiaxianwei, &QPushButton::clicked,
-		this, &DlgProductSet::pbtn_xiaxianwei_clicked);
+	QObject::connect(ui->pbtn_shangxiasuojin, &QPushButton::clicked,
+		this, &DlgProductSet::pbtn_shangxiasuojin_clicked);
 	QObject::connect(ui->pbtn_zuoxianwei, &QPushButton::clicked,
 		this, &DlgProductSet::pbtn_zuoxianwei_clicked);
 	QObject::connect(ui->pbtn_youxianwei, &QPushButton::clicked,
@@ -361,7 +358,7 @@ void DlgProductSet::pbtn_tifeijuli_clicked()
 	}
 }
 
-void DlgProductSet::pbtn_shangxianwei_clicked()
+void DlgProductSet::pbtn_shangxiasuojin_clicked()
 {
 	NumberKeyboard numKeyBord;
 	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
@@ -375,27 +372,8 @@ void DlgProductSet::pbtn_shangxianwei_clicked()
 			return;
 		}
 		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_shangxianwei->setText(value);
-		setConfig.shangXianWei = value.toDouble();
-	}
-}
-
-void DlgProductSet::pbtn_xiaxianwei_clicked()
-{
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-		ui->pbtn_xiaxianwei->setText(value);
-		setConfig.xiaXianWei = value.toDouble();
+		ui->pbtn_shangxiasuojin->setText(value);
+		setConfig.shangxiasuojin = value.toDouble();
 	}
 }
 
