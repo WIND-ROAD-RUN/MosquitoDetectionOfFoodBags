@@ -24,6 +24,14 @@ struct MatProcess {
 	double Area;
 	double MeanThreshold;
 };
+// 数据处理完以后的图片存储结构体
+struct MatProduct {
+	
+	double Width;
+	double zuoxianwei;
+	double youxianwei;
+
+};
 
 class ImageProcessor : public QThread
 {
@@ -48,18 +56,19 @@ private:
 
 
 
-	void halconPRocess(cv::Mat image, QVector<MatProcess>& processResults);
+	void halconPRocess(cv::Mat image, QVector<MatProcess>& processResults, MatProduct& _matProduct);
 
 	// 在图像上绘制矩形
 	void drawRectanglesOnImage(QImage& image,
 		const QVector<MatProcess>& processResults,
 		const QColor& color = Qt::red,
 		int penWidth = 2);
-
+	void drawDefectInfo(QImage& image, double area, double meanThreshold);
 	bool checkDefectAndDrawOnImage(QImage& image,
 		const QVector<MatProcess>& processResults,
 		double minArea,
-		double allMinArea);
+		double allMinArea,
+		 MatProduct _matProduct);
 
 	// 在图像上绘制单个矩形
 	void drawSingleRectangleOnImage(QImage& image,
