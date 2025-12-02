@@ -503,7 +503,6 @@ void MDOFoodBags::pbtn_limit_clicked()
 	auto& _dlgProductLimit = Modules::getInstance().uiModule._dlgProductLimit;
 	_dlgProductLimit->setFixedSize(this->width(), this->height());
 	_dlgProductLimit->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	_dlgProductLimit->updateShowImage();
 	_dlgProductLimit->exec();
 }
 

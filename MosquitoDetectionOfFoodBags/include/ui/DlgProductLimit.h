@@ -19,6 +19,9 @@ public:
 	void read_config();
 	void build_connect();
 
+protected:
+	void showEvent(QShowEvent* event) override;
+
 private slots:
 	void pbtn_close_clicked();
 
@@ -28,6 +31,8 @@ private:
 	void getImage();
 	void setImage();
 	QImage drawLimitLines();
+
+	void drawVerticalLimitLine(QImage& image, int position);
 private:
 	Ui::DlgProductLimitClass *ui;
 

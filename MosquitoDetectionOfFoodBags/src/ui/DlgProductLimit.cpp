@@ -1,9 +1,10 @@
 #include "DlgProductLimit.h"
+
+#include <QPainter>
+
 #include "MDOFoodBags.h"
 #include "rqw_HalconUtilty.hpp"
 #include "Modules.hpp"
-#include "../../../ThirdRep/RW_UL/RW_UL/Module/ImgPro/include/imgPro_ImagePainter.hpp"
-#include "../../../ThirdRep/RW_UL/RW_UL/Module/ImgPro/include/imgPro_ImageProcessUtilty.hpp"
 
 DlgProductLimit::DlgProductLimit(QWidget *parent)
 	: QDialog(parent)
@@ -36,6 +37,17 @@ void DlgProductLimit::build_connect()
 	connect(ui->btn_close, &QPushButton::clicked, this, &DlgProductLimit::pbtn_close_clicked);
 }
 
+void DlgProductLimit::showEvent(QShowEvent* event)
+{
+	QDialog::showEvent(event);
+
+	if (event->spontaneous()) {
+		return;
+	}
+
+	updateShowImage();
+}
+
 void DlgProductLimit::pbtn_close_clicked()
 {
 	this->close();
@@ -44,6 +56,7 @@ void DlgProductLimit::pbtn_close_clicked()
 void DlgProductLimit::updateShowImage()
 {
 	getImage();
+	setImage();
 }
 
 void DlgProductLimit::getImage()
@@ -61,7 +74,6 @@ void DlgProductLimit::setImage()
 	auto tempQImage = drawLimitLines();
 	auto showImage = QPixmap::fromImage(tempQImage);
 	ui->label_imgDisplay->setPixmap(showImage.scaled(ui->label_imgDisplay->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
 }
 
 QImage DlgProductLimit::drawLimitLines()
@@ -73,13 +85,21 @@ QImage DlgProductLimit::drawLimitLines()
 	// 绘制限位
 	QImage tempQImage = showQImage;
 	// 左限位
-	rw::imgPro::ConfigDrawLine cfg;
-	cfg.position = leftLimit;
-	rw::imgPro::ImagePainter::drawVerticalLine(tempQImage, cfg);
+	drawVerticalLimitLine(tempQImage, leftLimit);
 	// 右限位
-	cfg.position = rightLimit;
-	rw::imgPro::ImagePainter::drawVerticalLine(tempQImage, cfg);
+	drawVerticalLimitLine(tempQImage, rightLimit);
 
 	return tempQImage;
 }
 
+void DlgProductLimit::drawVerticalLimitLine(QImage& image, int position)
+{
+	QPainter painter(&image);
+
+	// 设置黄色虚线，线宽为2
+	QPen pen(Qt::yellow, 2, Qt::DashLine);
+	painter.setPen(pen);
+
+	// 绘制从顶部到底部的垂直线
+	painter.drawLine(position, 0, position, image.height());
+}
