@@ -108,6 +108,8 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	ui->rbtn_debug->setVisible(false);
 #endif
 
+	// 不启用限位窗体
+	ui->pbtn_limit->setVisible(false);
 
 	Modules::getInstance().runtimeInfoModule.isTakePictures = mainWindowConfig.isSaveImg;
 
