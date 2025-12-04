@@ -194,14 +194,32 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	ShapeTrans(ho_SelectedRegions1, &ho_RegionTrans1, "rectangle1");
 	SmallestRectangle1(ho_RegionTrans1, &hv_shapetransRow11, &hv_shapetransColumn11,
 		&hv_shapetransRow22, &hv_shapetransColumn22);
-	//TODO:缩进改为可设值
-	hv_zuoxianwei = hv_shapetransColumn11 + hv_zuoyousuojin;
-	hv_youxianwei = hv_shapetransColumn22 - hv_zuoyousuojin;
-	hv_kuandu = hv_shapetransColumn22 - hv_shapetransColumn11;
-	hv_zuoceduiqi = hv_shapetransColumn11;
-	_matProduct.Width= hv_kuandu.D() *xiangsudangliang;
-	_matProduct.zuoxianwei = hv_zuoxianwei.D();
-	_matProduct.youxianwei = hv_youxianwei.D();
+	
+
+
+	if (0 != (int((hv_kuandu.TupleLength()) > 0)))
+	{
+		//TODO:缩进改为可设值
+		hv_zuoxianwei = hv_shapetransColumn11 + hv_zuoyousuojin;
+		hv_youxianwei = hv_shapetransColumn22 - hv_zuoyousuojin;
+		hv_kuandu = hv_shapetransColumn22 - hv_shapetransColumn11;
+		hv_zuoceduiqi = hv_shapetransColumn11;
+		_matProduct.Width = hv_kuandu.D() * xiangsudangliang;
+		_matProduct.zuoxianwei = hv_zuoxianwei.D();
+		_matProduct.youxianwei = hv_youxianwei.D();
+
+	}
+	else
+	{
+		hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
+		hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
+		hv_zuoceduiqi = 0;
+		_matProduct.Width = (hv_youxianwei- hv_zuoxianwei).D() * xiangsudangliang;
+		_matProduct.zuoxianwei = hv_zuoxianwei.D();
+		_matProduct.youxianwei = hv_youxianwei.D();
+
+
+	}
 
 
 	VectorAngleToRigid(0, hv_zuoceduiqi, 0, 0, hv_modelzuoceduiqi, 0, &hv_HomMat2D);
@@ -440,8 +458,8 @@ void ImageProcessor::drawDefectInfo(QImage& image, double area, double meanThres
 
 	// 设置字体
 	QFont font = painter.font();
-	font.setPointSize(16);  // 字体大小
-	font.setBold(true);     // 加粗
+	font.setPointSize(6);  // 字体大小
+	font.setBold(false);     // 加粗
 	painter.setFont(font);
 
 	// 准备文本内容
@@ -841,27 +859,20 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 	int imageWidth = sourceImage.width();
 	int imageHeight = sourceImage.height();
 
-	// 如果区域小于最小尺寸,则扩展区域
-	if (width < minSize || height < minSize)
-	{
-		// 计算区域中心点
-		int centerX = (x1 + x2) / 2;
-		int centerY = (y1 + y2) / 2;
+	// 计算区域中心点
+	int centerX = (x1 + x2) / 2;
+	int centerY = (y1 + y2) / 2;
 
-		// 计算需要的扩展尺寸
-		int finalWidth = (width > minSize) ? width : minSize;
-		int finalHeight = (height > minSize) ? height : minSize;
+	// 确定正方形的边长(取宽高中的较大值,并确保不小于minSize)
+	int sideLength = width > height ? width : height;
+	sideLength = sideLength > minSize ? sideLength : minSize;
 
-		// 以中心点为基准重新计算坐标
-		x1 = centerX - finalWidth / 2;
-		x2 = centerX + finalWidth / 2;
-		y1 = centerY - finalHeight / 2;
-		y2 = centerY + finalHeight / 2;
-
-		// 更新宽高
-		width = finalWidth;
-		height = finalHeight;
-	}
+	// 以中心点为基准计算正方形的坐标
+	int halfSide = sideLength / 2;
+	x1 = centerX - halfSide;
+	x2 = centerX + halfSide;
+	y1 = centerY - halfSide;
+	y2 = centerY + halfSide;
 
 	// 边界检查和调整,确保不超出图像范围
 	if (x1 < 0)
@@ -869,29 +880,29 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 		int offset = -x1;
 		x1 = 0;
 		x2 = (x2 + offset < imageWidth) ? (x2 + offset) : imageWidth;
-		width = x2 - x1;
 	}
 	if (y1 < 0)
 	{
 		int offset = -y1;
 		y1 = 0;
 		y2 = (y2 + offset < imageHeight) ? (y2 + offset) : imageHeight;
-		height = y2 - y1;
 	}
 	if (x2 > imageWidth)
 	{
 		int offset = x2 - imageWidth;
 		x2 = imageWidth;
 		x1 = (x1 - offset > 0) ? (x1 - offset) : 0;
-		width = x2 - x1;
 	}
 	if (y2 > imageHeight)
 	{
 		int offset = y2 - imageHeight;
 		y2 = imageHeight;
 		y1 = (y1 - offset > 0) ? (y1 - offset) : 0;
-		height = y2 - y1;
 	}
+
+	// 重新计算宽高
+	width = x2 - x1;
+	height = y2 - y1;
 
 	// 确保宽高为正数
 	if (width <= 0 || height <= 0)
@@ -905,7 +916,6 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 
 	return extractedImage;
 }
-
 
 void ImageProcessor::drawProcessingTime(QImage& image, double timeMs, const QColor& backgroundColor,
 	const QColor& textColor)
