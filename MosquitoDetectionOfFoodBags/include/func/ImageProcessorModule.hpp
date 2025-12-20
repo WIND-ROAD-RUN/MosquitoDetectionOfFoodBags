@@ -23,6 +23,7 @@ struct MatProcess {
 	double C2;
 	double Area;
 	double MeanThreshold;
+	double location;
 };
 // 数据处理完以后的图片存储结构体
 struct MatProduct {
@@ -106,6 +107,8 @@ public:
 private:
 	// 判断是否有缺陷
 	bool _isbad{ false };
+	// 缺陷具体loc
+	float defectLoc{ 0.0 };
 
 private:
 	QQueue<MatInfo>& _queue;

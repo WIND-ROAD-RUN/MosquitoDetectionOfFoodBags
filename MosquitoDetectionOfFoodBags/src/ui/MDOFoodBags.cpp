@@ -103,7 +103,6 @@ void MDOFoodBags::build_MDOFoodBagsData()
 
 	// release版本
 #ifdef NDEBUG
-	wetPapersConfig.isSaveImg = true;
 	ui->rbtn_takePicture->setChecked(true);
 	ui->rbtn_debug->setVisible(false);
 #endif

@@ -53,7 +53,7 @@ bool CameraModule::build_camera1()
 
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-	double xiangsudangliang= setConfig.xiangSuDangLiang;
+	double xiangsudangliang = setConfig.xiangSuDangLiang;
 	double xiangjichufachangdu = setConfig.xiangjichufachangdu;
 
 	if (cameraMetaData1.ip != "0")
@@ -62,10 +62,15 @@ bool CameraModule::build_camera1()
 		{
 			camera1 = std::make_unique<rw::rqw::CameraPassiveThread>(this);
 			// 相机触发回调
-			camera1->callBackForImgReadyBefore = [](rw::rqw::MatInfo& matInfo) {
-					auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-					auto loc = zmotion->getModbus(2, 1);
+			camera1->callBackForImgReadyBefore = [&setConfig](rw::rqw::MatInfo& matInfo) {
+				auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+				bool isGet = false;
+				auto loc = zmotion->getAxisLocation(0, isGet);
+				if (isGet)
+				{
+					loc -= static_cast<float>(setConfig.xiangjichufachangdu);
 					matInfo.customField["loc"] = static_cast<float>(loc);
+				}
 				};
 			camera1->initCamera(cameraMetaData1, rw::rqw::CameraObjectTrigger::Hardware);
 			//camera1->setTriggerState(true);
@@ -74,7 +79,7 @@ bool CameraModule::build_camera1()
 			camera1->setLineTriggered(true);
 
 			double hanggao = xiangjichufachangdu / xiangsudangliang;
-			
+
 			camera1->setLineHeight((int)hanggao);
 			camera1->setExposureTime(static_cast<size_t>(mainWindowConfig.baoguang));
 			camera1->setGain(static_cast<size_t>(setConfig.zengyi));
@@ -87,7 +92,7 @@ bool CameraModule::build_camera1()
 			return true;
 		}
 		catch (const std::exception&)
-		{ 
+		{
 			return false;
 		}
 	}
@@ -169,16 +174,16 @@ void CameraModule::onStartCamera(int index)
 void CameraModule::onFrameCaptured(rw::rqw::MatInfo frame, size_t index)
 {
 	float loc = 0;
-	if (frame.customField.find("loc")!= frame.customField.end())
+	if (frame.customField.find("loc") != frame.customField.end())
 	{
 		loc = std::any_cast<float>(frame.customField["loc"]);
 	}
 	switch (index)
 	{
-		case 1:
-			emit frameCaptured1(frame, index,loc);
-			break;
-		default:
-			break;
+	case 1:
+		emit frameCaptured1(frame, index, loc);
+		break;
+	default:
+		break;
 	}
 }

@@ -57,6 +57,8 @@ private slots:
 	void pbtn_youxianwei_clicked();
 	void pbtn_zengyi_clicked();
 	void pbtn_xiangsudangliang_clicked();
+	void pbtn_houfenpin_clicked();
+	void pbtn_chengfaqi_clicked();
 
 	void cbox_yundongkongzhiqichonglian_checked();
 

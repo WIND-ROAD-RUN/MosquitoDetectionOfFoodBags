@@ -81,6 +81,8 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
 
+	defectLoc = 0.0;
+
 	auto image = rw::rqw::cvMatToQImage(frame.image);
 	auto saveRowImg = image.copy();
 
@@ -96,8 +98,28 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	double minArea = 0;
 	double allMinArea = 0;
 
+	auto& setConfig1 = Modules::getInstance().configManagerModule.setConfig;
+
+	minArea = setConfig1.wenchongzuixiaomianji;
+	allMinArea = minArea;
+
+
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
-	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea,_matProduct);
+	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea, _matProduct);
+
+	for (const auto& item : _matProcess)
+	{
+		auto tempLoc = item.location;
+		if (tempLoc > static_cast<double>(defectLoc))
+		{
+			defectLoc = static_cast<float>(tempLoc);
+		}
+	}
+
+	defectLoc += frame.location;
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	defectLoc += setConfig.tifeijuli;
+
 	run_OpenRemoveFunc_emitErrorInfo(_isbad);
 
 	auto endTime = std::chrono::high_resolution_clock::now();
@@ -127,6 +149,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	HalconCpp::HObject  ho_ImageModelMean, ho_ImageMean, ho_ImageSub, ho_Rectangle;
 	HalconCpp::HObject  ho_ImageReduced, ho_Regions, ho_ConnectedRegions;
 	HalconCpp::HObject  ho_RegionTrans, ho_ObjectSelected;
+	HalconCpp::HObject  ho_SelectedRegions, ho_ImageMean1, ho_ImageCleared;
 
 	// Local control variables
 	HalconCpp::HTuple  hv_UsedThreshold, hv_shapetransRow11;
@@ -139,7 +162,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	HalconCpp::HTuple  hv_kuandu, hv_zuoceduiqi, hv_HomMat2D, hv_Area;
 	HalconCpp::HTuple  hv_Row, hv_Column, hv_shapetransRow1, hv_shapetransColumn1;
 	HalconCpp::HTuple  hv_shapetransRow2, hv_shapetransColumn2, hv_Index;
-	HalconCpp::HTuple  hv_a, hv_shangxiasuojin, hv_Mean, hv_Deviation;
+	HalconCpp::HTuple  hv_a, hv_shangxiasuojin, hv_Mean, hv_Deviation, R1, R2, C1, C2;
 	double xiangsudangliang = Modules::getInstance().configManagerModule.setConfig.xiangSuDangLiang;
 
 	// 需要认为设置的参数现在硬编码了
@@ -151,90 +174,65 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 
 	hv_huidumin = 100;
 
-	// 获取模板图像
-	auto modelImagePtr = MDOFoodBags::getModelHImage();
-	if (modelImagePtr && modelImagePtr->IsInitialized()) {
-		ho_ImageModel = *modelImagePtr;
-	}
 
 	// 当前图片
 	ho_Image = rw::rqw::CvMatToHImage(image);
 	HalconCpp::Rgb1ToGray(ho_Image, &ho_Image);
 
+
 	// 获取图片尺寸
+	//创建模板
 	GetImageSize(ho_Image, &hv_Width, &hv_Height);
-
-	if (!modelImagePtr || !modelImagePtr->IsInitialized()) {
-		return;
-	}
-	//计算模板图像左侧位置让所有图片都匹配最左侧位置
-	MeanImage(ho_ImageModel, &ho_ImageModelMean, hv_marskx, hv_marsky);
-	BinaryThreshold(ho_ImageModel, &ho_Region, "max_separability", "dark", &hv_UsedThreshold);
-	Connection(ho_Region, &ho_ConnectedRegions1);
-	SelectShapeStd(ho_ConnectedRegions1, &ho_SelectedRegions1, "max_area", 70);
-	ShapeTrans(ho_SelectedRegions1, &ho_RegionTrans1, "rectangle1");
-	SmallestRectangle1(ho_RegionTrans1, &hv_shapetransRow11, &hv_shapetransColumn11,
-		&hv_shapetransRow22, &hv_shapetransColumn22);
-
-	hv_modelzuoceduiqi = hv_shapetransColumn11;
-
-
-
-
-
-
 	MeanImage(ho_Image, &ho_ImageMean, hv_marskx, hv_marsky);
 
+	double w = hv_Width;
+	double h = hv_Height;
 
-	//求袋子的宽度
 
 	BinaryThreshold(ho_Image, &ho_Region, "max_separability", "dark", &hv_UsedThreshold);
-	Connection(ho_Region, &ho_ConnectedRegions1);
-	SelectShapeStd(ho_ConnectedRegions1, &ho_SelectedRegions1, "max_area", 70);
-	ShapeTrans(ho_SelectedRegions1, &ho_RegionTrans1, "rectangle1");
-	SmallestRectangle1(ho_RegionTrans1, &hv_shapetransRow11, &hv_shapetransColumn11,
-		&hv_shapetransRow22, &hv_shapetransColumn22);
-	
+	Connection(ho_Region, &ho_ConnectedRegions);
+	SelectShapeStd(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
 
-
-	if (0 != (int((hv_kuandu.TupleLength()) > 0)))
+	HalconCpp::AreaCenter(ho_SelectedRegions, &hv_Area, &hv_Row, &hv_Column);
+	double area = hv_Area;
+	double ll = hv_Area.TupleLength();
+	if (0 == (int((hv_Area.TupleLength()) > 0)))
 	{
-		//TODO:缩进改为可设值
-		hv_zuoxianwei = hv_shapetransColumn11 + hv_zuoyousuojin;
-		hv_youxianwei = hv_shapetransColumn22 - hv_zuoyousuojin;
-		hv_kuandu = hv_shapetransColumn22 - hv_shapetransColumn11;
-		hv_zuoceduiqi = hv_shapetransColumn11;
-		_matProduct.Width = hv_kuandu.D() * xiangsudangliang;
+		return;
+	}
+
+	Intensity(ho_SelectedRegions, ho_ImageMean, &hv_Mean, &hv_Deviation);
+	double mean = hv_Mean;
+
+	GenImageProto(ho_Image, &ho_ImageCleared, hv_Mean);
+
+	ShapeTrans(ho_SelectedRegions, &ho_RegionTrans1, "rectangle1");
+	SmallestRectangle1(ho_RegionTrans1, &R1, &hv_zuoxianwei, &R2, &hv_youxianwei);
+
+
+
+
+	if (0 != (int((hv_zuoxianwei.TupleLength()) > 0)))
+	{
+		//获取图像里面的宽度
+		_matProduct.Width = (hv_youxianwei - hv_zuoxianwei).D() * xiangsudangliang;
 		_matProduct.zuoxianwei = hv_zuoxianwei.D();
 		_matProduct.youxianwei = hv_youxianwei.D();
+
 
 	}
 	else
 	{
-		hv_zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
-		hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
-		hv_zuoceduiqi = 0;
-		_matProduct.Width = (hv_youxianwei- hv_zuoxianwei).D() * xiangsudangliang;
-		_matProduct.zuoxianwei = hv_zuoxianwei.D();
-		_matProduct.youxianwei = hv_youxianwei.D();
-
-
+		return;
 	}
 
 
-	VectorAngleToRigid(0, hv_zuoceduiqi, 0, 0, hv_modelzuoceduiqi, 0, &hv_HomMat2D);
-	AffineTransImage(ho_ImageMean, &ho_ImageMean, hv_HomMat2D, "constant", "false");
 
 
 
 
 
-
-
-
-
-
-	SubImage(ho_ImageModelMean, ho_ImageMean, &ho_ImageSub, 10, 0);
+	SubImage(ho_ImageCleared, ho_ImageMean, &ho_ImageSub, 10, 0);
 
 	if (hv_Height < hv_shangxiasuojin)
 	{
@@ -249,8 +247,10 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 
 
 
+	double z = hv_zuoxianwei.TupleLength();
+	double y = hv_youxianwei.TupleLength();
 
-	GenRectangle1(&ho_Rectangle, 20, hv_zuoxianwei, hv_Height - 20, hv_youxianwei);
+	GenRectangle1(&ho_Rectangle, hv_shangxiasuojin, hv_zuoxianwei, hv_Height - hv_shangxiasuojin, hv_youxianwei);
 	ReduceDomain(ho_ImageSub, ho_Rectangle, &ho_ImageReduced);
 
 	Threshold(ho_ImageReduced, &ho_Regions, hv_huidumin, 255);
@@ -260,6 +260,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	ShapeTrans(ho_Regions, &ho_RegionTrans, "rectangle1");
 	SmallestRectangle1(ho_RegionTrans, &hv_shapetransRow1, &hv_shapetransColumn1, &hv_shapetransRow2,
 		&hv_shapetransColumn2);
+	double we = hv_shapetransRow1.TupleLength();
 
 	if (0 != (int((hv_shapetransRow1.TupleLength()) > 0)))
 	{
@@ -267,6 +268,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 		HalconCpp::HTuple step_val39 = 1;
 		for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
 		{
+			double aaa = hv_shapetransRow1[hv_Index];
 			if (hv_shapetransRow1[hv_Index] > 0)
 			{
 				SelectObj(ho_Regions, &ho_ObjectSelected, hv_Index + 1);
@@ -278,7 +280,8 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 				result.C2 = hv_shapetransColumn2[hv_Index];
 				result.Area = hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang;
 				result.MeanThreshold = hv_Mean;
-				
+				result.location = (result.R2 - result.R1) * xiangsudangliang;
+
 
 				processResults.append(result);
 			}
@@ -513,7 +516,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 	// 绘制左右限位
 	double zuoxianwei = Modules::getInstance().configManagerModule.setConfig.zuoXianWei;
 	double youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
-	if (_matProduct.zuoxianwei>0)
+	if (_matProduct.zuoxianwei > 0)
 	{
 		zuoxianwei = _matProduct.zuoxianwei;
 		youxianwei = _matProduct.youxianwei;
@@ -554,7 +557,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 
 				if (!defectRegion.isNull())
 				{
-					
+
 					// 绘制面积和灰度值在图片上
 					drawDefectInfo(defectRegion, result.Area, result.MeanThreshold);
 
@@ -612,16 +615,13 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		++statisticalInfo.produceCount;
 	}
 
-	/*if (isbad)
+	if (isbad)
 	{
-		for (const auto& item : DefectBox)
+		if (1 == imageProcessingModuleIndex)
 		{
-			if (1 == imageProcessingModuleIndex)
-			{
-				priorityQueue1->push(item);
-			}
+			priorityQueue1->push(defectLoc);
 		}
-	}*/
+	}
 }
 
 void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex)
