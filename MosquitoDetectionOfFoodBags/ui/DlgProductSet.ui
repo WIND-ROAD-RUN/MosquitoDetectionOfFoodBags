@@ -2488,7 +2488,7 @@ QTabBar::tab:hover {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -3704,7 +3704,7 @@ QCheckBox::indicator:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_DI2_2">
+                  <widget class="QCheckBox" name="cbox_qiyongtifei">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -3765,7 +3765,7 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>DI2</string>
+                    <string>启用剔废</string>
                    </property>
                   </widget>
                  </item>

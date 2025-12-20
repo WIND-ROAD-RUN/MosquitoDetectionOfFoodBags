@@ -604,6 +604,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
 	if (isbad)
 	{
@@ -615,7 +616,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		++statisticalInfo.produceCount;
 	}
 
-	if (isbad)
+	if (isbad && setConfig.qiyongtifei)
 	{
 		if (1 == imageProcessingModuleIndex)
 		{
