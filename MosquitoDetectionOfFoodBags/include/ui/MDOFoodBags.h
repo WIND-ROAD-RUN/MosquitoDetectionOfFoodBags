@@ -60,7 +60,7 @@ private slots:
 	void pbtn_resetProduct_clicked();
 	void pbtn_limit_clicked();
 	void pbtn_baoguang_clicked();
-
+	void rbtn_istifei_checked(bool checked);
 signals:
 	void shibiekuangChanged();
 	

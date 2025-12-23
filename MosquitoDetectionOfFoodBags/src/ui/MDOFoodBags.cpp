@@ -74,6 +74,7 @@ void MDOFoodBags::build_connect()
 	connect(ui->pbtn_openSaveLocation, &QPushButton::clicked, this, &MDOFoodBags::pbtn_openSaveLocation_clicked);
 	connect(ui->pbtn_limit, &QPushButton::clicked, this, &MDOFoodBags::pbtn_limit_clicked);
 	connect(ui->pbtn_baoguang, &QPushButton::clicked, this, &MDOFoodBags::pbtn_baoguang_clicked);
+	connect(ui->rbtn_istifei, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_istifei_checked);
 
 
 	// 连接显示标题
@@ -91,14 +92,14 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	mainWindowConfig.isshibiekuang = true;
 	mainWindowConfig.iswenzi = true;
 
-	/*ui->label_produceTotalValue->setText(QString::number(wetPapersConfig.totalProductionVolume));
-	ui->label_wasteProductsValue->setText(QString::number(wetPapersConfig.totalDefectiveVolume));
-	ui->label_productionYieldValue->setText(QString::number(wetPapersConfig.productionYield));*/
+	ui->lb_productionLength->setText(QString::number(mainWindowConfig.totalProductionLength));
+	ui->lb_wasteCount->setText(QString::number(mainWindowConfig.totalDefectiveVolume));
 	ui->rbtn_takePicture->setChecked(mainWindowConfig.isSaveImg);
 	ui->rbtn_removeFunc->setChecked(mainWindowConfig.isDefect);
 	ui->ckb_shibiekuang->setChecked(mainWindowConfig.isshibiekuang);
 	ui->ckb_wenzi->setChecked(mainWindowConfig.iswenzi);
 	ui->pbtn_baoguang->setText(QString::number(mainWindowConfig.baoguang));
+	ui->rbtn_istifei->setChecked(mainWindowConfig.istifei);
 
 	// release版本
 #ifdef NDEBUG
@@ -512,6 +513,12 @@ void MDOFoodBags::pbtn_baoguang_clicked()
 			camera1->setExposureTime(static_cast<size_t>(value.toDouble()));
 		}
 	}
+}
+
+void MDOFoodBags::rbtn_istifei_checked(bool checked)
+{
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+	mainWindowConfig.isDefect = checked;
 }
 
 void MDOFoodBags::setModelHImage(const HalconCpp::HObject& img)
