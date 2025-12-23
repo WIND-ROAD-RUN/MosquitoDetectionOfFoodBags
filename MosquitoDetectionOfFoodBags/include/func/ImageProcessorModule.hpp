@@ -53,7 +53,7 @@ private:
 private:
 	void run_OpenRemoveFunc(MatInfo& frame);	// 开启剔废功能时的处理模式
 
-	void run_OpenRemoveFunc_emitErrorInfo(bool isbad) const;
+	void run_OpenRemoveFunc_emitErrorInfo(bool isbad);
 
 
 
@@ -110,6 +110,8 @@ private:
 	// 缺陷具体loc
 	float defectLoc{ 0.0 };
 
+	int baojingCount{ 0 };
+	int liangpinCount{ 0 };
 private:
 	QQueue<MatInfo>& _queue;
 	QMutex& _mutex;

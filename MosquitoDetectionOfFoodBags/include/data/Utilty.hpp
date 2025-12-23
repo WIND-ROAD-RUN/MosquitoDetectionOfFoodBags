@@ -32,7 +32,7 @@ public:	// 输入
 	
 public: // 输出
 	static size_t tifeixinhaoOut;
-	static size_t xiangjichufa1Out;
+	static size_t baojingOut;
 	static size_t xiangjichufa2Out;
 };
 

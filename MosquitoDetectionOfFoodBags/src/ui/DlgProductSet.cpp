@@ -63,10 +63,12 @@ void DlgProductSet::read_config()
 	ui->btn_xiangjichufachangdu->setText(QString::number(setConfig.xiangjichufachangdu));
 	ui->btn_meizhuanmaichongshu->setText(QString::number(setConfig.meizhuanmaichongshu));
 	ui->btn_shedingzhouchang->setText(QString::number(setConfig.shedingzhouchang));
+	ui->btn_baojingjishu->setText(QString::number(setConfig.baojingjishu));
+	ui->btn_liangpinjishu->setText(QString::number(setConfig.liangpinjishu));
 
 	// 设置IO
 	ui->btn_setDOtifeixinhao->setText(QString::number(setConfig.tifeixinhaoOUT));
-	ui->btn_setDOxiangjichufa1->setText(QString::number(setConfig.xiangjichufa1OUT));
+	ui->btn_setDObaojing->setText(QString::number(setConfig.baojingOUT));
 	ui->btn_setDOxiangjichufa2->setText(QString::number(setConfig.xiangjichufa2OUT));
 
 	// 默认显示第一个
@@ -123,22 +125,26 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_meizhuanmaichongshu_clicked);
 	QObject::connect(ui->btn_shedingzhouchang, &QPushButton::clicked,
 		this, &DlgProductSet::btn_shedingzhouchang_clicked);
+	QObject::connect(ui->btn_baojingjishu, &QPushButton::clicked,
+		this, &DlgProductSet::btn_baojingjishu_clicked);
+	QObject::connect(ui->btn_liangpinjishu, &QPushButton::clicked,
+		this, &DlgProductSet::btn_liangpinjishu_clicked);
 
 	// 监控IO
 	QObject::connect(ui->tabWidget, &QTabWidget::currentChanged,
 		this, &DlgProductSet::tabWidget_indexChanged);
 	QObject::connect(ui->cbox_DOtifeixinhao, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_DOtifeixinhao_checked);
-	QObject::connect(ui->cbox_DOxiangjichufa1, &QCheckBox::clicked,
-		this, &DlgProductSet::cbox_DOxiangjichufa1_checked);
+	QObject::connect(ui->cbox_DObaojing, &QCheckBox::clicked,
+		this, &DlgProductSet::cbox_DObaojing_checked);
 	QObject::connect(ui->cbox_DOxiangjichufa2, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_DOxiangjichufa2_checked);
 
 	// 设置IO
 	QObject::connect(ui->btn_setDOtifeixinhao, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOtifeixinhao_clicked);
-	QObject::connect(ui->btn_setDOxiangjichufa1, &QPushButton::clicked,
-		this, &DlgProductSet::btn_setDOxiangjichufa1_clicked);
+	QObject::connect(ui->btn_setDObaojing, &QPushButton::clicked,
+		this, &DlgProductSet::btn_setDObaojing_clicked);
 	QObject::connect(ui->btn_setDOxiangjichufa2, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOxiangjichufa2_clicked);
 
@@ -186,7 +192,7 @@ void DlgProductSet::updateControlLines()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	ControlLines::tifeixinhaoOut = setConfig.tifeixinhaoOUT;
-	ControlLines::xiangjichufa1Out = setConfig.xiangjichufa1OUT;
+	ControlLines::baojingOut = setConfig.baojingOUT;
 	ControlLines::xiangjichufa2Out = setConfig.xiangjichufa2OUT;
 }
 
@@ -195,7 +201,7 @@ void DlgProductSet::initDOCheckItems()
 	DOCheckItems.clear();
 	DOCheckItems = {
 		{ &ControlLines::tifeixinhaoOut, ui->cbox_DOtifeixinhao },
-		{ &ControlLines::xiangjichufa1Out, ui->cbox_DOxiangjichufa1 },
+		{ &ControlLines::baojingOut, ui->cbox_DObaojing },
 		{ &ControlLines::xiangjichufa2Out, ui->cbox_DOxiangjichufa2 }
 	};
 }
@@ -213,7 +219,7 @@ std::vector<std::vector<int>> DlgProductSet::DOFindAllDuplicateIndices()
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	std::vector<int> values = {
 		setConfig.tifeixinhaoOUT,
-		setConfig.xiangjichufa1OUT,
+		setConfig.baojingOUT,
 		setConfig.xiangjichufa2OUT
 	};
 
@@ -521,11 +527,11 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 	if (isDebugIO)
 	{
 		ui->cbox_DOtifeixinhao->setChecked(false);
-		ui->cbox_DOxiangjichufa1->setChecked(false);
+		ui->cbox_DObaojing->setChecked(false);
 		ui->cbox_DOxiangjichufa2->setChecked(false);
 
 		ui->cbox_DOtifeixinhao->setEnabled(true);
-		ui->cbox_DOxiangjichufa1->setEnabled(true);
+		ui->cbox_DObaojing->setEnabled(true);
 		ui->cbox_DOxiangjichufa2->setEnabled(true);
 
 		monitorZMotionMonitorThread->setRunning(false);
@@ -533,11 +539,11 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 	else
 	{
 		ui->cbox_DOtifeixinhao->setChecked(false);
-		ui->cbox_DOxiangjichufa1->setChecked(false);
+		ui->cbox_DObaojing->setChecked(false);
 		ui->cbox_DOxiangjichufa2->setChecked(false);
 
 		ui->cbox_DOtifeixinhao->setEnabled(false);
-		ui->cbox_DOxiangjichufa1->setEnabled(false);
+		ui->cbox_DObaojing->setEnabled(false);
 		ui->cbox_DOxiangjichufa2->setEnabled(false);
 
 		monitorZMotionMonitorThread->setRunning(true);
@@ -553,12 +559,12 @@ void DlgProductSet::cbox_DOtifeixinhao_checked(bool ischecked)
 	}
 }
 
-void DlgProductSet::cbox_DOxiangjichufa1_checked(bool ischecked)
+void DlgProductSet::cbox_DObaojing_checked(bool ischecked)
 {
 	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
 	if (isDebugIO)
 	{
-		auto isSuccess = zmotion->setIOOut(ControlLines::xiangjichufa1Out, ischecked);
+		auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, ischecked);
 	}
 }
 
@@ -595,7 +601,7 @@ void DlgProductSet::btn_setDOtifeixinhao_clicked()
 	}
 }
 
-void DlgProductSet::btn_setDOxiangjichufa1_clicked()
+void DlgProductSet::btn_setDObaojing_clicked()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	NumberKeyboard numKeyBord;
@@ -609,9 +615,9 @@ void DlgProductSet::btn_setDOxiangjichufa1_clicked()
 			QMessageBox::warning(this, "提示", "请输入大于0的数值");
 			return;
 		}
-		ui->btn_setDOxiangjichufa1->setText(value);
-		setConfig.xiangjichufa1OUT = value.toDouble();
-		ControlLines::xiangjichufa1Out = static_cast<int>(value.toDouble());
+		ui->btn_setDObaojing->setText(value);
+		setConfig.baojingOUT = value.toDouble();
+		ControlLines::baojingOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
 		auto indicesDI = DIFindAllDuplicateIndices();
@@ -711,6 +717,44 @@ void DlgProductSet::btn_shedingzhouchang_clicked()
 		}
 		ui->btn_shedingzhouchang->setText(value);
 		setConfig.shedingzhouchang = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_baojingjishu_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_baojingjishu->setText(value);
+		setConfig.baojingjishu = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_liangpinjishu_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_liangpinjishu->setText(value);
+		setConfig.liangpinjishu = value.toDouble();
 	}
 }
 

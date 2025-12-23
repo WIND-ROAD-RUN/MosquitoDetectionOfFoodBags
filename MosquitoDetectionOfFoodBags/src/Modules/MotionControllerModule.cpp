@@ -14,7 +14,7 @@ bool MotionControllerModule::build()
 
 	monitorMotionIoStateThread->setMonitorObject(*zmotion);
 	QVector<size_t> monitorIList = {  };
-	QVector<size_t> monitorOList = { ControlLines::tifeixinhaoOut,ControlLines::xiangjichufa1Out,ControlLines::xiangjichufa2Out };
+	QVector<size_t> monitorOList = { ControlLines::tifeixinhaoOut,ControlLines::baojingOut,ControlLines::xiangjichufa2Out };
 	monitorMotionIoStateThread->setMonitorIList(monitorIList);
 	monitorMotionIoStateThread->setMonitorOList(monitorOList);
 	monitorMotionIoStateThread->setMonitorFrequency(20);

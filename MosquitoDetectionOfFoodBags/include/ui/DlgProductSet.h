@@ -66,17 +66,19 @@ private slots:
 	void btn_xiangjichufachangdu_clicked();
 	void btn_meizhuanmaichongshu_clicked();
 	void btn_shedingzhouchang_clicked();
+	void btn_baojingjishu_clicked();
+	void btn_liangpinjishu_clicked();
 
 	// 监控IO
 	void cbox_debugMode_checked(bool ischecked);
 
 	void cbox_DOtifeixinhao_checked(bool ischecked);
-	void cbox_DOxiangjichufa1_checked(bool ischecked);
+	void cbox_DObaojing_checked(bool ischecked);
 	void cbox_DOxiangjichufa2_checked(bool ischecked);
 
 	// 设置IO
 	void btn_setDOtifeixinhao_clicked();
-	void btn_setDOxiangjichufa1_clicked();
+	void btn_setDObaojing_clicked();
 	void btn_setDOxiangjichufa2_clicked();
 
 	void tabWidget_indexChanged(int index);

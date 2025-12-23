@@ -80,15 +80,13 @@ void ImageProcessor::run_debug(MatInfo& frame)
 void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 
 	defectLoc = 0.0;
 
 	auto image = rw::rqw::cvMatToQImage(frame.image);
 	auto saveRowImg = image.copy();
 
-	//显示图片测试
-	//QString imagePath = "C:/Users/zfkj4090/Desktop/temp/image.jpg";
-	//QImage image(imagePath);
 	//进行图像处理
 	//4个qvector用来存坏的数据的位置，还有面积
 	QVector< MatProcess> _matProcess;
@@ -98,9 +96,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	double minArea = 0;
 	double allMinArea = 0;
 
-	auto& setConfig1 = Modules::getInstance().configManagerModule.setConfig;
-
-	minArea = setConfig1.wenchongzuixiaomianji;
+	minArea = setConfig.wenchongzuixiaomianji;
 	allMinArea = minArea;
 
 
@@ -117,7 +113,6 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	}
 
 	defectLoc += frame.location;
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	defectLoc += setConfig.tifeijuli;
 
 	run_OpenRemoveFunc_emitErrorInfo(_isbad);
@@ -601,7 +596,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 
 
 
-void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
+void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
@@ -623,6 +618,23 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		if (1 == imageProcessingModuleIndex)
 		{
 			priorityQueue1->push(defectLoc);
+			++baojingCount;
+			liangpinCount = 0;
+			if (baojingCount >= setConfig.baojingjishu)
+			{
+				auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+				auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, true);
+			}
+		}
+	}
+	else
+	{
+		++liangpinCount;
+		baojingCount = 0;
+		if (liangpinCount >= setConfig.liangpinjishu)
+		{
+			auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+			auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, false);
 		}
 	}
 }

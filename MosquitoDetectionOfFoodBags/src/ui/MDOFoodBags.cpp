@@ -519,6 +519,11 @@ void MDOFoodBags::rbtn_istifei_checked(bool checked)
 {
 	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	mainWindowConfig.isDefect = checked;
+	if (!checked)
+	{
+		auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+		auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, false);
+	}
 }
 
 void MDOFoodBags::setModelHImage(const HalconCpp::HObject& img)
