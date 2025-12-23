@@ -29,7 +29,6 @@ namespace cdm {
         double chengFaQi{ 0 };
         double xiangSuDangLiang{ 0 };
         bool yundongkongzhiqichonglian{ false };
-        bool qiyongtifei{ false };
         bool debugMode{ false };
         int tifeixinhaoOUT{ 0 };
         int xiangjichufa1OUT{ 0 };
@@ -104,11 +103,6 @@ namespace cdm {
             throw std::runtime_error("$variable$yundongkongzhiqichonglian is not found");
         }
         yundongkongzhiqichonglian = yundongkongzhiqichonglianItem->getValueAsBool();
-        auto qiyongtifeiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$qiyongtifei$"));
-        if (!qiyongtifeiItem) {
-            throw std::runtime_error("$variable$qiyongtifei is not found");
-        }
-        qiyongtifei = qiyongtifeiItem->getValueAsBool();
         auto debugModeItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$debugMode$"));
         if (!debugModeItem) {
             throw std::runtime_error("$variable$debugMode is not found");
@@ -198,7 +192,6 @@ namespace cdm {
         chengFaQi = obj.chengFaQi;
         xiangSuDangLiang = obj.xiangSuDangLiang;
         yundongkongzhiqichonglian = obj.yundongkongzhiqichonglian;
-        qiyongtifei = obj.qiyongtifei;
         debugMode = obj.debugMode;
         tifeixinhaoOUT = obj.tifeixinhaoOUT;
         xiangjichufa1OUT = obj.xiangjichufa1OUT;
@@ -229,7 +222,6 @@ namespace cdm {
             chengFaQi = obj.chengFaQi;
             xiangSuDangLiang = obj.xiangSuDangLiang;
             yundongkongzhiqichonglian = obj.yundongkongzhiqichonglian;
-            qiyongtifei = obj.qiyongtifei;
             debugMode = obj.debugMode;
             tifeixinhaoOUT = obj.tifeixinhaoOUT;
             xiangjichufa1OUT = obj.xiangjichufa1OUT;
@@ -293,10 +285,6 @@ namespace cdm {
         yundongkongzhiqichonglianItem->setName("$variable$yundongkongzhiqichonglian$");
         yundongkongzhiqichonglianItem->setValueFromBool(yundongkongzhiqichonglian);
         assembly.addItem(yundongkongzhiqichonglianItem);
-        auto qiyongtifeiItem = std::make_shared<rw::oso::ObjectStoreItem>();
-        qiyongtifeiItem->setName("$variable$qiyongtifei$");
-        qiyongtifeiItem->setValueFromBool(qiyongtifei);
-        assembly.addItem(qiyongtifeiItem);
         auto debugModeItem = std::make_shared<rw::oso::ObjectStoreItem>();
         debugModeItem->setName("$variable$debugMode$");
         debugModeItem->setValueFromBool(debugMode);
@@ -362,7 +350,7 @@ namespace cdm {
 
     inline bool SetConfig::operator==(const SetConfig& obj) const
     {
-        return tifeichixushijian == obj.tifeichixushijian && tifeijuli == obj.tifeijuli && shangxiasuojin == obj.shangxiasuojin && zuoXianWei == obj.zuoXianWei && youXianWei == obj.youXianWei && zengyi == obj.zengyi && houFenPin == obj.houFenPin && chengFaQi == obj.chengFaQi && xiangSuDangLiang == obj.xiangSuDangLiang && yundongkongzhiqichonglian == obj.yundongkongzhiqichonglian && qiyongtifei == obj.qiyongtifei && debugMode == obj.debugMode && tifeixinhaoOUT == obj.tifeixinhaoOUT && xiangjichufa1OUT == obj.xiangjichufa1OUT && xiangjichufa2OUT == obj.xiangjichufa2OUT && xiangjichufachangdu == obj.xiangjichufachangdu && meizhuanmaichongshu == obj.meizhuanmaichongshu && shedingzhouchang == obj.shedingzhouchang && wenchongzuidahuiduchazhi == obj.wenchongzuidahuiduchazhi && wenchongzuixiaohuiduchazhi == obj.wenchongzuixiaohuiduchazhi && wenchongzuidamianji == obj.wenchongzuidamianji && wenchongzuixiaomianji == obj.wenchongzuixiaomianji && maofazuidahuiduchazhi == obj.maofazuidahuiduchazhi && maofazuixiaohuiduchazhi == obj.maofazuixiaohuiduchazhi && maofazuidamianji == obj.maofazuidamianji && maofazuixiaomianji == obj.maofazuixiaomianji;
+        return tifeichixushijian == obj.tifeichixushijian && tifeijuli == obj.tifeijuli && shangxiasuojin == obj.shangxiasuojin && zuoXianWei == obj.zuoXianWei && youXianWei == obj.youXianWei && zengyi == obj.zengyi && houFenPin == obj.houFenPin && chengFaQi == obj.chengFaQi && xiangSuDangLiang == obj.xiangSuDangLiang && yundongkongzhiqichonglian == obj.yundongkongzhiqichonglian && debugMode == obj.debugMode && tifeixinhaoOUT == obj.tifeixinhaoOUT && xiangjichufa1OUT == obj.xiangjichufa1OUT && xiangjichufa2OUT == obj.xiangjichufa2OUT && xiangjichufachangdu == obj.xiangjichufachangdu && meizhuanmaichongshu == obj.meizhuanmaichongshu && shedingzhouchang == obj.shedingzhouchang && wenchongzuidahuiduchazhi == obj.wenchongzuidahuiduchazhi && wenchongzuixiaohuiduchazhi == obj.wenchongzuixiaohuiduchazhi && wenchongzuidamianji == obj.wenchongzuidamianji && wenchongzuixiaomianji == obj.wenchongzuixiaomianji && maofazuidahuiduchazhi == obj.maofazuidahuiduchazhi && maofazuixiaohuiduchazhi == obj.maofazuixiaohuiduchazhi && maofazuidamianji == obj.maofazuidamianji && maofazuixiaomianji == obj.maofazuixiaomianji;
     }
 
     inline bool SetConfig::operator!=(const SetConfig& obj) const

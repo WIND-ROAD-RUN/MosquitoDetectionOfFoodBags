@@ -605,6 +605,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
 	if (isbad)
 	{
@@ -617,7 +618,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		statisticalInfo.productionLength += (static_cast<uint64_t>(setConfig.xiangjichufachangdu / 1000));
 	}
 
-	if (isbad && setConfig.qiyongtifei)
+	if (isbad && mainWindowConfig.istifei)
 	{
 		if (1 == imageProcessingModuleIndex)
 		{

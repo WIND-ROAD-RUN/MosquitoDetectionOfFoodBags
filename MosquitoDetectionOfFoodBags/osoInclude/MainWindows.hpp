@@ -26,6 +26,7 @@ namespace cdm {
         bool isSaveImg{ false };
         bool isshibiekuang{ true };
         bool iswenzi{ true };
+        bool istifei{ true };
         double baoguang{ 0.0 };
     };
 
@@ -71,6 +72,11 @@ namespace cdm {
             throw std::runtime_error("$variable$iswenzi is not found");
         }
         iswenzi = iswenziItem->getValueAsBool();
+        auto istifeiItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$istifei$"));
+        if (!istifeiItem) {
+            throw std::runtime_error("$variable$istifei is not found");
+        }
+        istifei = istifeiItem->getValueAsBool();
         auto baoguangItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$baoguang$"));
         if (!baoguangItem) {
             throw std::runtime_error("$variable$baoguang is not found");
@@ -87,6 +93,7 @@ namespace cdm {
         isSaveImg = obj.isSaveImg;
         isshibiekuang = obj.isshibiekuang;
         iswenzi = obj.iswenzi;
+        istifei = obj.istifei;
         baoguang = obj.baoguang;
     }
 
@@ -100,6 +107,7 @@ namespace cdm {
             isSaveImg = obj.isSaveImg;
             isshibiekuang = obj.isshibiekuang;
             iswenzi = obj.iswenzi;
+            istifei = obj.istifei;
             baoguang = obj.baoguang;
         }
         return *this;
@@ -137,6 +145,10 @@ namespace cdm {
         iswenziItem->setName("$variable$iswenzi$");
         iswenziItem->setValueFromBool(iswenzi);
         assembly.addItem(iswenziItem);
+        auto istifeiItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        istifeiItem->setName("$variable$istifei$");
+        istifeiItem->setValueFromBool(istifei);
+        assembly.addItem(istifeiItem);
         auto baoguangItem = std::make_shared<rw::oso::ObjectStoreItem>();
         baoguangItem->setName("$variable$baoguang$");
         baoguangItem->setValueFromDouble(baoguang);
@@ -146,7 +158,7 @@ namespace cdm {
 
     inline bool MainWindowsConfig::operator==(const MainWindowsConfig& obj) const
     {
-        return totalProductionLength == obj.totalProductionLength && totalDefectiveVolume == obj.totalDefectiveVolume && isDebug == obj.isDebug && isDefect == obj.isDefect && isSaveImg == obj.isSaveImg && isshibiekuang == obj.isshibiekuang && iswenzi == obj.iswenzi && baoguang == obj.baoguang;
+        return totalProductionLength == obj.totalProductionLength && totalDefectiveVolume == obj.totalDefectiveVolume && isDebug == obj.isDebug && isDefect == obj.isDefect && isSaveImg == obj.isSaveImg && isshibiekuang == obj.isshibiekuang && iswenzi == obj.iswenzi && istifei == obj.istifei && baoguang == obj.baoguang;
     }
 
     inline bool MainWindowsConfig::operator!=(const MainWindowsConfig& obj) const

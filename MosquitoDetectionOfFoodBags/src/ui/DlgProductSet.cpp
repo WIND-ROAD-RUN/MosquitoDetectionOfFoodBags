@@ -58,7 +58,6 @@ void DlgProductSet::read_config()
 
 	// 基本功能
 	ui->cbox_yundongkongzhiqichonglian->setChecked(setConfig.yundongkongzhiqichonglian);
-	ui->cbox_qiyongtifei->setChecked(setConfig.qiyongtifei);
 
 	// 基本参数
 	ui->btn_xiangjichufachangdu->setText(QString::number(setConfig.xiangjichufachangdu));
@@ -116,8 +115,6 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_close_clicked);
 	QObject::connect(ui->cbox_yundongkongzhiqichonglian, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_yundongkongzhiqichonglian_checked);
-	QObject::connect(ui->cbox_qiyongtifei, &QCheckBox::clicked,
-		this, &DlgProductSet::cbox_qiyongtifei_checked);
 
 	// 基本参数
 	QObject::connect(ui->btn_xiangjichufachangdu, &QPushButton::clicked,
@@ -650,12 +647,6 @@ void DlgProductSet::cbox_yundongkongzhiqichonglian_checked()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	setConfig.yundongkongzhiqichonglian = ui->cbox_yundongkongzhiqichonglian->isChecked();
-}
-
-void DlgProductSet::cbox_qiyongtifei_checked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	setConfig.qiyongtifei = ui->cbox_qiyongtifei->isChecked();
 }
 
 void DlgProductSet::btn_xiangjichufachangdu_clicked()

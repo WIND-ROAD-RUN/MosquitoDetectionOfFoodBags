@@ -3704,7 +3704,7 @@ QCheckBox::indicator:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_qiyongtifei">
+                  <widget class="QCheckBox" name="cbox_DI2_2">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -3765,7 +3765,7 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>启用剔废</string>
+                    <string>DI2</string>
                    </property>
                   </widget>
                  </item>

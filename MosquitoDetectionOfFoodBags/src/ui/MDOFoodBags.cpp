@@ -103,7 +103,7 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	// release版本
 #ifdef NDEBUG
 	ui->rbtn_takePicture->setChecked(true);
-	ui->rbtn_debug->setVisible(false);
+	ui->wgt_runMode->setVisible(false);
 #endif
 
 	// 不启用限位窗体
