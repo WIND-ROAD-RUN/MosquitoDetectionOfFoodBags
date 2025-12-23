@@ -40,19 +40,5 @@ void DetachUtiltyThread::run()
 
 void DetachUtiltyThread::CalculateRealtimeInformation(size_t s)
 {
-	auto& runtimeModule = Modules::getInstance().runtimeInfoModule;
-	auto& statisticalInfo = runtimeModule.statisticalInfo;
-
-	// 计算生产良率
-	auto totalCount = statisticalInfo.produceCount.load();
-	auto wasteCount = statisticalInfo.wasteCount.load();
-	if (totalCount != 0)
-	{
-		if (totalCount > wasteCount)
-		{
-			statisticalInfo.productionYield = (static_cast<double>(totalCount - wasteCount) / totalCount) * 100;
-		}
-	}
-
 	emit updateStatisticalInfo();
 }

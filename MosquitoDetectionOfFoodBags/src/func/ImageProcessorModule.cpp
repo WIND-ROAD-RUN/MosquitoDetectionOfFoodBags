@@ -611,9 +611,10 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad) const
 		++statisticalInfo.wasteCount;
 	}
 
-	if (imageProcessingModuleIndex == 1 || imageProcessingModuleIndex == 2)
+	if (imageProcessingModuleIndex == 1)
 	{
-		++statisticalInfo.produceCount;
+		// 生产长度统计，单位米
+		statisticalInfo.productionLength += (static_cast<uint64_t>(setConfig.xiangjichufachangdu / 1000));
 	}
 
 	if (isbad && setConfig.qiyongtifei)

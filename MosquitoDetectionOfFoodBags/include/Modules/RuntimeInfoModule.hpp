@@ -24,9 +24,8 @@ public:
 public:
 	struct StatisticalInfo
 	{
-		std::atomic_uint64_t produceCount{ 0 };
+		std::atomic_uint64_t productionLength{ 0 };
 		std::atomic_uint64_t wasteCount{ 0 };
-		std::atomic<double> productionYield{ 0 };
 	} statisticalInfo;
 public:
 	std::atomic_bool isTakePictures{ false };

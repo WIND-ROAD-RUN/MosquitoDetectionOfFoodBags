@@ -58,7 +58,6 @@ private slots:
 	void ckb_shibiekuang_checked(bool checked);
 	void ckb_wenzi_checked(bool checked);
 	void pbtn_resetProduct_clicked();
-	void pbtn_start_clicked();
 	void pbtn_limit_clicked();
 	void pbtn_baoguang_clicked();
 

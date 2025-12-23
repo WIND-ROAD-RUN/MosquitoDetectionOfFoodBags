@@ -66,7 +66,6 @@ void MDOFoodBags::build_connect()
 {
 	connect(ui->pbtn_exit, &QPushButton::clicked, this, &MDOFoodBags::pbtn_exit_clicked);
 	connect(ui->pbtn_set, &QPushButton::clicked, this, &MDOFoodBags::pbtn_set_clicked);
-	connect(ui->pbtn_start, &QPushButton::clicked, this, &MDOFoodBags::pbtn_start_clicked);
 	connect(ui->rbtn_debug, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_debug_checked);
 	connect(ui->rbtn_takePicture, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_takePicture_checked);
 	connect(ui->rbtn_removeFunc, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_removeFunc_checked);
@@ -140,8 +139,6 @@ void MDOFoodBags::initializeComponents()
 	getCameraStateAndUpdateUi();
 
 	build_connect();
-
-	pbtn_start_clicked();
 
 #ifdef BUILD_WITHOUT_HARDWARE
 #endif
@@ -291,9 +288,8 @@ void MDOFoodBags::updateCameraLabelState(int cameraIndex, bool state)
 void MDOFoodBags::onUpdateStatisticalInfoUI()
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
-	/*ui->label_produceTotalValue->setText(QString::number(statisticalInfo.produceCount.load()));
-	ui->label_wasteProductsValue->setText(QString::number(statisticalInfo.wasteCount.load()));
-	ui->label_productionYieldValue->setText(QString::number(statisticalInfo.productionYield.load(), 'f', 2) + "%");*/
+	ui->lb_productionLength->setText(QString::number(statisticalInfo.productionLength.load()));
+	ui->lb_wasteCount->setText(QString::number(statisticalInfo.wasteCount.load()));
 }
 
 void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool isSmallNgImg)
@@ -478,25 +474,12 @@ void MDOFoodBags::ckb_wenzi_checked(bool checked)
 void MDOFoodBags::pbtn_resetProduct_clicked()
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
-	statisticalInfo.produceCount = 0;
+	statisticalInfo.productionLength = 0;
 	statisticalInfo.wasteCount = 0;
-	statisticalInfo.productionYield = 0.0f;
 	onUpdateStatisticalInfoUI();
 	auto& wetPapersConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-	wetPapersConfig.totalProductionVolume = 0;
+	wetPapersConfig.totalProductionLength = 0;
 	wetPapersConfig.totalDefectiveVolume = 0;
-	wetPapersConfig.productionYield = 0.0f;
-}
-
-void MDOFoodBags::pbtn_start_clicked()
-{
-	setIsModelImageLoaded(false);
-
-	auto& camera = Modules::getInstance().cameraModule.camera1;
-	if (camera)
-	{
-		camera->softwareTrigger();
-	}
 }
 
 void MDOFoodBags::pbtn_limit_clicked()

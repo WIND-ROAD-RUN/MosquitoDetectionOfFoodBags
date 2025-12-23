@@ -8,15 +8,14 @@ bool ConfigManagerModule::build()
     storeContext = std::make_unique<rw::oso::StorageContext>(rw::oso::StorageType::Xml);
 	auto& runtimeModule = Modules::getInstance().runtimeInfoModule;
 
-#pragma region readWetPapersCfg
+#pragma region readMainWindowCfg
 	auto loadMainWindowConfig = storeContext->loadSafe(globalPath.MainWindwsConfigPath.toStdString());
 	if (loadMainWindowConfig)
 	{
 		MainWindowsConfig = *loadMainWindowConfig;
 		runtimeModule.isTakePictures = MainWindowsConfig.isSaveImg;
-		runtimeModule.statisticalInfo.produceCount = MainWindowsConfig.totalProductionVolume;
+		runtimeModule.statisticalInfo.productionLength = MainWindowsConfig.totalProductionLength;
 		runtimeModule.statisticalInfo.wasteCount = MainWindowsConfig.totalDefectiveVolume;
-		runtimeModule.statisticalInfo.productionYield = MainWindowsConfig.productionYield;
 	}
 #pragma endregion
 

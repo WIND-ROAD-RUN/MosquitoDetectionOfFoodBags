@@ -7,9 +7,8 @@ bool RuntimeInfoModule::build()
 	detachUtiltyThread = std::make_unique<DetachUtiltyThread>(this);
 
 	auto &configModule=Modules::getInstance().configManagerModule;
-	statisticalInfo.produceCount = configModule.MainWindowsConfig.totalProductionVolume;
+	statisticalInfo.productionLength = configModule.MainWindowsConfig.totalProductionLength;
 	statisticalInfo.wasteCount = configModule.MainWindowsConfig.totalDefectiveVolume;
-	statisticalInfo.productionYield = configModule.MainWindowsConfig.productionYield;
 
 	return true;
 }

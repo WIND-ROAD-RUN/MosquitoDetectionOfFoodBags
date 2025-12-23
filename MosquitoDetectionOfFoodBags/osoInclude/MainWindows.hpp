@@ -19,9 +19,8 @@ namespace cdm {
         bool operator!=(const MainWindowsConfig& obj) const;
 
     public:
-        int totalProductionVolume{ 0 };
+        int totalProductionLength{ 0 };
         int totalDefectiveVolume{ 0 };
-        double productionYield{ 0.0 };
         bool isDebug{ false };
         bool isDefect{ false };
         bool isSaveImg{ false };
@@ -37,21 +36,16 @@ namespace cdm {
         {
             throw std::runtime_error("Assembly is not $class$MainWindowsConfig$");
         }
-        auto totalProductionVolumeItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$totalProductionVolume$"));
-        if (!totalProductionVolumeItem) {
-            throw std::runtime_error("$variable$totalProductionVolume is not found");
+        auto totalProductionLengthItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$totalProductionLength$"));
+        if (!totalProductionLengthItem) {
+            throw std::runtime_error("$variable$totalProductionLength is not found");
         }
-        totalProductionVolume = totalProductionVolumeItem->getValueAsInt();
+        totalProductionLength = totalProductionLengthItem->getValueAsInt();
         auto totalDefectiveVolumeItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$totalDefectiveVolume$"));
         if (!totalDefectiveVolumeItem) {
             throw std::runtime_error("$variable$totalDefectiveVolume is not found");
         }
         totalDefectiveVolume = totalDefectiveVolumeItem->getValueAsInt();
-        auto productionYieldItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$productionYield$"));
-        if (!productionYieldItem) {
-            throw std::runtime_error("$variable$productionYield is not found");
-        }
-        productionYield = productionYieldItem->getValueAsDouble();
         auto isDebugItem = rw::oso::ObjectStoreCoreToItem(assembly.getItem("$variable$isDebug$"));
         if (!isDebugItem) {
             throw std::runtime_error("$variable$isDebug is not found");
@@ -86,9 +80,8 @@ namespace cdm {
 
     inline MainWindowsConfig::MainWindowsConfig(const MainWindowsConfig& obj)
     {
-        totalProductionVolume = obj.totalProductionVolume;
+        totalProductionLength = obj.totalProductionLength;
         totalDefectiveVolume = obj.totalDefectiveVolume;
-        productionYield = obj.productionYield;
         isDebug = obj.isDebug;
         isDefect = obj.isDefect;
         isSaveImg = obj.isSaveImg;
@@ -100,9 +93,8 @@ namespace cdm {
     inline MainWindowsConfig& MainWindowsConfig::operator=(const MainWindowsConfig& obj)
     {
         if (this != &obj) {
-            totalProductionVolume = obj.totalProductionVolume;
+            totalProductionLength = obj.totalProductionLength;
             totalDefectiveVolume = obj.totalDefectiveVolume;
-            productionYield = obj.productionYield;
             isDebug = obj.isDebug;
             isDefect = obj.isDefect;
             isSaveImg = obj.isSaveImg;
@@ -117,18 +109,14 @@ namespace cdm {
     {
         rw::oso::ObjectStoreAssembly assembly;
         assembly.setName("$class$MainWindowsConfig$");
-        auto totalProductionVolumeItem = std::make_shared<rw::oso::ObjectStoreItem>();
-        totalProductionVolumeItem->setName("$variable$totalProductionVolume$");
-        totalProductionVolumeItem->setValueFromInt(totalProductionVolume);
-        assembly.addItem(totalProductionVolumeItem);
+        auto totalProductionLengthItem = std::make_shared<rw::oso::ObjectStoreItem>();
+        totalProductionLengthItem->setName("$variable$totalProductionLength$");
+        totalProductionLengthItem->setValueFromInt(totalProductionLength);
+        assembly.addItem(totalProductionLengthItem);
         auto totalDefectiveVolumeItem = std::make_shared<rw::oso::ObjectStoreItem>();
         totalDefectiveVolumeItem->setName("$variable$totalDefectiveVolume$");
         totalDefectiveVolumeItem->setValueFromInt(totalDefectiveVolume);
         assembly.addItem(totalDefectiveVolumeItem);
-        auto productionYieldItem = std::make_shared<rw::oso::ObjectStoreItem>();
-        productionYieldItem->setName("$variable$productionYield$");
-        productionYieldItem->setValueFromDouble(productionYield);
-        assembly.addItem(productionYieldItem);
         auto isDebugItem = std::make_shared<rw::oso::ObjectStoreItem>();
         isDebugItem->setName("$variable$isDebug$");
         isDebugItem->setValueFromBool(isDebug);
@@ -158,7 +146,7 @@ namespace cdm {
 
     inline bool MainWindowsConfig::operator==(const MainWindowsConfig& obj) const
     {
-        return totalProductionVolume == obj.totalProductionVolume && totalDefectiveVolume == obj.totalDefectiveVolume && productionYield == obj.productionYield && isDebug == obj.isDebug && isDefect == obj.isDefect && isSaveImg == obj.isSaveImg && isshibiekuang == obj.isshibiekuang && iswenzi == obj.iswenzi && baoguang == obj.baoguang;
+        return totalProductionLength == obj.totalProductionLength && totalDefectiveVolume == obj.totalDefectiveVolume && isDebug == obj.isDebug && isDefect == obj.isDefect && isSaveImg == obj.isSaveImg && isshibiekuang == obj.isshibiekuang && iswenzi == obj.iswenzi && baoguang == obj.baoguang;
     }
 
     inline bool MainWindowsConfig::operator!=(const MainWindowsConfig& obj) const

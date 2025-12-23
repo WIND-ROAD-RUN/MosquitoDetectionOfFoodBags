@@ -4,9 +4,8 @@ namespace cdm {
 	class MainWindowsConfig
 	{
 	public:
-		totalProductionVolume : int :default = 0;
+		totalProductionLength : int :default = 0;
 		totalDefectiveVolume : int :default = 0;
-		productionYield : double :default = 0.0;
 		isDebug : bool :default = false;
 		isDefect : bool :default = false;
 		isSaveImg : bool :default = false;
