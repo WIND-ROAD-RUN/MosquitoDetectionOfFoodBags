@@ -518,7 +518,7 @@ void MDOFoodBags::pbtn_baoguang_clicked()
 void MDOFoodBags::rbtn_istifei_checked(bool checked)
 {
 	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-	mainWindowConfig.isDefect = checked;
+	mainWindowConfig.istifei = checked;
 	if (!checked)
 	{
 		auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
