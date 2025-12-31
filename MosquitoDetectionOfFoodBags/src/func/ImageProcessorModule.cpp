@@ -617,14 +617,21 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 	{
 		if (1 == imageProcessingModuleIndex)
 		{
-			priorityQueue1->push(defectLoc);
-			++baojingCount;
+			
+			
 			liangpinCount = 0;
+			++baojingCount;
 			if (baojingCount >= setConfig.baojingjishu)
 			{
 				auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
 				auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, true);
 			}
+			else
+			{
+				priorityQueue1->push(defectLoc);
+
+			}
+			
 		}
 	}
 	else
@@ -634,7 +641,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		if (liangpinCount >= setConfig.liangpinjishu)
 		{
 			auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-			auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, false);
+			
 		}
 	}
 }

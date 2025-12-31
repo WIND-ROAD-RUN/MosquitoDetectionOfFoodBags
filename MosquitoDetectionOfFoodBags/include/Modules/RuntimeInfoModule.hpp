@@ -29,6 +29,7 @@ public:
 	} statisticalInfo;
 public:
 	std::atomic_bool isTakePictures{ false };
+
 	std::atomic<RunningState> runningState{ RunningState::Stop };
 public:
 	std::unique_ptr<DetachUtiltyThread> detachUtiltyThread{ nullptr };

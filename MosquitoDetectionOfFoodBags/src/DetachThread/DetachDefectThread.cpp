@@ -47,8 +47,14 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 		if (((nowLocation)-(minlocation)) >= 0)
 		{
 			queue->tryPopTop(nowLocation);
+			auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+			auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
 
-			auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
+		  
+
+		    auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
+			isSuccess = zmotion->SetIOOut(2, ControlLines::baojingOut, true, 1000);
+
 		}
 	}
 	catch (const std::runtime_error&)
