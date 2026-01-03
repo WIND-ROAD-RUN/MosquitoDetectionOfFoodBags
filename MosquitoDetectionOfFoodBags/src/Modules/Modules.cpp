@@ -150,7 +150,7 @@ void Modules::connect()
 
 #pragma region connect UIModule and RuntimeInfoModule
 	QObject::connect(runtimeInfoModule.detachUtiltyThread.get(), &DetachUtiltyThread::updateStatisticalInfo,
-		uiModule._MDOFoodBags, &MDOFoodBags::onUpdateStatisticalInfoUI, Qt::QueuedConnection);
+		uiModule._MDOFoodBags, &MDOFoodBags::onUpdateStatisticalInfoUI);
 #pragma endregion
 
 #ifdef BUILD_WITHOUT_HARDWARE

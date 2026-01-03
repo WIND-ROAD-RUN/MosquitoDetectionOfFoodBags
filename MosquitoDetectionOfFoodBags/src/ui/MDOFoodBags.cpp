@@ -289,7 +289,8 @@ void MDOFoodBags::updateCameraLabelState(int cameraIndex, bool state)
 void MDOFoodBags::onUpdateStatisticalInfoUI()
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
-	ui->lb_productionLength->setText(QString::number(statisticalInfo.productionLength.load()));
+	double productionLength = static_cast<double>(statisticalInfo.productionLength.load()) / 1000.0;
+	ui->lb_productionLength->setText(QString::number(productionLength,'f',2));
 	ui->lb_wasteCount->setText(QString::number(statisticalInfo.wasteCount.load()));
 }
 

@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QColor>
+#include <cmath>
 
 ImageProcessor::ImageProcessor(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
 	: QThread(parent), _queue(queue), _mutex(mutex), _condition(condition), _workIndex(workIndex)
@@ -92,7 +93,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	QVector< MatProcess> _matProcess;
 	MatProduct _matProduct;
 	halconPRocess(frame.image, _matProcess, _matProduct);
-
+	
 	double minArea = 0;
 	double allMinArea = 0;
 
@@ -102,7 +103,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
 	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea, _matProduct);
-
+	
 	for (const auto& item : _matProcess)
 	{
 		auto tempLoc = item.location;
@@ -609,16 +610,14 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 
 	if (imageProcessingModuleIndex == 1)
 	{
-		// 生产长度统计，单位米
-		statisticalInfo.productionLength += (static_cast<uint64_t>(setConfig.xiangjichufachangdu / 1000));
+		// 生产长度统计，单位毫米
+		statisticalInfo.productionLength += static_cast<uint64_t>(setConfig.xiangjichufachangdu);
 	}
 
 	if (isbad && mainWindowConfig.istifei)
 	{
 		if (1 == imageProcessingModuleIndex)
 		{
-			
-			
 			liangpinCount = 0;
 			++baojingCount;
 			if (baojingCount >= setConfig.baojingjishu)
@@ -631,7 +630,6 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 				priorityQueue1->push(defectLoc);
 
 			}
-			
 		}
 	}
 	else
@@ -641,7 +639,6 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		if (liangpinCount >= setConfig.liangpinjishu)
 		{
 			auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-			
 		}
 	}
 }
@@ -781,7 +778,6 @@ void ImageProcessingModule::onFrameCaptured(rw::rqw::MatInfo matInfo, size_t ind
 }
 void ImageProcessor::drawLimitLines(QImage& image, double leftLimit, double rightLimit, const QColor& color, int penWidth)
 {
-	// 检查图像是否有效
 	if (image.isNull())
 	{
 		return;
@@ -801,45 +797,60 @@ void ImageProcessor::drawLimitLines(QImage& image, double leftLimit, double righ
 
 	int imageHeight = image.height();
 
-	// 绘制左限位线 (垂直线)
-	int leftX = static_cast<int>(leftLimit);
-	painter.drawLine(leftX, 0, leftX, imageHeight);
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 
-	// 绘制右限位线 (垂直线)
-	int rightX = static_cast<int>(rightLimit);
+	// 不对左右限位直线进行像素当量计算 —— 直接把传入的值作为绘制位置（逻辑坐标）
+	// 若传入的就是像素值，则线会按像素绘制；若不是，请确保调用处传入期望的坐标系。
+	int leftX = static_cast<int>(std::round(leftLimit));
+	int rightX = static_cast<int>(std::round(rightLimit));
+
+	// 绘制左右限位线 (垂直线)
+	painter.drawLine(leftX, 0, leftX, imageHeight);
 	painter.drawLine(rightX, 0, rightX, imageHeight);
 
-	// 绘制限位线标签
+	// 准备字体与度量
 	QFont font = painter.font();
 	font.setPointSize(25);
 	font.setBold(true);
 	painter.setFont(font);
-
-	// 左限位标签
-	QString leftText = QString("左限位: %1").arg(leftLimit, 0, 'f', 0);
 	QFontMetrics metrics(font);
+
+	// 绘制左限位标签（显示逻辑值，并同时显示像素当量）
+	// 计算像素当量用于显示：pixel = logical * xiangSuDangLiang
+	int leftPixel = static_cast<int>(std::round(leftLimit * setConfig.xiangSuDangLiang));
+	QString leftText = QString("左限位: %1").arg(leftPixel);
 	QRect leftTextRect = metrics.boundingRect(leftText);
 	leftTextRect.moveTo(leftX + 10, 50);
 	leftTextRect.adjust(-5, -5, 5, 5);
-
-	// 绘制半透明背景
 	painter.fillRect(leftTextRect, QColor(0, 0, 0, 180));
-
-	// 绘制文本(白色)
 	painter.setPen(Qt::white);
 	painter.drawText(leftTextRect, Qt::AlignCenter, leftText);
 
-	// 右限位标签
-	QString rightText = QString("右限位: %1").arg(rightLimit, 0, 'f', 0);
+	// 绘制右限位标签
+	int rightPixel = static_cast<int>(std::round(rightLimit * setConfig.xiangSuDangLiang));
+	QString rightText = QString("右限位: %1").arg(rightPixel);
 	QRect rightTextRect = metrics.boundingRect(rightText);
 	rightTextRect.moveTo(rightX - rightTextRect.width() - 10, 50);
 	rightTextRect.adjust(-5, -5, 5, 5);
-
-	// 绘制半透明背景
 	painter.fillRect(rightTextRect, QColor(0, 0, 0, 180));
-
-	// 绘制文本(白色)
 	painter.drawText(rightTextRect, Qt::AlignCenter, rightText);
+
+	// 在左右限位中点处绘制袋子宽度（逻辑单位 + 像素当量）
+	int widthValuePixel = rightPixel - leftPixel;
+	QString lengthText = QString("袋子长度: %1").arg(widthValuePixel);
+	QRect lengthTextRect = metrics.boundingRect(lengthText);
+
+	// 中点逻辑坐标（用于文本放置）
+	int midX = (leftX + rightX) / 2;
+	int lengthTextX = midX - lengthTextRect.width() / 2;
+	int lengthTextY = 100; // 垂直位置，可根据需要调整
+
+	lengthTextRect.moveTo(lengthTextX, lengthTextY);
+	lengthTextRect.adjust(-5, -5, 5, 5);
+	painter.fillRect(lengthTextRect, QColor(0, 0, 0, 180));
+	// 文本颜色白色
+	painter.setPen(Qt::white);
+	painter.drawText(lengthTextRect, Qt::AlignCenter, lengthText);
 
 	// 结束绘制
 	painter.end();

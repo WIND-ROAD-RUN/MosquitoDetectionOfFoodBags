@@ -26,19 +26,13 @@ void DetachUtiltyThread::stopThread()
 
 void DetachUtiltyThread::run()
 {
-	static size_t s = 0;
 	while (running) {
 		QThread::sleep(1);
-		CalculateRealtimeInformation(s);
-		++s;
-		if (s == 300)
-		{
-			s = 0;
-		}
+		CalculateRealtimeInformation();
 	}
 }
 
-void DetachUtiltyThread::CalculateRealtimeInformation(size_t s)
+void DetachUtiltyThread::CalculateRealtimeInformation()
 {
 	emit updateStatisticalInfo();
 }

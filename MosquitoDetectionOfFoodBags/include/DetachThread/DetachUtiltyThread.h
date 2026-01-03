@@ -21,7 +21,7 @@ private:
 protected:
 	void run() override;
 private:
-	void CalculateRealtimeInformation(size_t s);
+	void CalculateRealtimeInformation();
 signals:
 	void updateStatisticalInfo();
 private:
