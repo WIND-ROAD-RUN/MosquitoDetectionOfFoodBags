@@ -513,6 +513,15 @@ void MDOFoodBags::pbtn_baoguang_clicked()
 		if (camera1)
 		{
 			camera1->setExposureTime(static_cast<size_t>(value.toDouble()));
+			auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
+			RunningState previousState = runtimeInfoModule.runningState.load();
+			runtimeInfoModule.runningState = RunningState::Stop;
+
+			QTimer::singleShot(5000, this, [previousState]()
+				{
+					auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
+					runtimeInfoModule.runningState = previousState;
+				});
 		}
 	}
 }

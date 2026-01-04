@@ -30,6 +30,7 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 {
 
 	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	try
 	{
 		float nowLocation = 0;
@@ -50,11 +51,8 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 			auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 			auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
 
-		  
-
 		    auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
-			isSuccess = zmotion->SetIOOut(2, ControlLines::baojingOut, true, 1000);
-
+			isSuccess = zmotion->SetIOOut(2, ControlLines::baojingOut, true, static_cast<int>(setConfig.baojingchixushijian));
 		}
 	}
 	catch (const std::runtime_error&)

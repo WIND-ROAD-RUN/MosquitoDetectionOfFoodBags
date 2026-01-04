@@ -21,13 +21,15 @@ namespace cdm {
 
 		tifeixinhaoOUT : int :default = 0;
 		baojingOUT : int :default = 0;
-		xiangjichufa2OUT : int :default = 0;
+		lvdengOUT : int :default = 0;
+		hongdengOUT : int :default = 0;
 
 		xiangjichufachangdu : double :default = 0;
 		meizhuanmaichongshu : double :default = 0;
 		shedingzhouchang : double :default = 0;
 		baojingjishu : int :default = 0;
 		liangpinjishu : int :default = 0;
+		baojingchixushijian : double :default = 0;
 
 		wenchongzuidahuiduchazhi : double :default = 0;
 		wenchongzuixiaohuiduchazhi : double :default = 0;
