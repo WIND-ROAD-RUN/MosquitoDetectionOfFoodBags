@@ -61,6 +61,7 @@ private slots:
 	void pbtn_limit_clicked();
 	void pbtn_baoguang_clicked();
 	void rbtn_istifei_checked(bool checked);
+	void rbtn_isbaojing_checked(bool checked);
 signals:
 	void shibiekuangChanged();
 	
@@ -90,6 +91,8 @@ private:
 	void updateNgImageDisplay(size_t index, const QPixmap& pixmap);
 	void updateAllNgImageDisplays();
 	rw::rqw::ClickableLabel* getNgLabelByIndex(size_t index);
+
+	void applyLightState();
 
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg1 = nullptr;

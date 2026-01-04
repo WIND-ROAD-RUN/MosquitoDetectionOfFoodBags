@@ -66,8 +66,7 @@ private slots:
 	void btn_xiangjichufachangdu_clicked();
 	void btn_meizhuanmaichongshu_clicked();
 	void btn_shedingzhouchang_clicked();
-	void btn_baojingjishu_clicked();
-	void btn_liangpinjishu_clicked();
+	void btn_tifeijishu_clicked();
 	void btn_baojingchixushijian_clicked();
 
 	// 监控IO

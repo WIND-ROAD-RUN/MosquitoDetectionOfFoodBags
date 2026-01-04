@@ -75,6 +75,7 @@ void MDOFoodBags::build_connect()
 	connect(ui->pbtn_limit, &QPushButton::clicked, this, &MDOFoodBags::pbtn_limit_clicked);
 	connect(ui->pbtn_baoguang, &QPushButton::clicked, this, &MDOFoodBags::pbtn_baoguang_clicked);
 	connect(ui->rbtn_istifei, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_istifei_checked);
+	connect(ui->rbtn_isbaojing, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_isbaojing_checked);
 
 
 	// 连接显示标题
@@ -100,6 +101,7 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	ui->ckb_wenzi->setChecked(mainWindowConfig.iswenzi);
 	ui->pbtn_baoguang->setText(QString::number(mainWindowConfig.baoguang));
 	ui->rbtn_istifei->setChecked(mainWindowConfig.istifei);
+	ui->rbtn_isbaojing->setChecked(mainWindowConfig.isbaojing);
 
 	// release版本
 #ifdef NDEBUG
@@ -290,7 +292,7 @@ void MDOFoodBags::onUpdateStatisticalInfoUI()
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	double productionLength = static_cast<double>(statisticalInfo.productionLength.load()) / 1000.0;
-	ui->lb_productionLength->setText(QString::number(productionLength,'f',2));
+	ui->lb_productionLength->setText(QString::number(productionLength, 'f', 2));
 	ui->lb_wasteCount->setText(QString::number(statisticalInfo.wasteCount.load()));
 	ui->lb_bagLength->setText(QString::number(statisticalInfo.bagLength.load()));
 }
@@ -317,7 +319,7 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool 
 			}
 			_lastImage1 = image;
 		}
-		
+
 		if (isbad)
 		{
 			processLastImageNg(image);
@@ -530,11 +532,21 @@ void MDOFoodBags::rbtn_istifei_checked(bool checked)
 {
 	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	mainWindowConfig.istifei = checked;
-	if (checked)
+
+	applyLightState();
+}
+
+void MDOFoodBags::rbtn_isbaojing_checked(bool checked)
+{
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+	mainWindowConfig.isbaojing = checked;
+	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+	if (zmotion)
 	{
-		auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-		auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, false);
+		zmotion->setIOOut(ControlLines::baojingOut, false);
 	}
+
+	applyLightState();
 }
 
 void MDOFoodBags::setModelHImage(const HalconCpp::HObject& img)
@@ -639,6 +651,21 @@ rw::rqw::ClickableLabel* MDOFoodBags::getNgLabelByIndex(size_t index)
 	case 3: return imgDisNg4;
 	case 4: return imgDisNg5;
 	default: return nullptr;
+	}
+}
+
+void MDOFoodBags::applyLightState()
+{
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
+	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+
+	bool redOn = !mainWindowConfig.istifei && !mainWindowConfig.isbaojing;
+	bool greenOn = !redOn;
+
+	if (zmotion)
+	{
+		zmotion->setIOOut(ControlLines::hongdengOut, redOn);
+		zmotion->setIOOut(ControlLines::lvdengOut, greenOn);
 	}
 }
 

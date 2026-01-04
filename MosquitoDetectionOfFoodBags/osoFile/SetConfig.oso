@@ -27,8 +27,7 @@ namespace cdm {
 		xiangjichufachangdu : double :default = 0;
 		meizhuanmaichongshu : double :default = 0;
 		shedingzhouchang : double :default = 0;
-		baojingjishu : int :default = 0;
-		liangpinjishu : int :default = 0;
+		tifeijishu : int :default = 0;
 		baojingchixushijian : double :default = 0;
 
 		wenchongzuidahuiduchazhi : double :default = 0;

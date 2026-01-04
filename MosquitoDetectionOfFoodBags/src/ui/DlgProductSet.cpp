@@ -63,8 +63,7 @@ void DlgProductSet::read_config()
 	ui->btn_xiangjichufachangdu->setText(QString::number(setConfig.xiangjichufachangdu));
 	ui->btn_meizhuanmaichongshu->setText(QString::number(setConfig.meizhuanmaichongshu));
 	ui->btn_shedingzhouchang->setText(QString::number(setConfig.shedingzhouchang));
-	ui->btn_baojingjishu->setText(QString::number(setConfig.baojingjishu));
-	ui->btn_liangpinjishu->setText(QString::number(setConfig.liangpinjishu));
+	ui->btn_tifeijishu->setText(QString::number(setConfig.tifeijishu));
 	ui->btn_baojingchixushijian->setText(QString::number(setConfig.baojingchixushijian));
 
 	// 设置IO
@@ -127,10 +126,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_meizhuanmaichongshu_clicked);
 	QObject::connect(ui->btn_shedingzhouchang, &QPushButton::clicked,
 		this, &DlgProductSet::btn_shedingzhouchang_clicked);
-	QObject::connect(ui->btn_baojingjishu, &QPushButton::clicked,
-		this, &DlgProductSet::btn_baojingjishu_clicked);
-	QObject::connect(ui->btn_liangpinjishu, &QPushButton::clicked,
-		this, &DlgProductSet::btn_liangpinjishu_clicked);
+	QObject::connect(ui->btn_tifeijishu, &QPushButton::clicked,
+		this, &DlgProductSet::btn_tifeijishu_clicked);
 	QObject::connect(ui->btn_baojingchixushijian, &QPushButton::clicked,
 		this, &DlgProductSet::btn_baojingchixushijian_clicked);
 
@@ -768,7 +765,7 @@ void DlgProductSet::btn_shedingzhouchang_clicked()
 	}
 }
 
-void DlgProductSet::btn_baojingjishu_clicked()
+void DlgProductSet::btn_tifeijishu_clicked()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	NumberKeyboard numKeyBord;
@@ -782,27 +779,8 @@ void DlgProductSet::btn_baojingjishu_clicked()
 			QMessageBox::warning(this, "提示", "请输入大于0的数值");
 			return;
 		}
-		ui->btn_baojingjishu->setText(value);
-		setConfig.baojingjishu = value.toDouble();
-	}
-}
-
-void DlgProductSet::btn_liangpinjishu_clicked()
-{
-	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	NumberKeyboard numKeyBord;
-	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
-	auto isAccept = numKeyBord.exec();
-	if (isAccept == QDialog::Accepted)
-	{
-		auto value = numKeyBord.getValue();
-		if (value.toDouble() < 0)
-		{
-			QMessageBox::warning(this, "提示", "请输入大于0的数值");
-			return;
-		}
-		ui->btn_liangpinjishu->setText(value);
-		setConfig.liangpinjishu = value.toDouble();
+		ui->btn_tifeijishu->setText(value);
+		setConfig.tifeijishu = value.toDouble();
 	}
 }
 

@@ -606,7 +606,6 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
-	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
 	if (isbad)
 	{
@@ -619,32 +618,21 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		statisticalInfo.productionLength += static_cast<uint64_t>(setConfig.xiangjichufachangdu);
 	}
 
-	if (isbad && mainWindowConfig.istifei)
+	if (isbad)
 	{
 		if (1 == imageProcessingModuleIndex)
 		{
-			liangpinCount = 0;
-			++baojingCount;
-			if (baojingCount >= setConfig.baojingjishu)
-			{
-				auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-				auto isSuccess = zmotion->setIOOut(ControlLines::baojingOut, true);
-			}
-			else
+			// 只剔废指定数量内的连续不良品
+			++tifeiCount;
+			if (tifeiCount <= setConfig.tifeijishu)
 			{
 				priorityQueue1->push(defectLoc);
-
 			}
 		}
 	}
 	else
 	{
-		++liangpinCount;
-		baojingCount = 0;
-		if (liangpinCount >= setConfig.liangpinjishu)
-		{
-			auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
-		}
+		tifeiCount = 0;
 	}
 }
 

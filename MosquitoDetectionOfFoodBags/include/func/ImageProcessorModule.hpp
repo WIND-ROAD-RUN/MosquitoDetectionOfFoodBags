@@ -111,7 +111,7 @@ private:
 	// 缺陷具体loc
 	float defectLoc{ 0.0 };
 
-	int baojingCount{ 0 };
+	int tifeiCount{ 0 };
 	int liangpinCount{ 0 };
 private:
 	QQueue<MatInfo>& _queue;
