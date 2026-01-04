@@ -26,6 +26,7 @@ public:
 	{
 		std::atomic_uint64_t productionLength{ 0 };
 		std::atomic_uint64_t wasteCount{ 0 };
+		std::atomic_uint64_t bagLength{ 0 };
 	} statisticalInfo;
 public:
 	std::atomic_bool isTakePictures{ false };

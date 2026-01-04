@@ -292,6 +292,7 @@ void MDOFoodBags::onUpdateStatisticalInfoUI()
 	double productionLength = static_cast<double>(statisticalInfo.productionLength.load()) / 1000.0;
 	ui->lb_productionLength->setText(QString::number(productionLength,'f',2));
 	ui->lb_wasteCount->setText(QString::number(statisticalInfo.wasteCount.load()));
+	ui->lb_bagLength->setText(QString::number(statisticalInfo.bagLength.load()));
 }
 
 void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool isSmallNgImg)

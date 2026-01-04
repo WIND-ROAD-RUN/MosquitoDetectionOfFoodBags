@@ -100,6 +100,7 @@ public:
 signals:
 	void imageNGReady(QPixmap image, size_t index, bool isbad, bool isSmallNgImg);
 
+	void sendAvgBagLength();
 public:
 	// 构建模型引擎
 	void buildSegModelEngine(const QString& enginePath);		// Segmentation 模型

@@ -590,6 +590,11 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 	// 绘制限位线
 	drawLimitLines(image, zuoxianwei, youxianwei, Qt::yellow, 3);
 
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
+	auto pixBagLength = (youxianwei - zuoxianwei) * setConfig.xiangSuDangLiang;
+	statisticalInfo.bagLength = static_cast<uint64_t>(std::round(pixBagLength));
+
 	return isbad;
 }
 
@@ -834,23 +839,6 @@ void ImageProcessor::drawLimitLines(QImage& image, double leftLimit, double righ
 	rightTextRect.adjust(-5, -5, 5, 5);
 	painter.fillRect(rightTextRect, QColor(0, 0, 0, 180));
 	painter.drawText(rightTextRect, Qt::AlignCenter, rightText);
-
-	// 在左右限位中点处绘制袋子宽度（逻辑单位 + 像素当量）
-	int widthValuePixel = rightPixel - leftPixel;
-	QString lengthText = QString("袋子长度: %1").arg(widthValuePixel);
-	QRect lengthTextRect = metrics.boundingRect(lengthText);
-
-	// 中点逻辑坐标（用于文本放置）
-	int midX = (leftX + rightX) / 2;
-	int lengthTextX = midX - lengthTextRect.width() / 2;
-	int lengthTextY = 100; // 垂直位置，可根据需要调整
-
-	lengthTextRect.moveTo(lengthTextX, lengthTextY);
-	lengthTextRect.adjust(-5, -5, 5, 5);
-	painter.fillRect(lengthTextRect, QColor(0, 0, 0, 180));
-	// 文本颜色白色
-	painter.setPen(Qt::white);
-	painter.drawText(lengthTextRect, Qt::AlignCenter, lengthText);
 
 	// 结束绘制
 	painter.end();
