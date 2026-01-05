@@ -16,6 +16,9 @@ namespace cdm {
 		xiangSuDangLiang : double :default = 0;
 
 		yundongkongzhiqichonglian : bool :default = false;
+		xiangjiduanlianbaojing : bool :default = false;
+		yundongkongzhiqiduanlianbaojing : bool :default = false;
+		tiebiaotiewanbaojing : bool :default = false;
 
 		debugMode : bool :default = false;
 

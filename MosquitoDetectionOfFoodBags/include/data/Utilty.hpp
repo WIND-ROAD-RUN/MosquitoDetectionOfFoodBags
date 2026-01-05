@@ -26,6 +26,14 @@ struct ClassId
 	static constexpr int indexCount = 7;
 };
 
+struct WarningId
+{
+	static constexpr int cameraConnectionLost = 0;
+	static constexpr int zmotionConnectionLost = 1;
+	static constexpr int jiaodaiTieWan = 2;
+	static constexpr int warnNum = 3;
+};
+
 struct ControlLines
 {
 public:	// 输入

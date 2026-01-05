@@ -3,6 +3,7 @@
 #include"IModule.hpp"
 
 #include"CameraModule.hpp"
+#include "ConditionMonitorModule.hpp"
 #include"ConfigManagerModule.hpp"
 #include "EliminateModule.hpp"
 #include "ImgProModule.hpp"
@@ -58,6 +59,7 @@ public:
 	EliminateModule eliminateModule;
 	ImgSaveModule imgSaveModule;
 	MotionControllerModule motionControllerModule;
+	ConditionMonitorModule conditionMonitorModule;
 
 #ifdef BUILD_WITHOUT_HARDWARE
 	TestModule test_module;

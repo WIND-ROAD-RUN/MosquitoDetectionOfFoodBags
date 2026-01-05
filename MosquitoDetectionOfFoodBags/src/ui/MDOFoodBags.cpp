@@ -117,6 +117,9 @@ void MDOFoodBags::build_MDOFoodBagsData()
 	// 初始化图像查看器
 	_picturesViewer = new PictureViewerThumbnails(this);
 
+	ui->gBox_warningInfo->layout()->replaceWidget(ui->label_warningInfo, Modules::getInstance().conditionMonitorModule.labelWarning);
+	delete ui->label_warningInfo;
+
 	ini_clickableTitle();
 }
 

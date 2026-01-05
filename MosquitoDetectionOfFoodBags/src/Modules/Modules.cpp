@@ -45,6 +45,9 @@ bool Modules::build()
 	// 构建运动控制模块
 	auto motionControllerModuleBuild = motionControllerModule.build();
 
+	// 构建状态监测模块
+	conditionMonitorModule.build();
+
 #ifdef BUILD_WITHOUT_HARDWARE
 	test_module.build();
 #endif
@@ -67,6 +70,7 @@ void Modules::destroy()
 	eliminateModule.destroy();
 	imgSaveModule.destroy();
 	motionControllerModule.destroy();
+	conditionMonitorModule.destroy();
 }
 
 void Modules::start()
@@ -80,6 +84,7 @@ void Modules::start()
 	imgProModule.start();
 	cameraModule.start();
 	reconnectModule.start();
+	conditionMonitorModule.start();
 
 #ifdef BUILD_WITHOUT_HARDWARE
 	test_module.start();
@@ -92,6 +97,7 @@ void Modules::stop()
 	test_module.stop();
 #endif
 
+	conditionMonitorModule.stop();
 	reconnectModule.stop();
 	cameraModule.stop();
 	imgProModule.stop();

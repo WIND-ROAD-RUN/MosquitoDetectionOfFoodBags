@@ -61,6 +61,9 @@ private slots:
 	void pbtn_chengfaqi_clicked();
 
 	void cbox_yundongkongzhiqichonglian_checked();
+	void cbox_xiangjiduanlianbaojing_checked();
+	void cbox_yundongkongzhiqiduanlianbaojing_checked();
+	void cbox_tiebiaotiewanbaojing_checked();
 
 	// 基本参数
 	void btn_xiangjichufachangdu_clicked();

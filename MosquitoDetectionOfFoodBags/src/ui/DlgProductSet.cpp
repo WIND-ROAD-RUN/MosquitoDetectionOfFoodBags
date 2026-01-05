@@ -58,6 +58,9 @@ void DlgProductSet::read_config()
 
 	// 基本功能
 	ui->cbox_yundongkongzhiqichonglian->setChecked(setConfig.yundongkongzhiqichonglian);
+	ui->cbox_xiangjiduanlianbaojing->setChecked(setConfig.xiangjiduanlianbaojing);
+	ui->cbox_yundongkongzhiqiduanlianbaojing->setChecked(setConfig.yundongkongzhiqiduanlianbaojing);
+	ui->cbox_tiebiaotiewanbaojing->setChecked(setConfig.tiebiaotiewanbaojing);
 
 	// 基本参数
 	ui->btn_xiangjichufachangdu->setText(QString::number(setConfig.xiangjichufachangdu));
@@ -121,6 +124,13 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::pbtn_close_clicked);
 	QObject::connect(ui->cbox_yundongkongzhiqichonglian, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_yundongkongzhiqichonglian_checked);
+	QObject::connect(ui->cbox_xiangjiduanlianbaojing, &QCheckBox::clicked,
+		this, &DlgProductSet::cbox_xiangjiduanlianbaojing_checked);
+	QObject::connect(ui->cbox_yundongkongzhiqiduanlianbaojing, &QCheckBox::clicked,
+		this, &DlgProductSet::cbox_yundongkongzhiqiduanlianbaojing_checked);
+	QObject::connect(ui->cbox_tiebiaotiewanbaojing, &QCheckBox::clicked,
+		this, &DlgProductSet::cbox_tiebiaotiewanbaojing_checked);
+
 
 	// 基本参数
 	QObject::connect(ui->btn_xiangjichufachangdu, &QPushButton::clicked,
@@ -344,10 +354,8 @@ std::vector<std::vector<int>> DlgProductSet::DIFindAllDuplicateIndices()
 void DlgProductSet::pbtn_close_clicked()
 {
 	auto& _isUpdateMonitorInfo = Modules::getInstance().motionControllerModule._isUpdateMonitorInfo;
-	auto& monitorZMotionMonitorThread = Modules::getInstance().motionControllerModule.monitorMotionIoStateThread;
 	// 关闭监控IO线程
 	_isUpdateMonitorInfo = false;
-	monitorZMotionMonitorThread->setRunning(false);
 	ui->cbox_debugMode->setChecked(false);
 	cbox_debugMode_checked(false);
 
@@ -561,7 +569,7 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 		ui->cbox_DOlvdeng->setEnabled(true);
 		ui->cbox_DOhongdeng->setEnabled(true);
 
-		monitorZMotionMonitorThread->setRunning(false);
+		monitorZMotionMonitorThread->setRunning(true);
 	}
 	else
 	{
@@ -575,7 +583,7 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 		ui->cbox_DOlvdeng->setEnabled(false);
 		ui->cbox_DOhongdeng->setEnabled(false);
 
-		monitorZMotionMonitorThread->setRunning(true);
+		monitorZMotionMonitorThread->setRunning(false);
 	}
 }
 
@@ -739,6 +747,24 @@ void DlgProductSet::cbox_yundongkongzhiqichonglian_checked()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	setConfig.yundongkongzhiqichonglian = ui->cbox_yundongkongzhiqichonglian->isChecked();
+}
+
+void DlgProductSet::cbox_xiangjiduanlianbaojing_checked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	setConfig.xiangjiduanlianbaojing = ui->cbox_xiangjiduanlianbaojing->isChecked();
+}
+
+void DlgProductSet::cbox_yundongkongzhiqiduanlianbaojing_checked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	setConfig.yundongkongzhiqiduanlianbaojing = ui->cbox_yundongkongzhiqiduanlianbaojing->isChecked();
+}
+
+void DlgProductSet::cbox_tiebiaotiewanbaojing_checked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	setConfig.tiebiaotiewanbaojing = ui->cbox_tiebiaotiewanbaojing->isChecked();
 }
 
 void DlgProductSet::btn_xiangjichufachangdu_clicked()

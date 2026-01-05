@@ -2905,7 +2905,7 @@ QTabBar::tab:hover {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -4121,7 +4121,7 @@ QCheckBox::indicator:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_DI2_2">
+                  <widget class="QCheckBox" name="cbox_xiangjiduanlianbaojing">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -4182,12 +4182,12 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>DI2</string>
+                    <string>相机断连报警</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_DI3_2">
+                  <widget class="QCheckBox" name="cbox_yundongkongzhiqiduanlianbaojing">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -4248,12 +4248,12 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>DI3</string>
+                    <string>运动控制器断连报警</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="cbox_DI4">
+                  <widget class="QCheckBox" name="cbox_tiebiaotiewanbaojing">
                    <property name="styleSheet">
                     <string notr="true">QCheckBox {
     spacing: 8px;
@@ -4314,7 +4314,7 @@ QCheckBox::indicator:pressed {
 }</string>
                    </property>
                    <property name="text">
-                    <string>DI4</string>
+                    <string>贴标贴完报警</string>
                    </property>
                   </widget>
                  </item>

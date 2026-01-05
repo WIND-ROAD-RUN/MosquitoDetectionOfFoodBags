@@ -73,6 +73,7 @@ target_link_libraries(${PROJECT_NAME}
 	PRIVATE hoem
 	PRIVATE rqwscc
 	PRIVATE rqwhalcon
+	PRIVATE conMon
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
