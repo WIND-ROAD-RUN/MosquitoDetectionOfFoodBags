@@ -27,6 +27,7 @@ bool ConditionMonitorModule::build()
 	}
 
 	labelWarning = new rw::rqw::LabelWarning();
+	labelWarning->setMaxHistorySize(500);
 
 	auto setConfig = Modules::getInstance().configManagerModule.setConfig;
 

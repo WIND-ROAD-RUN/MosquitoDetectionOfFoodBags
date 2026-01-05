@@ -326,6 +326,14 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool 
 		if (isbad)
 		{
 			processLastImageNg(image);
+
+			rw::rqw::WarningInfo WarningInfo;
+			WarningInfo.message = "检测到缺陷进行一次贴标!";
+			WarningInfo.type = rw::rqw::WarningType::Warning;
+			QMetaObject::invokeMethod(this,
+				[this, WarningInfo]() {
+					addWarning(WarningInfo);
+				});
 		}
 	}
 }
@@ -670,6 +678,11 @@ void MDOFoodBags::applyLightState()
 		zmotion->setIOOut(ControlLines::hongdengOut, redOn);
 		zmotion->setIOOut(ControlLines::lvdengOut, greenOn);
 	}
+}
+
+void MDOFoodBags::addWarning(const rw::rqw::WarningInfo& message, bool updateTimestampIfSame, int redDuration, int time)
+{
+	Modules::getInstance().conditionMonitorModule.labelWarning->addWarning(message, updateTimestampIfSame, redDuration, time);
 }
 
 void MDOFoodBags::imgDis1_clicked()

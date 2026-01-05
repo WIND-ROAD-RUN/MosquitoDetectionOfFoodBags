@@ -7,6 +7,8 @@
 #include"rqw_LabelClickable.h"
 #include <halconcpp/HalconCpp.h>
 
+#include "WarnUtilty.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MDOFoodBagsClass; };
 QT_END_NAMESPACE
@@ -93,6 +95,8 @@ private:
 	rw::rqw::ClickableLabel* getNgLabelByIndex(size_t index);
 
 	void applyLightState();
+
+	void addWarning(const rw::rqw::WarningInfo& message, bool updateTimestampIfSame = true, int redDuration = 5000, int time = 10000);
 
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg1 = nullptr;
