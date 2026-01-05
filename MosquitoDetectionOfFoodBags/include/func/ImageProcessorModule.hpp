@@ -55,8 +55,6 @@ private:
 
 	void run_OpenRemoveFunc_emitErrorInfo(bool isbad);
 
-
-
 	void halconPRocess(cv::Mat image, QVector<MatProcess>& processResults, MatProduct& _matProduct);
 
 	// 在图像上绘制矩形
@@ -113,6 +111,7 @@ private:
 
 	int tifeiCount{ 0 };
 	int liangpinCount{ 0 };
+	bool needGoodReset{ false };
 private:
 	QQueue<MatInfo>& _queue;
 	QMutex& _mutex;

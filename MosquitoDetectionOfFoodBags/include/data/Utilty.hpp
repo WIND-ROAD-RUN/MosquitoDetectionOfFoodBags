@@ -29,7 +29,7 @@ struct ClassId
 struct ControlLines
 {
 public:	// 输入
-	
+	static size_t jiaodaitiewanIn;
 public: // 输出
 	static size_t tifeixinhaoOut;
 	static size_t baojingOut;

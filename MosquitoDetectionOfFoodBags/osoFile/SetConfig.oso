@@ -19,6 +19,8 @@ namespace cdm {
 
 		debugMode : bool :default = false;
 
+		jiaodaitiewanIN : int :default = 0;
+
 		tifeixinhaoOUT : int :default = 0;
 		baojingOUT : int :default = 0;
 		lvdengOUT : int :default = 0;
@@ -28,6 +30,7 @@ namespace cdm {
 		meizhuanmaichongshu : double :default = 0;
 		shedingzhouchang : double :default = 0;
 		tifeijishu : int :default = 0;
+		liangpinjishu : int :default = 0;
 		baojingchixushijian : double :default = 0;
 
 		wenchongzuidahuiduchazhi : double :default = 0;

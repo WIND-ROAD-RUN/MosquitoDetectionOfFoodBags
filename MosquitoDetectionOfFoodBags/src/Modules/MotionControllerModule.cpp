@@ -7,6 +7,8 @@ bool MotionControllerModule::build()
 #pragma region build zmotion
 	bool isConnected = false;
 	isConnected = build_zmotion();
+	// 默认绿灯常亮
+	zmotion->setIOOut(ControlLines::lvdengOut, true);
 #pragma endregion
 
 #pragma region build monitorMotionIoStateThread

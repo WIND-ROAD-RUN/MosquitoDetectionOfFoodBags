@@ -606,7 +606,14 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 {
 	auto& statisticalInfo = Modules::getInstance().runtimeInfoModule.statisticalInfo;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
 	auto& priorityQueue1 = Modules::getInstance().eliminateModule.productPriorityQueue1;
+
+	if (1 != imageProcessingModuleIndex)
+	{
+		return;
+	}
+
 	if (isbad)
 	{
 		++statisticalInfo.wasteCount;
@@ -618,21 +625,53 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		statisticalInfo.productionLength += static_cast<uint64_t>(setConfig.xiangjichufachangdu);
 	}
 
-	if (isbad)
+	// =========================
+	// 状态机：needGoodReset == true 表示“锁定(禁止剔废)”; false 表示“允许剔废”
+	// =========================
+
+	if (!isbad)
 	{
-		if (1 == imageProcessingModuleIndex)
-		{
-			// 只剔废指定数量内的连续不良品
-			++tifeiCount;
-			if (tifeiCount <= setConfig.tifeijishu)
-			{
-				priorityQueue1->push(defectLoc);
-			}
-		}
-	}
-	else
-	{
+		// 良品：累计连续良品；并清空连续剔废计数（因为已经不连续了）
 		tifeiCount = 0;
+		++liangpinCount;
+
+		// 只有在“锁定状态”下，连续良品达到门槛才解锁
+		if (needGoodReset && (liangpinCount >= setConfig.liangpinjishu))
+		{
+			needGoodReset = false;	// 解锁：重新允许剔废窗口打开
+			tifeiCount = 0;			// 新一轮剔废窗口，计数从0开始
+		}
+		return;
+	}
+
+	// 次品：连续良品被打断
+	liangpinCount = 0;
+
+	// 只要有坏的就报警
+	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+	if (mainWindowConfig.isbaojing)
+	{
+		auto isSuccess = zmotion->SetIOOut(2, ControlLines::baojingOut, true, static_cast<int>(setConfig.baojingchixushijian));
+		isSuccess = zmotion->SetIOOut(3, ControlLines::hongdengOut, true, static_cast<int>(setConfig.baojingchixushijian));
+		isSuccess = zmotion->SetIOOut(4, ControlLines::lvdengOut, false, static_cast<int>(setConfig.baojingchixushijian));
+	}
+
+	// 如果处于锁定状态：次品不剔废，直接返回
+	if (needGoodReset)
+	{
+		return;
+	}
+
+	// 允许剔废状态：次品 => 执行剔废，并累计“连续剔废次数”
+	priorityQueue1->push(defectLoc);
+
+	++tifeiCount;
+
+	// 当连续剔废次数达到门槛：上锁（下一张开始不再剔废）
+	if (tifeiCount >= setConfig.tifeijishu)
+	{
+		needGoodReset = true;	// 上锁
+		liangpinCount = 0;		// 开始准备累计连续良品用于解锁
 	}
 }
 

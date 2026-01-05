@@ -64,9 +64,12 @@ void DlgProductSet::read_config()
 	ui->btn_meizhuanmaichongshu->setText(QString::number(setConfig.meizhuanmaichongshu));
 	ui->btn_shedingzhouchang->setText(QString::number(setConfig.shedingzhouchang));
 	ui->btn_tifeijishu->setText(QString::number(setConfig.tifeijishu));
+	ui->btn_liangpinjishu->setText(QString::number(setConfig.liangpinjishu));
 	ui->btn_baojingchixushijian->setText(QString::number(setConfig.baojingchixushijian));
 
 	// 设置IO
+	ui->btn_setDIjiaodaitiewan->setText(QString::number(setConfig.jiaodaitiewanIN));
+
 	ui->btn_setDOtifeixinhao->setText(QString::number(setConfig.tifeixinhaoOUT));
 	ui->btn_setDObaojing->setText(QString::number(setConfig.baojingOUT));
 	ui->btn_setDOlvdeng->setText(QString::number(setConfig.lvdengOUT));
@@ -128,6 +131,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_shedingzhouchang_clicked);
 	QObject::connect(ui->btn_tifeijishu, &QPushButton::clicked,
 		this, &DlgProductSet::btn_tifeijishu_clicked);
+	QObject::connect(ui->btn_liangpinjishu, &QPushButton::clicked,
+		this, &DlgProductSet::btn_liangpinjishu_clicked);
 	QObject::connect(ui->btn_baojingchixushijian, &QPushButton::clicked,
 		this, &DlgProductSet::btn_baojingchixushijian_clicked);
 
@@ -144,6 +149,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::cbox_DOhongdeng_checked);
 
 	// 设置IO
+	QObject::connect(ui->btn_setDIjiaodaitiewan, &QPushButton::clicked,
+		this, &DlgProductSet::btn_setDIjiaodaitiewan_clicked);
 	QObject::connect(ui->btn_setDOtifeixinhao, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOtifeixinhao_clicked);
 	QObject::connect(ui->btn_setDObaojing, &QPushButton::clicked,
@@ -174,6 +181,8 @@ void DlgProductSet::build_connect()
 
 void DlgProductSet::setDIErrorInfo(const std::vector<std::vector<int>>& index)
 {
+	ui->lb_DIjiaodaitiewan->clear();
+
 	for (const auto& classic : index)
 	{
 		for (const auto& item : classic)
@@ -188,6 +197,9 @@ void DlgProductSet::setDIErrorInfo(int index)
 	QString text = "重复数值";
 	switch (index)
 	{
+	case 0:
+		ui->lb_DIjiaodaitiewan->setText(text);
+		break;
 	default:
 		break;
 	}
@@ -217,7 +229,7 @@ void DlgProductSet::initDICheckItems()
 {
 	DICheckItems.clear();
 	DICheckItems = {
-		
+		{&ControlLines::jiaodaitiewanIn, ui->cbox_DIjiaodaitiewan}
 	};
 }
 
@@ -260,8 +272,10 @@ std::vector<std::vector<int>> DlgProductSet::DOFindAllDuplicateIndices()
 void DlgProductSet::setDOErrorInfo(const std::vector<std::vector<int>>& index)
 {
 	ui->lb_DOtifeixinhao->clear();
-	ui->lb_DOxiangjichufa1->clear();
-	ui->lb_DOxiangjichufa2->clear();
+	ui->lb_DObaojing->clear();
+	ui->lb_DOlvdeng->clear();
+	ui->lb_DOhongdeng->clear();
+
 
 	for (const auto& classic : index)
 	{
@@ -281,10 +295,13 @@ void DlgProductSet::setDOErrorInfo(int index)
 		ui->lb_DOtifeixinhao->setText(text);
 		break;
 	case 1:
-		ui->lb_DOxiangjichufa1->setText(text);
+		ui->lb_DObaojing->setText(text);
 		break;
 	case 2:
-		ui->lb_DOxiangjichufa2->setText(text);
+		ui->lb_DOlvdeng->setText(text);
+		break;
+	case 3:
+		ui->lb_DOhongdeng->setText(text);
 		break;
 	default:
 		break;
@@ -295,7 +312,7 @@ std::vector<std::vector<int>> DlgProductSet::DIFindAllDuplicateIndices()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	std::vector<int> values = {
-
+		setConfig.jiaodaitiewanIN
 	};
 
 	std::unordered_map<int, std::vector<int>> valueToIndices;
@@ -598,6 +615,30 @@ void DlgProductSet::cbox_DOhongdeng_checked(bool ischecked)
 	}
 }
 
+void DlgProductSet::btn_setDIjiaodaitiewan_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_setDIjiaodaitiewan->setText(value);
+		setConfig.jiaodaitiewanIN = value.toInt();
+		ControlLines::jiaodaitiewanIn = static_cast<int>(value.toDouble());
+		auto indicesDI = DIFindAllDuplicateIndices();
+		setDIErrorInfo(indicesDI);
+		auto indicesDO = DOFindAllDuplicateIndices();
+		setDOErrorInfo(indicesDO);
+	}
+}
+
 void DlgProductSet::btn_setDOtifeixinhao_clicked()
 {
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
@@ -613,7 +654,7 @@ void DlgProductSet::btn_setDOtifeixinhao_clicked()
 			return;
 		}
 		ui->btn_setDOtifeixinhao->setText(value);
-		setConfig.tifeixinhaoOUT = value.toDouble();
+		setConfig.tifeixinhaoOUT = value.toInt();
 		ControlLines::tifeixinhaoOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
@@ -637,7 +678,7 @@ void DlgProductSet::btn_setDObaojing_clicked()
 			return;
 		}
 		ui->btn_setDObaojing->setText(value);
-		setConfig.baojingOUT = value.toDouble();
+		setConfig.baojingOUT = value.toInt();
 		ControlLines::baojingOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
@@ -661,7 +702,7 @@ void DlgProductSet::btn_setDOlvdeng_clicked()
 			return;
 		}
 		ui->btn_setDOlvdeng->setText(value);
-		setConfig.lvdengOUT = value.toDouble();
+		setConfig.lvdengOUT = value.toInt();
 		ControlLines::lvdengOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
@@ -685,7 +726,7 @@ void DlgProductSet::btn_setDOhongdeng_clicked()
 			return;
 		}
 		ui->btn_setDOhongdeng->setText(value);
-		setConfig.hongdengOUT = value.toDouble();
+		setConfig.hongdengOUT = value.toInt();
 		ControlLines::hongdengOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
@@ -781,6 +822,25 @@ void DlgProductSet::btn_tifeijishu_clicked()
 		}
 		ui->btn_tifeijishu->setText(value);
 		setConfig.tifeijishu = value.toDouble();
+	}
+}
+
+void DlgProductSet::btn_liangpinjishu_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_liangpinjishu->setText(value);
+		setConfig.liangpinjishu = value.toDouble();
 	}
 }
 

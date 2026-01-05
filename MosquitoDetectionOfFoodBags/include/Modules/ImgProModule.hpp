@@ -9,7 +9,7 @@ class ImgProModule
 {
 	Q_OBJECT
 private:
-	static constexpr int  imgProSignalWorkThreadNum = 2;
+	static constexpr int  imgProSignalWorkThreadNum = 1;
 public:
 	bool build() override;
 	void destroy() override;
