@@ -163,7 +163,6 @@ void MDOFoodBags::getCameraStateAndUpdateUi()
 	auto& cameraModules = Modules::getInstance().cameraModule;
 	auto errors = cameraModules.getBuildResults();
 	updateCameraLabelState(1, true);
-	updateCameraLabelState(2, true);
 
 	for (const auto& error : errors)
 	{
@@ -326,14 +325,6 @@ void MDOFoodBags::onCameraDisplay(QPixmap image, size_t index, bool isbad, bool 
 		if (isbad)
 		{
 			processLastImageNg(image);
-
-			rw::rqw::WarningInfo WarningInfo;
-			WarningInfo.message = "检测到缺陷进行一次贴标!";
-			WarningInfo.type = rw::rqw::WarningType::Warning;
-			QMetaObject::invokeMethod(this,
-				[this, WarningInfo]() {
-					addWarning(WarningInfo);
-				});
 		}
 	}
 }

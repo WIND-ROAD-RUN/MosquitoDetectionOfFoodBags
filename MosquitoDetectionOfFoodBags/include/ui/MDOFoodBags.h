@@ -74,6 +74,8 @@ public:
 	static std::shared_ptr<const QImage> getModelQImage();
 	static void setIsModelImageLoaded(bool isLoaded);
 	static bool getIsModelImageLoaded();
+
+	static void addWarning(const rw::rqw::WarningInfo& message, bool updateTimestampIfSame = true, int redDuration = 5000, int time = 10000);
 private:
 	static std::shared_ptr<const HalconCpp::HObject> modelHImage;
 	static std::shared_ptr<const QImage> modelQImage;
@@ -95,8 +97,6 @@ private:
 	rw::rqw::ClickableLabel* getNgLabelByIndex(size_t index);
 
 	void applyLightState();
-
-	void addWarning(const rw::rqw::WarningInfo& message, bool updateTimestampIfSame = true, int redDuration = 5000, int time = 10000);
 
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg1 = nullptr;

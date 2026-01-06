@@ -82,6 +82,11 @@ bool MotionControllerModule::build_zmotion()
 		bool isSetdangqianweizhi = zmotion->setModbus(2, 1, 0);
 		isSetdangqianweizhi = zmotion->setModbus(6, 1, 0);
 
+		if (!isLocationZero || !isAxisType || !isAxisPulse || !isSetXiangJiChuFaChangDu || !isSetdangqianweizhi)
+		{
+			qDebug() << "ZMotion初始化失败";
+		}
+
 		bool isOK = true;
 		for (int i = 0; i < 13; i++)
 		{

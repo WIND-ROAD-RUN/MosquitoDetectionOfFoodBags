@@ -36,8 +36,6 @@ bool ConditionMonitorModule::build()
 	cfg.intervalMs = 200;
 	conditionMonitor = std::make_unique<rw::conMon::ConditionMonitor>(cfg);
 
-	rw::conMon::ConditionItem baseItem;
-
 #pragma region conditionCamera
 	rw::conMon::ConditionItem conditionCamera;
 	conditionCamera.info.id = WarningId::cameraConnectionLost;
@@ -48,10 +46,7 @@ bool ConditionMonitorModule::build()
 			auto& cameraModule = Modules::getInstance().cameraModule;
 			if (cameraModule.camera1)
 			{
-				if (!cameraModule.camera1->getConnectState())
-				{
-					return false;
-				}
+				return !cameraModule.camera1->getConnectState();
 			}
 			return true;
 		};

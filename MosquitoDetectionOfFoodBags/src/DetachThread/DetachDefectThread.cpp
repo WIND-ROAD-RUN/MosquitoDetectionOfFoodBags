@@ -1,6 +1,7 @@
 #include "DetachDefectThread.h"
 #include <chrono>
 #include "Modules.hpp"
+#include "MDOFoodBags.h"
 
 DetachDefectThreadMDOFoodBags::DetachDefectThreadMDOFoodBags(QObject* parent)
 {
@@ -49,11 +50,20 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 		{
 			queue->tryPopTop(nowLocation);
 			auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-			auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
 
 			if (mainWindowConfig.istifei)
 			{
-				auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
+				++defectCount;
+				//auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
+				//qDebug() << "贴标信号输出: " << isSuccess;
+				rw::rqw::WarningInfo WarningInfo;
+				WarningInfo.message = QString("检测到缺陷!第%1次贴标!").arg(defectCount);
+				WarningInfo.type = rw::rqw::WarningType::Warning;
+				QMetaObject::invokeMethod(this,
+					[this, WarningInfo]() {
+						MDOFoodBags::addWarning(WarningInfo);
+						qDebug() << "添加一次缺陷贴标警告";
+					});
 			}
 		}
 	}
