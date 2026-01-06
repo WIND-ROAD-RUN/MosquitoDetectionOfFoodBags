@@ -57,7 +57,8 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 				//auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
 				//qDebug() << "贴标信号输出: " << isSuccess;
 				rw::rqw::WarningInfo WarningInfo;
-				WarningInfo.message = QString("检测到缺陷!第%1次贴标!").arg(defectCount);
+				WarningInfo.warningId = defectCount;
+				WarningInfo.message = QString("检测到缺陷");
 				WarningInfo.type = rw::rqw::WarningType::Warning;
 				QMetaObject::invokeMethod(this,
 					[this, WarningInfo]() {
