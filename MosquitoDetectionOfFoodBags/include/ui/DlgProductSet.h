@@ -77,10 +77,10 @@ private slots:
 	void cbox_debugMode_checked(bool ischecked);
 
 	void cbox_DOtifeixinhao_checked(bool ischecked);
-
 	void cbox_DObaojing_checked(bool ischecked);
 	void cbox_DOlvdeng_checked(bool ischecked);
 	void cbox_DOhongdeng_checked(bool ischecked);
+	void cbox_DOtiebiaojifuwei_checked(bool ischecked);
 
 	// 设置IO
 	void btn_setDIjiaodaitiewan_clicked();
@@ -89,6 +89,7 @@ private slots:
 	void btn_setDObaojing_clicked();
 	void btn_setDOlvdeng_clicked();
 	void btn_setDOhongdeng_clicked();
+	void btn_setDOtiebiaojifuwei_clicked();
 
 	void tabWidget_indexChanged(int index);
 

@@ -24,6 +24,7 @@ struct MatProcess {
 	double Area;
 	double MeanThreshold;
 	double location;
+	int classid{0};
 };
 // 数据处理完以后的图片存储结构体
 struct MatProduct {
@@ -84,7 +85,7 @@ private:
 	// 从图像中提取指定区域,确保最小尺寸为100像素
 	QImage extractDefectRegion(const QImage& sourceImage,
 		const MatProcess& result,
-		int minSize = 100);
+		int minSize = 30);
 
 	void drawProcessingTime(QImage& image,
 		double timeMs,

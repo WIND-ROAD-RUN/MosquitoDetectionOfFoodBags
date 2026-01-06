@@ -64,6 +64,7 @@ private slots:
 	void pbtn_baoguang_clicked();
 	void rbtn_istifei_checked(bool checked);
 	void rbtn_isbaojing_checked(bool checked);
+	void btn_tiebiaojifuwei_clicked();
 signals:
 	void shibiekuangChanged();
 	

@@ -54,8 +54,7 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 			if (mainWindowConfig.istifei)
 			{
 				++defectCount;
-				//auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
-				//qDebug() << "贴标信号输出: " << isSuccess;
+				auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
 				rw::rqw::WarningInfo WarningInfo;
 				WarningInfo.warningId = defectCount;
 				WarningInfo.message = QString("检测到缺陷");
@@ -63,7 +62,6 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 				QMetaObject::invokeMethod(this,
 					[this, WarningInfo]() {
 						MDOFoodBags::addWarning(WarningInfo);
-						qDebug() << "添加一次缺陷贴标警告";
 					});
 			}
 		}

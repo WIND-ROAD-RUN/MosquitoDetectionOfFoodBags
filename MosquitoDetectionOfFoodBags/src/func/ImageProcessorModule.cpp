@@ -93,7 +93,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	QVector< MatProcess> _matProcess;
 	MatProduct _matProduct;
 	halconPRocess(frame.image, _matProcess, _matProduct);
-	
+
 	double minArea = 0;
 	double allMinArea = 0;
 
@@ -103,7 +103,7 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
 	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea, _matProduct);
-	
+
 	for (const auto& item : _matProcess)
 	{
 		auto tempLoc = item.location;
@@ -159,6 +159,15 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	HalconCpp::HTuple  hv_Row, hv_Column, hv_shapetransRow1, hv_shapetransColumn1;
 	HalconCpp::HTuple  hv_shapetransRow2, hv_shapetransColumn2, hv_Index;
 	HalconCpp::HTuple  hv_a, hv_shangxiasuojin, hv_Mean, hv_Deviation, R1, R2, C1, C2;
+
+	HalconCpp::HObject ho_image1, ho_image2, ho_ImageSub1, ho_ImageSub2, ho_ImageReduced1, ho_ImageReduced2;
+	HalconCpp::HObject ho_Regions1, ho_Regions2;
+
+	HalconCpp::HTuple  hv_Row1, hv_Column1, hv_Row2, hv_Column2;
+
+
+
+
 	double xiangsudangliang = Modules::getInstance().configManagerModule.setConfig.xiangSuDangLiang;
 
 	// 需要认为设置的参数现在硬编码了
@@ -168,7 +177,7 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	hv_youxianwei = Modules::getInstance().configManagerModule.setConfig.youXianWei;
 	hv_shangxiasuojin = Modules::getInstance().configManagerModule.setConfig.shangxiasuojin;
 
-	hv_huidumin = 100;
+	hv_huidumin = Modules::getInstance().configManagerModule.setConfig.wenchongzuixiaohuiduchazhi;
 
 
 	// 当前图片
@@ -196,11 +205,58 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 	{
 		return;
 	}
+	//拆分两个不一样的灰度计算方法进行差分
 
-	Intensity(ho_SelectedRegions, ho_ImageMean, &hv_Mean, &hv_Deviation);
-	double mean = hv_Mean;
+	CopyImage(ho_ImageMean, &ho_image1);
+	CopyImage(ho_ImageMean, &ho_image2);
+	SmallestRectangle1(ho_SelectedRegions, &hv_Row1, &hv_Column1, &hv_Row2, &hv_Column2);
 
-	GenImageProto(ho_Image, &ho_ImageCleared, hv_Mean);
+
+	double quyukuaishu = 3;
+
+	double kuandu = hv_Column2 - hv_Column1;
+	double dankuandu = kuandu / quyukuaishu;
+	dankuandu += 1;
+
+	{
+		HalconCpp::HTuple end_val39 = quyukuaishu;
+		HalconCpp::HTuple step_val39 = 1;
+		HalconCpp::HTuple hv_Index1;
+		for (hv_Index1 = 0; hv_Index1.Continue(end_val39, step_val39); hv_Index1 += step_val39)
+		{
+			HalconCpp::HObject ho_Rectangle1;
+
+			GenRectangle1(&ho_Rectangle1, hv_Row1, (hv_Column1 + (hv_Index1 * dankuandu)) - 1,
+				hv_Row2, (hv_Column1 + (dankuandu * (hv_Index1 + 1))) + 1);
+			Intensity(ho_Rectangle1, ho_ImageMean, &hv_Mean, &hv_Deviation);
+			OverpaintRegion(ho_image1, ho_Rectangle1, hv_Mean, "fill");
+
+		}
+	}
+	quyukuaishu = 10;
+	kuandu = hv_Column2 - hv_Column1;
+	dankuandu = kuandu / quyukuaishu;
+	dankuandu += 1;
+
+	{
+		HalconCpp::HTuple end_val51 = quyukuaishu;
+		HalconCpp::HTuple step_val51 = 1; HalconCpp::HTuple hv_Index1;
+		for (hv_Index1 = 0; hv_Index1.Continue(end_val51, step_val51); hv_Index1 += step_val51)
+		{
+			HalconCpp::HObject ho_Rectangle1;
+
+			GenRectangle1(&ho_Rectangle1, hv_Row1, (hv_Column1 + (hv_Index1 * dankuandu)) - 1,
+				hv_Row2, (hv_Column1 + (dankuandu * (hv_Index1 + 1))) + 1);
+			Intensity(ho_Rectangle1, ho_ImageMean, &hv_Mean, &hv_Deviation);
+			OverpaintRegion(ho_image2, ho_Rectangle1, hv_Mean, "fill");
+
+		}
+	}
+
+
+
+
+
 
 	ShapeTrans(ho_SelectedRegions, &ho_RegionTrans1, "rectangle1");
 	SmallestRectangle1(ho_RegionTrans1, &R1, &hv_zuoxianwei, &R2, &hv_youxianwei);
@@ -226,9 +282,9 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 
 
 
-
-
-	SubImage(ho_ImageCleared, ho_ImageMean, &ho_ImageSub, 10, 0);
+	SubImage(ho_image1, ho_ImageMean, &ho_ImageSub1, 10, 0);
+	SubImage(ho_image2, ho_ImageMean, &ho_ImageSub2, 10, 0);
+	ho_ImageSub = ho_ImageSub1;
 
 	if (hv_Height < hv_shangxiasuojin)
 	{
@@ -240,48 +296,177 @@ void ImageProcessor::halconPRocess(cv::Mat image, QVector<MatProcess>& processRe
 
 
 
-
-
-
 	double z = hv_zuoxianwei.TupleLength();
 	double y = hv_youxianwei.TupleLength();
 
 	GenRectangle1(&ho_Rectangle, hv_shangxiasuojin, hv_zuoxianwei, hv_Height - hv_shangxiasuojin, hv_youxianwei);
-	ReduceDomain(ho_ImageSub, ho_Rectangle, &ho_ImageReduced);
 
-	Threshold(ho_ImageReduced, &ho_Regions, hv_huidumin, 255);
-	HalconCpp::Connection(ho_Regions, &ho_Regions);
-	AreaCenter(ho_Regions, &hv_Area, &hv_Row, &hv_Column);
+	ReduceDomain(ho_ImageSub1, ho_Rectangle, &ho_ImageReduced1);
+	ReduceDomain(ho_ImageSub2, ho_Rectangle, &ho_ImageReduced2);
 
-	ShapeTrans(ho_Regions, &ho_RegionTrans, "rectangle1");
-	SmallestRectangle1(ho_RegionTrans, &hv_shapetransRow1, &hv_shapetransColumn1, &hv_shapetransRow2,
-		&hv_shapetransColumn2);
-	double we = hv_shapetransRow1.TupleLength();
-
-	if (0 != (int((hv_shapetransRow1.TupleLength()) > 0)))
+	//判断蚊虫
 	{
-		HalconCpp::HTuple end_val39 = (hv_shapetransRow1.TupleLength()) - 1;
-		HalconCpp::HTuple step_val39 = 1;
-		for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
+		
+
+		double zuixiaohuidu = Modules::getInstance().configManagerModule.setConfig.wenchongzuixiaohuiduchazhi;
+		double zuidahuidu = Modules::getInstance().configManagerModule.setConfig.wenchongzuidahuiduchazhi;
+
+		if (zuixiaohuidu > zuidahuidu)
 		{
-			double aaa = hv_shapetransRow1[hv_Index];
-			if (hv_shapetransRow1[hv_Index] > 0)
-			{
-				SelectObj(ho_Regions, &ho_ObjectSelected, hv_Index + 1);
-				Intensity(ho_ObjectSelected, ho_ImageSub, &hv_Mean, &hv_Deviation);
-				MatProcess result;
-				result.R1 = hv_shapetransRow1[hv_Index];
-				result.C1 = hv_shapetransColumn1[hv_Index];
-				result.R2 = hv_shapetransRow2[hv_Index];
-				result.C2 = hv_shapetransColumn2[hv_Index];
-				result.Area = hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang;
-				result.MeanThreshold = hv_Mean;
-				result.location = (result.R2 - result.R1) * xiangsudangliang;
+			zuixiaohuidu = 50;
+			zuidahuidu = 255;
 
-
-				processResults.append(result);
-			}
 		}
+		Threshold(ho_ImageReduced1, &ho_Regions1, zuixiaohuidu, zuidahuidu);
+
+		Threshold(ho_ImageReduced2, &ho_Regions2, zuixiaohuidu, zuidahuidu);
+
+		Intersection(ho_Regions1, ho_Regions2, &ho_Regions);
+
+
+
+		HalconCpp::Connection(ho_Regions, &ho_Regions);
+		AreaCenter(ho_Regions, &hv_Area, &hv_Row, &hv_Column);
+
+		ShapeTrans(ho_Regions, &ho_RegionTrans, "rectangle1");
+		SmallestRectangle1(ho_RegionTrans, &hv_shapetransRow1, &hv_shapetransColumn1, &hv_shapetransRow2,
+			&hv_shapetransColumn2);
+		double we = hv_shapetransRow1.TupleLength();
+		double are = zuixiaohuidu;
+
+		if (0 != (int((hv_shapetransRow1.TupleLength()) > 0)))
+		{
+			QVector<MatProcess> tempResults;
+
+			HalconCpp::HTuple end_val39 = (hv_shapetransRow1.TupleLength()) - 1;
+			HalconCpp::HTuple step_val39 = 1;
+			for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
+			{
+				if (hv_shapetransRow1[hv_Index] > 0)
+				{
+					SelectObj(ho_Regions, &ho_ObjectSelected, hv_Index + 1);
+					Intensity(ho_ObjectSelected, ho_ImageSub, &hv_Mean, &hv_Deviation);
+
+					MatProcess result;
+					result.R1 = hv_shapetransRow1[hv_Index];
+					result.C1 = hv_shapetransColumn1[hv_Index];
+					result.R2 = hv_shapetransRow2[hv_Index];
+					result.C2 = hv_shapetransColumn2[hv_Index];
+					result.Area = hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang;
+					result.MeanThreshold = hv_Mean;
+					result.location = (result.R2 - result.R1) * xiangsudangliang;
+
+					if (result.Area > Modules::getInstance().configManagerModule.setConfig.wenchongzuixiaomianji && result.Area < Modules::getInstance().configManagerModule.setConfig.wenchongzuidamianji)
+					{
+						result.classid = 0; // 蚊虫
+						tempResults.append(result);
+
+					}
+
+					else
+					{
+						result.classid = -1; // 未知瑕疵
+					}
+
+				}
+			}
+
+			// 仅保留最大的10个
+			if (tempResults.size() > 10)
+			{
+				std::sort(tempResults.begin(), tempResults.end(),
+					[](const MatProcess& a, const MatProcess& b) {
+						return a.Area > b.Area;
+					});
+				tempResults.resize(10);
+			}
+
+			processResults += tempResults;
+		}
+
+	}
+
+
+	//判断毛发
+	{
+	
+
+		double zuixiaohuidu = Modules::getInstance().configManagerModule.setConfig.maofazuixiaohuiduchazhi;
+		double zuidahuidu = Modules::getInstance().configManagerModule.setConfig.maofazuidahuiduchazhi;
+
+		if (zuixiaohuidu> zuidahuidu)
+		{
+			zuixiaohuidu = 50;
+			zuidahuidu = 255;
+
+		}
+		Threshold(ho_ImageReduced1, &ho_Regions1, zuixiaohuidu, zuidahuidu);
+
+		Threshold(ho_ImageReduced2, &ho_Regions2, zuixiaohuidu, zuidahuidu);
+
+		Intersection(ho_Regions1, ho_Regions2, &ho_Regions);
+
+
+
+		HalconCpp::Connection(ho_Regions, &ho_Regions);
+		AreaCenter(ho_Regions, &hv_Area, &hv_Row, &hv_Column);
+
+		ShapeTrans(ho_Regions, &ho_RegionTrans, "rectangle1");
+		SmallestRectangle1(ho_RegionTrans, &hv_shapetransRow1, &hv_shapetransColumn1, &hv_shapetransRow2,
+			&hv_shapetransColumn2);
+		double we = hv_shapetransRow1.TupleLength();
+		double are = zuixiaohuidu;
+
+		if (0 != (int((hv_shapetransRow1.TupleLength()) > 0)))
+		{
+			QVector<MatProcess> tempResults;
+
+			HalconCpp::HTuple end_val39 = (hv_shapetransRow1.TupleLength()) - 1;
+			HalconCpp::HTuple step_val39 = 1;
+			for (hv_Index = 0; hv_Index.Continue(end_val39, step_val39); hv_Index += step_val39)
+			{
+				if (hv_shapetransRow1[hv_Index] > 0)
+				{
+					SelectObj(ho_Regions, &ho_ObjectSelected, hv_Index + 1);
+					Intensity(ho_ObjectSelected, ho_ImageSub, &hv_Mean, &hv_Deviation);
+
+					MatProcess result;
+					result.R1 = hv_shapetransRow1[hv_Index];
+					result.C1 = hv_shapetransColumn1[hv_Index];
+					result.R2 = hv_shapetransRow2[hv_Index];
+					result.C2 = hv_shapetransColumn2[hv_Index];
+					result.Area = hv_Area[hv_Index] * xiangsudangliang * xiangsudangliang;
+					result.MeanThreshold = hv_Mean;
+					result.location = (result.R2 - result.R1) * xiangsudangliang;
+
+					if (result.Area > Modules::getInstance().configManagerModule.setConfig.maofazuixiaomianji && result.Area < Modules::getInstance().configManagerModule.setConfig.maofazuidamianji)
+					{
+						result.classid =1; // 蚊虫
+					 tempResults.append(result);
+
+					}
+
+					else
+					{
+						result.classid = -1; // 未知瑕疵
+					}
+
+				}
+			}
+
+			// 仅保留最大的10个
+			if (tempResults.size() > 10)
+			{
+				std::sort(tempResults.begin(), tempResults.end(),
+					[](const MatProcess& a, const MatProcess& b) {
+						return a.Area > b.Area;
+					});
+				tempResults.resize(10);
+			}
+
+			processResults += tempResults;
+		}
+
 	}
 }
 void ImageProcessor::drawSingleRectangleOnImage(QImage& image,
@@ -295,66 +480,88 @@ void ImageProcessor::drawSingleRectangleOnImage(QImage& image,
 		return;
 	}
 
-	// 创建 QPainter 对象用于在图像上绘制
 	QPainter painter(&image);
-
-	// 设置抗锯齿,使绘制的矩形边缘更平滑
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
-	// 设置画笔颜色和宽度
 	QPen pen(color);
 	pen.setWidth(penWidth);
 	painter.setPen(pen);
 
-	// Halcon 坐标系: R 表示 Row (行,对应 y 坐标), C 表示 Column (列,对应 x 坐标)
-	// R1, C1 是矩形左上角坐标
-	// R2, C2 是矩形右下角坐标
 	int x1 = static_cast<int>(result.C1);
 	int y1 = static_cast<int>(result.R1);
 	int x2 = static_cast<int>(result.C2);
 	int y2 = static_cast<int>(result.R2);
 
-	// 计算矩形的宽度和高度
+	// 确保坐标顺序正确
+	if (x1 > x2) std::swap(x1, x2);
+	if (y1 > y2) std::swap(y1, y2);
+
 	int width = x2 - x1;
 	int height = y2 - y1;
+	if (width <= 0 || height <= 0)
+	{
+		return;
+	}
 
-	// 绘制矩形框
-	painter.drawRect(x1, y1, width, height);
+	// 在中心点不变的前提下放大 20%
+	const double scale = 1;
+	int centerX = x1 + width / 2;
+	int centerY = y1 + height / 2;
 
-	// 绘制面积文本
+	int newWidth = static_cast<int>(std::round(width * scale));
+	int newHeight = static_cast<int>(std::round(height * scale));
+
+	int drawX1 = centerX - newWidth / 2;
+	int drawY1 = centerY - newHeight / 2;
+	int drawX2 = drawX1 + newWidth;
+	int drawY2 = drawY1 + newHeight;
+
+	// 边界裁剪，避免画出图外
+	drawX1 = (drawX1 < 0) ? 0 : drawX1;
+	drawY1 = (drawY1 < 0) ? 0 : drawY1;
+
+	const int maxX = image.width() - 1;
+	const int maxY = image.height() - 1;
+
+	drawX2 = (drawX2 > maxX) ? maxX : drawX2;
+	drawY2 = (drawY2 > maxY) ? maxY : drawY2;
+
+	int drawW = drawX2 - drawX1;
+	int drawH = drawY2 - drawY1;
+	if (drawW <= 0 || drawH <= 0)
+	{
+		return;
+	}
+
+	// 绘制放大后的矩形框
+	painter.drawRect(drawX1, drawY1, drawW, drawH);
+
+	// 绘制面积文本（使用放大后的框来居中计算）
 	QFont font = painter.font();
-	font.setPointSize(30);  // 字体大小
-	font.setBold(true);     // 加粗
+	font.setPointSize(30);
+	font.setBold(true);
 	painter.setFont(font);
 
-	// 准备文本内容
 	QString areaText = QString("%1 mm²").arg(result.Area, 0, 'f', 2);
 
-	// 计算文本位置(矩形左上角上方)
 	QFontMetrics metrics(font);
 	QRect textRect = metrics.boundingRect(areaText);
 
-	// 将文本放置在矩形上方,居中对齐
-	int textX = x1 + (width - textRect.width()) / 2;
-	int textY = y1 - 10;  // 矩形上方10像素处
+	int textX = drawX1 + (drawW - textRect.width()) / 2;
+	int textY = drawY1 - 10;
 
-	// 如果文本会超出图像顶部,则放在矩形内部顶部
 	if (textY - textRect.height() < 0)
 	{
-		textY = y1 + textRect.height() + 10;
+		textY = drawY1 + textRect.height() + 10;
 	}
 
 	textRect.moveTo(textX, textY - textRect.height());
-	textRect.adjust(-5, -5, 5, 5);  // 扩展矩形边距
+	textRect.adjust(-5, -5, 5, 5);
 
-	// 绘制半透明背景
 	painter.fillRect(textRect, QColor(0, 0, 0, 180));
-
-	// 绘制文本(白色)
 	painter.setPen(Qt::white);
 	painter.drawText(textRect, Qt::AlignCenter, areaText);
 
-	// 结束绘制
 	painter.end();
 }
 void ImageProcessor::drawRectanglesOnImage(QImage& image,
@@ -529,13 +736,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 	// 说明有瑕疵
 	if (processResults.size() > 0)
 	{
-		// 计算总面积
-		double totalArea = 0.0;
-		for (const auto& result : processResults)
-		{
-			totalArea += result.Area;
-		}
-
+		
 		// 判断是否为坏袋子:
 		// 1. 总面积超过最小总面积阈值
 		// 2. 或者存在单个面积超过最小面积阈值
@@ -544,9 +745,8 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 		auto paintimage = image.copy();
 		for (const auto& result : processResults)
 		{
-			if (result.Area >= minArea)
-			{
-				drawSingleRectangleOnImage(image, result, Qt::red, 3);
+			
+				drawSingleRectangleOnImage(image, result, Qt::red, 1);
 
 				// 提取缺陷区域图像
 				QImage defectRegion = extractDefectRegion(paintimage, result);
@@ -555,7 +755,7 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 				{
 
 					// 绘制面积和灰度值在图片上
-					drawDefectInfo(defectRegion, result.Area, result.MeanThreshold);
+					//drawDefectInfo(defectRegion, result.Area, result.MeanThreshold);
 
 
 
@@ -569,22 +769,11 @@ bool ImageProcessor::checkDefectAndDrawOnImage(
 				}
 
 				isbad = true;
-			}
-			else
-			{
-				drawSingleRectangleOnImage(image, result, Qt::green, 3);
-			}
+			
+			
 		}
 
-		// 检查总面积是否超过阈值
-		if (totalArea >= allMinArea)
-		{
-			isbad = true;
-
-			// 在图像上绘制检测到的矩形区域
-			// 红色表示缺陷区域，线宽为3像素
-			drawRectanglesOnImage(image, processResults, Qt::red, 3);
-		}
+		
 	}
 
 	// 绘制限位线
@@ -677,17 +866,7 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 
 void ImageProcessor::save_image(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex)
 {
-	auto& isTakePictures = Modules::getInstance().runtimeInfoModule.isTakePictures;
 
-	if (!isTakePictures)
-	{
-		return;
-	}
-
-	if ((imageProcessingModuleIndex == 1))
-	{
-		save_image_work(imageInfo, image, imageIndex);
-	}
 }
 
 void ImageProcessor::save_image_work(rw::rqw::ImageInfo& imageInfo, const QImage& image, int imageIndex)
@@ -900,8 +1079,8 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 	}
 
 	// 计算原始区域的宽度和高度
-	int width = x2 - x1;
-	int height = y2 - y1;
+	int defectWidth = x2 - x1;
+	int defectHeight = y2 - y1;
 
 	// 获取图像尺寸
 	int imageWidth = sourceImage.width();
@@ -912,10 +1091,10 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 	int centerY = (y1 + y2) / 2;
 
 	// 确定正方形的边长(取宽高中的较大值,并确保不小于minSize)
-	int sideLength = width > height ? width : height;
+	int sideLength = defectWidth > defectHeight ? defectWidth : defectHeight;
 	sideLength = sideLength > minSize ? sideLength : minSize;
 
-	// 以中心点为基准计算正方形的坐标
+	// 以中心点为基准计算正方形的坐标(注意：这里会覆盖 x1/y1/x2/y2，用于裁剪区域)
 	int halfSide = sideLength / 2;
 	x1 = centerX - halfSide;
 	x2 = centerX + halfSide;
@@ -949,21 +1128,236 @@ QImage ImageProcessor::extractDefectRegion(const QImage& sourceImage,
 	}
 
 	// 重新计算宽高
-	width = x2 - x1;
-	height = y2 - y1;
+	int cropWidth = x2 - x1;
+	int cropHeight = y2 - y1;
 
 	// 确保宽高为正数
-	if (width <= 0 || height <= 0)
+	if (cropWidth <= 0 || cropHeight <= 0)
 	{
 		return QImage();
 	}
 
 	// 提取图像区域
-	QRect extractRect(x1, y1, width, height);
+	QRect extractRect(x1, y1, cropWidth, cropHeight);
 	QImage extractedImage = sourceImage.copy(extractRect);
+	if (extractedImage.isNull())
+	{
+		return QImage();
+	}
+
+	// ============================
+	// 在裁剪图上绘制“原始瑕疵区域”矩形 + 不遮挡文字(字号自适应)
+	// ============================
+	QRect defectRectGlobal(static_cast<int>(result.C1),
+		static_cast<int>(result.R1),
+		static_cast<int>(result.C2 - result.C1),
+		static_cast<int>(result.R2 - result.R1));
+	defectRectGlobal = defectRectGlobal.normalized();
+
+	QRect defectRectLocal(defectRectGlobal.x() - extractRect.x(),
+		defectRectGlobal.y() - extractRect.y(),
+		defectRectGlobal.width(),
+		defectRectGlobal.height());
+
+	defectRectLocal = defectRectLocal.intersected(QRect(0, 0, extractedImage.width(), extractedImage.height()));
+	const double scale = 1.5;
+
+	int cx = defectRectLocal.x() + defectRectLocal.width() / 2;
+	int cy = defectRectLocal.y() + defectRectLocal.height() / 2;
+
+	int newW = static_cast<int>(std::round(defectRectLocal.width() * scale));
+	int newH = static_cast<int>(std::round(defectRectLocal.height() * scale));
+
+	int nx1 = cx - newW / 2;
+	int ny1 = cy - newH / 2;
+	int nx2 = nx1 + newW;
+	int ny2 = ny1 + newH;
+
+	// 边界裁剪（不使用 std::min/std::max）
+	nx1 = (nx1 < 0) ? 0 : nx1;
+	ny1 = (ny1 < 0) ? 0 : ny1;
+
+	const int maxX = extractedImage.width() - 1;
+	const int maxY = extractedImage.height() - 1;
+
+	nx2 = (nx2 > maxX) ? maxX : nx2;
+	ny2 = (ny2 > maxY) ? maxY : ny2;
+
+	int nw = nx2 - nx1;
+	int nh = ny2 - ny1;
+
+	if (nw > 0 && nh > 0)
+	{
+		defectRectLocal = QRect(nx1, ny1, nw, nh);
+	}
+	if (!defectRectLocal.isEmpty())
+	{
+		// 文字内容（包含类型）
+		QString defectTypeText;
+		if (result.classid == 0)
+		{
+			defectTypeText = "蚊虫";
+		}
+		else if (result.classid == 1)
+		{
+			defectTypeText = "毛发";
+		}
+		else
+		{
+			defectTypeText = "未知";
+		}
+
+		QString infoText = QString("%1  A:%2  G:%3")
+			.arg(defectTypeText)
+			.arg(result.Area, 0, 'f', 2)
+			.arg(result.MeanThreshold, 0, 'f', 2);
+
+		// 字号自适应：按“短边”比例缩放，并夹紧范围
+		int minSide = extractedImage.width() < extractedImage.height() ? extractedImage.width() : extractedImage.height();
+		int fontSize = static_cast<int>(std::round(minSide * 0.10)); // 10%短边
+		if (fontSize < 10) fontSize = 10;
+		if (fontSize > 28) fontSize = 28;
+
+		QFont font;
+		font.setPointSize(fontSize);
+		font.setBold(true);
+
+		// 先用 metrics 计算文字区域尺寸
+		QFontMetrics metrics(font);
+		QRect textRect = metrics.boundingRect(infoText);
+		const int pad = 6;
+		textRect.adjust(-pad, -pad, pad, pad);
+
+		// 先在原图上画框
+	/*	{
+			
+
+			
+			QPainter painter(&extractedImage);
+			painter.setRenderHint(QPainter::Antialiasing, true);
+
+			QPen pen(Qt::red);
+			pen.setWidth(2);
+			painter.setPen(pen);
+			painter.setBrush(Qt::NoBrush);
+			painter.drawRect(defectRectLocal);
+
+			painter.end();
+		}*/
+
+		const QRect imgRect(0, 0, extractedImage.width(), extractedImage.height());
+
+		// 候选位置：上方(优先) -> 下方 -> 右侧 -> 左侧
+		QRect candidateTop(defectRectLocal.center().x() - textRect.width() / 2,
+			defectRectLocal.top() - textRect.height() - 4,
+			textRect.width(),
+			textRect.height());
+
+		QRect candidateBottom(defectRectLocal.center().x() - textRect.width() / 2,
+			defectRectLocal.bottom() + 4,
+			textRect.width(),
+			textRect.height());
+
+		QRect candidateRight(defectRectLocal.right() + 4,
+			defectRectLocal.center().y() - textRect.height() / 2,
+			textRect.width(),
+			textRect.height());
+
+		QRect candidateLeft(defectRectLocal.left() - textRect.width() - 4,
+			defectRectLocal.center().y() - textRect.height() / 2,
+			textRect.width(),
+			textRect.height());
+
+		auto fits = [&](const QRect& r) {
+			return imgRect.contains(r);
+			};
+
+		QRect finalRect;
+		bool needExpandCanvas = false;
+
+		if (fits(candidateTop)) {
+			finalRect = candidateTop;
+		}
+		else if (fits(candidateBottom)) {
+			finalRect = candidateBottom;
+		}
+		else if (fits(candidateRight)) {
+			finalRect = candidateRight;
+		}
+		else if (fits(candidateLeft)) {
+			finalRect = candidateLeft;
+		}
+		else {
+			needExpandCanvas = true;
+		}
+
+		if (!needExpandCanvas)
+		{
+			QPainter painter(&extractedImage);
+			painter.setRenderHint(QPainter::Antialiasing, true);
+			painter.setFont(font);
+
+			painter.fillRect(finalRect, QColor(0, 0, 0, 140));
+			painter.setPen(Qt::white);
+			painter.drawText(finalRect, Qt::AlignCenter, infoText);
+
+			painter.end();
+
+			return extractedImage;
+		}
+
+		// ============================
+		// 四周都放不下：扩展画布，确保文字可见且不遮挡瑕疵
+		// 默认优先扩展顶部；如仍不够则扩展底部
+		// ============================
+		const int gap = 4;
+		int extraTop = textRect.height() + gap * 2;
+		int extraBottom = 0;
+		int extraLeft = 0;
+		int extraRight = 0;
+
+		// 如果文字宽度比图还宽，则左右也扩一点，保证文字完整显示
+		if (textRect.width() + gap * 2 > extractedImage.width())
+		{
+			int needW = (textRect.width() + gap * 2) - extractedImage.width();
+			extraLeft = needW / 2;
+			extraRight = needW - extraLeft;
+		}
+
+		QImage expanded(extractedImage.width() + extraLeft + extraRight,
+			extractedImage.height() + extraTop + extraBottom,
+			extractedImage.format());
+		expanded.fill(Qt::black);
+
+		{
+			QPainter painter(&expanded);
+			painter.setRenderHint(QPainter::Antialiasing, true);
+
+			// 把原图贴到新画布
+			painter.drawImage(extraLeft, extraTop, extractedImage);
+
+			// 文字放到新增顶部区域，居中
+			QRect topBandRect(extraLeft + (extractedImage.width() - textRect.width()) / 2,
+				(extraTop - textRect.height()) / 2,
+				textRect.width(),
+				textRect.height());
+
+			painter.setFont(font);
+			painter.fillRect(topBandRect, QColor(0, 0, 0, 140));
+			painter.setPen(Qt::white);
+			painter.drawText(topBandRect, Qt::AlignCenter, infoText);
+
+			painter.end();
+		}
+
+		return expanded;
+	}
 
 	return extractedImage;
 }
+
+
+
 
 void ImageProcessor::drawProcessingTime(QImage& image, double timeMs, const QColor& backgroundColor,
 	const QColor& textColor)

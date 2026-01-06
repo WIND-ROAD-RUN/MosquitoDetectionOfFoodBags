@@ -43,6 +43,7 @@ public: // 输出
 	static size_t baojingOut;
 	static size_t lvdengOut;
 	static size_t hongdengOut;
+	static size_t tiebiaojifuweiOut;
 };
 
 inline struct GlobalPath
@@ -58,5 +59,5 @@ public:
 	QString modelPath = modelRootPath + R"(MDOFoodBags.engine)";
 public:
 	QString imageSaveRootPath = projectHome + R"(SavedImages\)";
-	QString testImgDirPath = R"(D:\zfkjDevelopment\ImgStorage\MDOFoodBags)";
+	QString testImgDirPath = R"(D:\ImgStorage\MDOFoodBags)";
 }globalPath;

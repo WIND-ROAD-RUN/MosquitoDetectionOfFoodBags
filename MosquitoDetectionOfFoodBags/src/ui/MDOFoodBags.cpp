@@ -76,6 +76,7 @@ void MDOFoodBags::build_connect()
 	connect(ui->pbtn_baoguang, &QPushButton::clicked, this, &MDOFoodBags::pbtn_baoguang_clicked);
 	connect(ui->rbtn_istifei, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_istifei_checked);
 	connect(ui->rbtn_isbaojing, &QRadioButton::toggled, this, &MDOFoodBags::rbtn_isbaojing_checked);
+	connect(ui->btn_tiebiaojifuwei, &QPushButton::clicked, this, &MDOFoodBags::btn_tiebiaojifuwei_clicked);
 
 
 	// 连接显示标题
@@ -549,6 +550,15 @@ void MDOFoodBags::rbtn_isbaojing_checked(bool checked)
 	}
 
 	applyLightState();
+}
+
+void MDOFoodBags::btn_tiebiaojifuwei_clicked()
+{
+	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+	if (zmotion)
+	{
+		zmotion->SetIOOut(1,ControlLines::tiebiaojifuweiOut, true,100);
+	}
 }
 
 void MDOFoodBags::setModelHImage(const HalconCpp::HObject& img)

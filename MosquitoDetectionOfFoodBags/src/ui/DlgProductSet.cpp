@@ -77,6 +77,7 @@ void DlgProductSet::read_config()
 	ui->btn_setDObaojing->setText(QString::number(setConfig.baojingOUT));
 	ui->btn_setDOlvdeng->setText(QString::number(setConfig.lvdengOUT));
 	ui->btn_setDOhongdeng->setText(QString::number(setConfig.hongdengOUT));
+	ui->btn_setDOtiebiaojifuwei->setText(QString::number(setConfig.tiebiaojifuweiOUT));
 
 	// 默认显示第一个
 	ui->tabWidget->setCurrentIndex(0);
@@ -157,6 +158,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::cbox_DOlvdeng_checked);
 	QObject::connect(ui->cbox_DOhongdeng, &QCheckBox::clicked,
 		this, &DlgProductSet::cbox_DOhongdeng_checked);
+	QObject::connect(ui->cbox_DOtiebiaojifuwei, &QCheckBox::clicked,
+		this, &DlgProductSet::cbox_DOtiebiaojifuwei_checked);
 
 	// 设置IO
 	QObject::connect(ui->btn_setDIjiaodaitiewan, &QPushButton::clicked,
@@ -169,6 +172,8 @@ void DlgProductSet::build_connect()
 		this, &DlgProductSet::btn_setDOlvdeng_clicked);
 	QObject::connect(ui->btn_setDOhongdeng, &QPushButton::clicked,
 		this, &DlgProductSet::btn_setDOhongdeng_clicked);
+	QObject::connect(ui->btn_setDOtiebiaojifuwei, &QPushButton::clicked,
+		this, &DlgProductSet::btn_setDOtiebiaojifuwei_clicked);
 
 	// 参数设置
 	QObject::connect(ui->btn_wenchongzuidahuiduchazhi, &QPushButton::clicked,
@@ -222,6 +227,7 @@ void DlgProductSet::updateControlLines()
 	ControlLines::baojingOut = setConfig.baojingOUT;
 	ControlLines::lvdengOut = setConfig.lvdengOUT;
 	ControlLines::hongdengOut = setConfig.hongdengOUT;
+	ControlLines::tiebiaojifuweiOut = setConfig.tiebiaojifuweiOUT;
 }
 
 void DlgProductSet::initDOCheckItems()
@@ -231,7 +237,8 @@ void DlgProductSet::initDOCheckItems()
 		{ &ControlLines::tifeixinhaoOut, ui->cbox_DOtifeixinhao },
 		{ &ControlLines::baojingOut, ui->cbox_DObaojing },
 		{&ControlLines::lvdengOut,ui->cbox_DOlvdeng},
-		{&ControlLines::hongdengOut,ui->cbox_DOhongdeng}
+		{&ControlLines::hongdengOut,ui->cbox_DOhongdeng},
+		{&ControlLines::tiebiaojifuweiOut,ui->cbox_DOtiebiaojifuwei}
 	};
 }
 
@@ -250,7 +257,8 @@ std::vector<std::vector<int>> DlgProductSet::DOFindAllDuplicateIndices()
 		setConfig.tifeixinhaoOUT,
 		setConfig.baojingOUT,
 		setConfig.lvdengOUT,
-		setConfig.hongdengOUT
+		setConfig.hongdengOUT,
+		setConfig.tiebiaojifuweiOUT
 	};
 
 	std::unordered_map<int, std::vector<int>> valueToIndices;
@@ -285,7 +293,7 @@ void DlgProductSet::setDOErrorInfo(const std::vector<std::vector<int>>& index)
 	ui->lb_DObaojing->clear();
 	ui->lb_DOlvdeng->clear();
 	ui->lb_DOhongdeng->clear();
-
+	ui->lb_DOtiebiaojifuwei->clear();
 
 	for (const auto& classic : index)
 	{
@@ -312,6 +320,9 @@ void DlgProductSet::setDOErrorInfo(int index)
 		break;
 	case 3:
 		ui->lb_DOhongdeng->setText(text);
+		break;
+	case 4:
+		ui->lb_DOtiebiaojifuwei->setText(text);
 		break;
 	default:
 		break;
@@ -563,11 +574,13 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 		ui->cbox_DObaojing->setChecked(false);
 		ui->cbox_DOlvdeng->setChecked(false);
 		ui->cbox_DOhongdeng->setChecked(false);
+		ui->cbox_DOtiebiaojifuwei->setChecked(false);
 
 		ui->cbox_DOtifeixinhao->setEnabled(true);
 		ui->cbox_DObaojing->setEnabled(true);
 		ui->cbox_DOlvdeng->setEnabled(true);
 		ui->cbox_DOhongdeng->setEnabled(true);
+		ui->cbox_DOtiebiaojifuwei->setEnabled(true);
 
 		monitorZMotionMonitorThread->setRunning(true);
 	}
@@ -577,11 +590,13 @@ void DlgProductSet::cbox_debugMode_checked(bool ischecked)
 		ui->cbox_DObaojing->setChecked(false);
 		ui->cbox_DOlvdeng->setChecked(false);
 		ui->cbox_DOhongdeng->setChecked(false);
+		ui->cbox_DOtiebiaojifuwei->setChecked(false);
 
 		ui->cbox_DOtifeixinhao->setEnabled(false);
 		ui->cbox_DObaojing->setEnabled(false);
 		ui->cbox_DOlvdeng->setEnabled(false);
 		ui->cbox_DOhongdeng->setEnabled(false);
+		ui->cbox_DOtiebiaojifuwei->setEnabled(false);
 
 		monitorZMotionMonitorThread->setRunning(false);
 	}
@@ -620,6 +635,15 @@ void DlgProductSet::cbox_DOhongdeng_checked(bool ischecked)
 	if (isDebugIO)
 	{
 		auto isSuccess = zmotion->setIOOut(ControlLines::hongdengOut, ischecked);
+	}
+}
+
+void DlgProductSet::cbox_DOtiebiaojifuwei_checked(bool ischecked)
+{
+	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
+	if (isDebugIO)
+	{
+		auto isSuccess = zmotion->setIOOut(ControlLines::tiebiaojifuweiOut, ischecked);
 	}
 }
 
@@ -736,6 +760,30 @@ void DlgProductSet::btn_setDOhongdeng_clicked()
 		ui->btn_setDOhongdeng->setText(value);
 		setConfig.hongdengOUT = value.toInt();
 		ControlLines::hongdengOut = static_cast<int>(value.toDouble());
+		auto indicesDO = DOFindAllDuplicateIndices();
+		setDOErrorInfo(indicesDO);
+		auto indicesDI = DIFindAllDuplicateIndices();
+		setDIErrorInfo(indicesDI);
+	}
+}
+
+void DlgProductSet::btn_setDOtiebiaojifuwei_clicked()
+{
+	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
+	NumberKeyboard numKeyBord;
+	numKeyBord.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+	auto isAccept = numKeyBord.exec();
+	if (isAccept == QDialog::Accepted)
+	{
+		auto value = numKeyBord.getValue();
+		if (value.toDouble() < 0)
+		{
+			QMessageBox::warning(this, "提示", "请输入大于0的数值");
+			return;
+		}
+		ui->btn_setDOtiebiaojifuwei->setText(value);
+		setConfig.tiebiaojifuweiOUT = value.toInt();
+		ControlLines::tiebiaojifuweiOut = static_cast<int>(value.toDouble());
 		auto indicesDO = DOFindAllDuplicateIndices();
 		setDOErrorInfo(indicesDO);
 		auto indicesDI = DIFindAllDuplicateIndices();

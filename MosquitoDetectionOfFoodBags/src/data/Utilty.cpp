@@ -8,4 +8,5 @@ size_t ControlLines::tifeixinhaoOut = 0;
 size_t ControlLines::baojingOut = 0;
 size_t ControlLines::lvdengOut = 0;
 size_t ControlLines::hongdengOut = 0;
+size_t ControlLines::tiebiaojifuweiOut = 0;
 

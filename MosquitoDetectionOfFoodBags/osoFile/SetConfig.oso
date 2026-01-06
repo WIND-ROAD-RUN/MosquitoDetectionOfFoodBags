@@ -28,6 +28,7 @@ namespace cdm {
 		baojingOUT : int :default = 0;
 		lvdengOUT : int :default = 0;
 		hongdengOUT : int :default = 0;
+		tiebiaojifuweiOUT : int :default = 0;
 
 		xiangjichufachangdu : double :default = 0;
 		meizhuanmaichongshu : double :default = 0;
