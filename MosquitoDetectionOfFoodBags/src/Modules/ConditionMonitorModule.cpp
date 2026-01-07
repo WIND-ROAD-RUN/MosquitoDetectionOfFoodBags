@@ -30,6 +30,8 @@ bool ConditionMonitorModule::build()
 	labelWarning->setMaxHistorySize(500);
 	// 设置右下角警告图标灰色持续时间为无限大
 	labelWarning->setGrayDuration(std::numeric_limits<int>::max());
+	labelWarning->setWarningColor(QString("red"));
+	labelWarning->setTimeoutColor(QString("red"));
 
 	auto setConfig = Modules::getInstance().configManagerModule.setConfig;
 
