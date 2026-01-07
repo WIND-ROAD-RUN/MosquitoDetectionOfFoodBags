@@ -28,6 +28,8 @@ bool ConditionMonitorModule::build()
 
 	labelWarning = new rw::rqw::LabelWarning();
 	labelWarning->setMaxHistorySize(500);
+	// 设置右下角警告图标灰色持续时间为无限大
+	labelWarning->setGrayDuration(std::numeric_limits<int>::max());
 
 	auto setConfig = Modules::getInstance().configManagerModule.setConfig;
 
@@ -39,7 +41,7 @@ bool ConditionMonitorModule::build()
 #pragma region conditionCamera
 	rw::conMon::ConditionItem conditionCamera;
 	conditionCamera.info.id = WarningId::cameraConnectionLost;
-	conditionCamera.info.name = "相机断开连接报警";
+	conditionCamera.info.name = QString(QTime::currentTime().toString() + "相机断开连接报警");
 	conditionCamera.set.enabled = setConfig.xiangjiduanlianbaojing;
 	conditionCamera.call.condition = [](const rw::conMon::ConditionInfo& info) -> bool
 		{
@@ -86,7 +88,7 @@ bool ConditionMonitorModule::build()
 #pragma region conditionZmotion
 	rw::conMon::ConditionItem conditionZmotion;
 	conditionZmotion.info.id = WarningId::zmotionConnectionLost;
-	conditionZmotion.info.name = "运动控制器断开连接报警";
+	conditionZmotion.info.name = QString(QTime::currentTime().toString() + "运动控制器断开连接报警");
 	conditionZmotion.set.enabled = setConfig.yundongkongzhiqiduanlianbaojing;
 	conditionZmotion.call.condition = [](const rw::conMon::ConditionInfo& info) -> bool
 		{
