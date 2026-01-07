@@ -32,6 +32,8 @@ public:
 	std::atomic_bool isTakePictures{ false };
 
 	std::atomic<RunningState> runningState{ RunningState::Stop };
+
+	std::atomic_int lastDefectClassId{ -1 };
 public:
 	std::unique_ptr<DetachUtiltyThread> detachUtiltyThread{ nullptr };
 };

@@ -113,6 +113,8 @@ private:
 	int tifeiCount{ 0 };
 	int liangpinCount{ 0 };
 	bool needGoodReset{ false };
+
+	std::atomic_int defectCount{ 5 };
 private:
 	QQueue<MatInfo>& _queue;
 	QMutex& _mutex;

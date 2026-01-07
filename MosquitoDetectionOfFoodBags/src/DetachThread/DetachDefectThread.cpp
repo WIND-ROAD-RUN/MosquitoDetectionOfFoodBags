@@ -2,6 +2,7 @@
 #include <chrono>
 #include "Modules.hpp"
 #include "MDOFoodBags.h"
+#include "osoFIleUtiltyFunc.hpp"
 
 DetachDefectThreadMDOFoodBags::DetachDefectThreadMDOFoodBags(QObject* parent)
 {
@@ -29,7 +30,6 @@ void DetachDefectThreadMDOFoodBags::stopThread()
 
 void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::ThreadSafeHeap<float>>& queue)
 {
-
 	auto& zmotion = Modules::getInstance().motionControllerModule.zmotion;
 	auto& setConfig = Modules::getInstance().configManagerModule.setConfig;
 	try
@@ -50,19 +50,9 @@ void DetachDefectThreadMDOFoodBags::processQueue1(std::unique_ptr<rw::dsl::Threa
 		{
 			queue->tryPopTop(nowLocation);
 			auto& mainWindowConfig = Modules::getInstance().configManagerModule.MainWindowsConfig;
-
 			if (mainWindowConfig.istifei)
 			{
-				++defectCount;
 				auto isSuccess = zmotion->SetIOOut(1, ControlLines::tifeixinhaoOut, true, 100);
-				rw::rqw::WarningInfo WarningInfo;
-				WarningInfo.warningId = defectCount;
-				WarningInfo.message = QString("检测到缺陷");
-				WarningInfo.type = rw::rqw::WarningType::Warning;
-				QMetaObject::invokeMethod(this,
-					[this, WarningInfo]() {
-						MDOFoodBags::addWarning(WarningInfo);
-					});
 			}
 		}
 	}

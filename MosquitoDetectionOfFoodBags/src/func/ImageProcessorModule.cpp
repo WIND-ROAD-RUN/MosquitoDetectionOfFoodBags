@@ -10,6 +10,8 @@
 #include <QColor>
 #include <cmath>
 
+#include "osoFIleUtiltyFunc.hpp"
+
 ImageProcessor::ImageProcessor(QQueue<MatInfo>& queue, QMutex& mutex, QWaitCondition& condition, int workIndex, QObject* parent)
 	: QThread(parent), _queue(queue), _mutex(mutex), _condition(condition), _workIndex(workIndex)
 {
@@ -104,14 +106,36 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 	//这个函数可以判断是不是坏的，并且在图像上画出矩形，还要绘制左右限位
 	_isbad = checkDefectAndDrawOnImage(image, _matProcess, minArea, allMinArea, _matProduct);
 
+	bool hasWenChong = false;
+	bool hasMaoFa = false;
+
 	for (const auto& item : _matProcess)
 	{
+		// 计算剔废位置
 		auto tempLoc = item.location;
 		if (tempLoc > static_cast<double>(defectLoc))
 		{
 			defectLoc = static_cast<float>(tempLoc);
 		}
+		// 总结剔废类型用于报警
+		if (0 == item.classid)
+		{
+			hasWenChong = true;
+		}
+		if (1 == item.classid)
+		{
+			hasMaoFa = true;
+		}
 	}
+
+	// 更新报警信息
+	auto& runtimeInfoModule = Modules::getInstance().runtimeInfoModule;
+	// 0: 无/仅蚊虫(0) / 仅毛发(1) / 两者都有(2)
+	const int defectMask = (hasWenChong ? 1 : 0) | (hasMaoFa ? 2 : 0);
+	runtimeInfoModule.lastDefectClassId.store(
+		(defectMask == 1) ? 0 :
+		(defectMask == 2) ? 1 :
+		(defectMask == 3) ? 2 : -1);
 
 	defectLoc += frame.location;
 	defectLoc += setConfig.tifeijuli;
@@ -843,6 +867,19 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		auto isSuccess = zmotion->SetIOOut(2, ControlLines::baojingOut, true, static_cast<int>(setConfig.baojingchixushijian));
 		isSuccess = zmotion->SetIOOut(3, ControlLines::hongdengOut, true, static_cast<int>(setConfig.baojingchixushijian));
 		isSuccess = zmotion->SetIOOut(4, ControlLines::lvdengOut, false, static_cast<int>(setConfig.baojingchixushijian));
+
+		int defectClassId = Modules::getInstance().runtimeInfoModule.lastDefectClassId.load();
+		qDebug() << "defectClassId:" << defectClassId;
+		rw::rqw::WarningInfo WarningInfo;
+		WarningInfo.warningId = defectCount;
+		WarningInfo.message = QString(QTime::currentTime().toString() + "  " + osoFileUtilityFunc::defectClassIdToText(defectClassId));
+		qDebug() << "osoFileUtilityFunc::defectClassIdToText(defectClassId):" << osoFileUtilityFunc::defectClassIdToText(defectClassId);
+		WarningInfo.type = rw::rqw::WarningType::Warning;
+		QMetaObject::invokeMethod(this,
+			[this, WarningInfo]() {
+				MDOFoodBags::addWarning(WarningInfo);
+			});
+		++defectCount;
 	}
 
 	// 如果处于锁定状态：次品不剔废，直接返回
