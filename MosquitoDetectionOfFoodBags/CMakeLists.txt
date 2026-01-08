@@ -87,6 +87,20 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
 
+# --- copy txt configs to runtime projectHome\txt\ ---
+set(RUNTIME_PROJECT_HOME "D:/zfkjData/MosquitoDetectionOfFoodBags")
+set(RUNTIME_TXT_DIR "${RUNTIME_PROJECT_HOME}/txt")
+
+file(GLOB TXT_CONFIG_FILES "${CMAKE_CURRENT_SOURCE_DIR}/txt/*.txt")
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E make_directory "${RUNTIME_TXT_DIR}"
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		${TXT_CONFIG_FILES}
+		"${RUNTIME_TXT_DIR}"
+	COMMENT "Copying txt config files to ${RUNTIME_TXT_DIR}"
+)
+
 
 
 

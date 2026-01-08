@@ -131,7 +131,7 @@ void MDOFoodBags::ini_clickableTitle()
 	auto layoutTitle = ui->groupBox_head->layout();
 	layoutTitle->replaceWidget(ui->label_title, clickableTitle);
 	delete ui->label_title;
-	clickableTitle->setText("食品袋蚊虫检测");
+	clickableTitle->setText("食品袋异物检测");
 	clickableTitle->setStyleSheet("QLabel {font-size: 30px;font-weight: bold;color: rgb(255, 255, 255);padding: 5px 5px;border-bottom: 2px solid #cccccc;}");
 }
 
@@ -144,6 +144,8 @@ void MDOFoodBags::initializeComponents()
 	getMotionStateAndUpdateUi();
 
 	getCameraStateAndUpdateUi();
+
+	loadCompanyTXT();
 
 	build_connect();
 
@@ -679,6 +681,31 @@ void MDOFoodBags::applyLightState()
 		zmotion->setIOOut(ControlLines::hongdengOut, redOn);
 		zmotion->setIOOut(ControlLines::lvdengOut, greenOn);
 	}
+}
+
+void MDOFoodBags::loadCompanyTXT()
+{
+	const QString companyRootPath = globalPath.companyRootPath;
+	QFile file(companyRootPath);
+	if (!file.exists())
+	{
+		ui->label_companyInfo->setText(QString("company.txt不存在：%1").arg(companyRootPath));
+		return;
+	}
+
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		ui->label_companyInfo->setText(QString("company.txt打开失败：%1").arg(companyRootPath));
+		return;
+	}
+
+	QTextStream in(&file);
+	in.setEncoding(QStringConverter::Utf8);
+
+	const QString content = in.readAll().trimmed();
+	ui->label_companyInfo->setText(content);
+
+	file.close();
 }
 
 void MDOFoodBags::addWarning(const rw::rqw::WarningInfo& message, bool updateTimestampIfSame, int redDuration, int time)

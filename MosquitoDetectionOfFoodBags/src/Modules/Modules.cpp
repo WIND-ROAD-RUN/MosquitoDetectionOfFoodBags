@@ -195,6 +195,7 @@ bool Modules::check()
 	EnsureDirectoryExists(globalPath.configRootPath);
 	EnsureDirectoryExists(globalPath.modelRootPath);
 	EnsureDirectoryExists(globalPath.imageSaveRootPath);
+	EnsureDirectoryExists(globalPath.companyRootPath);
 #pragma endregion
 
 #pragma region check model exist

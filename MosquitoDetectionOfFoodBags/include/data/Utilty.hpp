@@ -60,4 +60,5 @@ public:
 public:
 	QString imageSaveRootPath = projectHome + R"(SavedImages\)";
 	QString testImgDirPath = R"(D:\ImgStorage\MDOFoodBags)";
+	QString companyRootPath = projectHome + R"(txt\company.txt)";
 }globalPath;

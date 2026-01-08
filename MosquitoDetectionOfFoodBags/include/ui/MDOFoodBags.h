@@ -99,6 +99,8 @@ private:
 
 	void applyLightState();
 
+	void loadCompanyTXT();
+
 	rw::rqw::ClickableLabel* imgDis1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg1 = nullptr;
 	rw::rqw::ClickableLabel* imgDisNg2 = nullptr;
