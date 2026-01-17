@@ -15,6 +15,7 @@
 #include "ReconnectModule.hpp"
 #include "rqw_RunEnvCheck.hpp"
 #include "TestModule.hpp"
+#include "LogModule.hpp"
 
 class Modules
 	:public IModule<bool>
@@ -60,6 +61,7 @@ public:
 	ImgSaveModule imgSaveModule;
 	MotionControllerModule motionControllerModule;
 	ConditionMonitorModule conditionMonitorModule;
+	LogModule logModule;
 
 #ifdef BUILD_WITHOUT_HARDWARE
 	TestModule test_module;

@@ -9,6 +9,7 @@
 #include <QPen>
 #include <QColor>
 #include <cmath>
+#include "Logger.hpp"
 
 #include "osoFIleUtiltyFunc.hpp"
 
@@ -126,6 +127,23 @@ void ImageProcessor::run_OpenRemoveFunc(MatInfo& frame)
 		{
 			hasMaoFa = true;
 		}
+	}
+
+	// 输出日志
+	if (hasWenChong && hasMaoFa)
+	{
+		LOG_INFO("检测到蚊虫与毛发缺陷");
+		qDebug() << "11111111111111";
+	}
+	else if (hasMaoFa)
+	{
+		LOG_INFO("检测到毛发缺陷");
+		qDebug() << "22222222222222222";
+	}
+	else if (hasWenChong)
+	{
+		LOG_INFO("检测到蚊虫缺陷");
+		qDebug() << "333333333333333333";
 	}
 
 	// 更新报警信息
@@ -869,11 +887,9 @@ void ImageProcessor::run_OpenRemoveFunc_emitErrorInfo(bool isbad)
 		isSuccess = zmotion->SetIOOut(4, ControlLines::lvdengOut, false, static_cast<int>(setConfig.baojingchixushijian));
 
 		int defectClassId = Modules::getInstance().runtimeInfoModule.lastDefectClassId.load();
-		qDebug() << "defectClassId:" << defectClassId;
 		rw::rqw::WarningInfo WarningInfo;
 		WarningInfo.warningId = defectCount;
 		WarningInfo.message = QString(QTime::currentTime().toString() + "  " + osoFileUtilityFunc::defectClassIdToText(defectClassId));
-		qDebug() << "osoFileUtilityFunc::defectClassIdToText(defectClassId):" << osoFileUtilityFunc::defectClassIdToText(defectClassId);
 		WarningInfo.type = rw::rqw::WarningType::Warning;
 		QMetaObject::invokeMethod(this,
 			[this, WarningInfo]() {

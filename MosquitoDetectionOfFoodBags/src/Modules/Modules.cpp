@@ -48,6 +48,9 @@ bool Modules::build()
 	// 构建状态监测模块
 	conditionMonitorModule.build();
 
+	// 构建日志模块
+	logModule.build();
+
 #ifdef BUILD_WITHOUT_HARDWARE
 	test_module.build();
 #endif
@@ -61,6 +64,7 @@ void Modules::destroy()
 	test_module.destroy();
 #endif
 
+	logModule.destroy();
 	runtimeInfoModule.destroy();
 	imgProModule.destroy();
 	cameraModule.destroy();
@@ -85,6 +89,7 @@ void Modules::start()
 	cameraModule.start();
 	reconnectModule.start();
 	conditionMonitorModule.start();
+	logModule.start();
 
 #ifdef BUILD_WITHOUT_HARDWARE
 	test_module.start();
@@ -97,6 +102,7 @@ void Modules::stop()
 	test_module.stop();
 #endif
 
+	logModule.stop();
 	conditionMonitorModule.stop();
 	reconnectModule.stop();
 	cameraModule.stop();

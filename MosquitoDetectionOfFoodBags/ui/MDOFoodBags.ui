@@ -1079,7 +1079,7 @@ QPushButton:pressed {
 }</string>
                </property>
                <property name="text">
-                <string>打开存储位置</string>
+                <string>查看存储图片</string>
                </property>
               </widget>
              </item>
